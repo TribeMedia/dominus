@@ -1,10 +1,10 @@
-Accounts.validateNewUser(function(user) {
-	if (process.env.DOMINUS_WORKER == 'true') {
-		return true
-	} else {
-		throw new Meteor.Error(503,'Dominus is full.  Please come back later.')
-	}
-})
+// Accounts.validateNewUser(function(user) {
+// 	if (process.env.DOMINUS_WORKER == 'true') {
+// 		return true
+// 	} else {
+// 		throw new Meteor.Error(503,'Dominus is full.  Please come back later.')
+// 	}
+// })
 
 
 // this is called before validateNewUser()
@@ -138,6 +138,7 @@ setupNewUser = function(user) {
 	user.allies_above = []
 	user.team = []
 	user.is_king = true
+	user.king = null
 	user.is_dominus = false
 	user.show_welcome_screen = true
 	user.num_vassals = 0
