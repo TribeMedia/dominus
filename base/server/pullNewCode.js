@@ -8,7 +8,7 @@ Meteor.methods({
 
         var exec = Npm.require('child_process').exec;
 
-        var cmd = '/bin/bash /home/dan/meteor/dominus/base/.scripts/pullNewCode '+gameId+' '+tempDir+' '+appDir;
+        var cmd = '/bin/bash /pullNewCode '+gameId+' '+tempDir+' '+appDir;
 
         var child = exec(cmd, function(error, stdout, stderr) {
             console.log('stdout: '+stdout);
