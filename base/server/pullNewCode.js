@@ -2,13 +2,11 @@ Meteor.methods({
 
     // TODO: still needs security
     pullNewCode: function() {
-        var gameId = process.env.GAME_ID;
-        var tempDir = '/temp/pull';
-        var appDir = '/opt/dominus';
+        var branchId = process.env.BRANCH_ID;
 
         var exec = Npm.require('child_process').exec;
 
-        var cmd = '/bin/bash /pullNewCode.sh '+gameId+' '+tempDir+' '+appDir;
+        var cmd = '/bin/bash /pullNewCode.sh '+branchId;
 
         var child = exec(cmd, function(error, stdout, stderr) {
             console.log('stdout: '+stdout);
