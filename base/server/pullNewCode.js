@@ -1,7 +1,11 @@
 Meteor.methods({
 
     // TODO: still needs security
-    pullNewCode: function() {
+    pullNewCode: function(key) {
+        if (key != process.env.DOMINUS_KEY) {
+            return;
+        }
+
         var branchId = process.env.BRANCH_ID;
 
         var exec = Npm.require('child_process').exec;
