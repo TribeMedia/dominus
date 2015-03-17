@@ -14,37 +14,27 @@ Meteor.startup(function() {
 
 var registerWithServer = function() {
     console.log('--- registering with home base');
-    console.log(getIp());
-    landingConn.call(
-        'registerServer',
-        process.env.GAME_ID,
-        process.env.BRANCH_ID,
-        process.env.DOMINUS_WORKER,
-        process.env.DOMINUS_KEY,
-        getIp(),
-        os.uptime(),
-        os.loadavg(),
-        os.totalmem(),
-        os.freemem(),
-        os.cpus()
-    );
-};
 
+    // TODO: find a better way to get the ip of the host from inside a docker container
+    HTTP.get('http://api.ipify.org', {timeout:1000*60}, function(error, result) {
+        if (error) {
+            console.error(error);
+        } else {
+            var ip = result.content;
 
-var getIp = function() {
-    // Get interfaces
-    var netInterfaces = os.networkInterfaces();
-    // Result
-    var result = [];
-    for (var id in netInterfaces) {
-        var netFace = netInterfaces[id];
-
-        for (var i = 0; i < netFace.length; i++) {
-            var ip = netFace[i];
-            if (ip.internal === false && ip.family === 'IPv4') {
-                result.push(ip);
-            }
+            landingConn.call(
+                'registerServer',
+                process.env.GAME_ID,
+                process.env.BRANCH_ID,
+                process.env.DOMINUS_WORKER,
+                process.env.DOMINUS_KEY,
+                ip,
+                os.uptime(),
+                os.loadavg(),
+                os.totalmem(),
+                os.freemem(),
+                os.cpus()
+            );
         }
-    }
-    return result;
+    });
 };
