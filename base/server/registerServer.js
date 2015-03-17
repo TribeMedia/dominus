@@ -22,19 +22,23 @@ var registerWithServer = function() {
         } else {
             var ip = result.content;
 
-            landingConn.call(
-                'registerServer',
-                process.env.GAME_ID,
-                process.env.BRANCH_ID,
-                process.env.DOMINUS_WORKER,
-                process.env.DOMINUS_KEY,
-                ip,
-                os.uptime(),
-                os.loadavg(),
-                os.totalmem(),
-                os.freemem(),
-                os.cpus()
-            );
+            if (landingConn.status == 'connected') {
+                landingConn.call(
+                    'registerServer',
+                    process.env.GAME_ID,
+                    process.env.BRANCH_ID,
+                    process.env.DOMINUS_WORKER,
+                    process.env.DOMINUS_KEY,
+                    ip,
+                    os.uptime(),
+                    os.loadavg(),
+                    os.totalmem(),
+                    os.freemem(),
+                    os.cpus()
+                );
+            } else {
+                console.error('not connected to home base');
+            }
         }
     });
 };
