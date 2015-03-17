@@ -1,10 +1,11 @@
 var os = Npm.require('os');
-var landingConn = DDP.connect(process.env.DOMINUS_BASE);
+landingConn = null;
 
 // register server and game with dominus base
 // dominus_key makes sure it's one of my servers
 Meteor.startup(function() {
     if (process.env.DOMINUS_BASE && process.env.GAME_ID && process.env.DOMINUS_KEY) {
+        landingConn = DDP.connect(process.env.DOMINUS_BASE);
         registerWithServer();
         Meteor.setInterval(function() {
             registerWithServer();
@@ -13,7 +14,7 @@ Meteor.startup(function() {
 });
 
 var registerWithServer = function() {
-    console.log('--- registering with home base');
+    console.log('--- registering server with '+process.env.DOMINUS_BASE);
 
     // TODO: find a better way to get the ip of the host from inside a docker container
     HTTP.get('http://api.ipify.org', {timeout:1000*60}, function(error, result) {
@@ -25,7 +26,7 @@ var registerWithServer = function() {
             var ip = result.content;
 
             if (landingConn.status() == 'connected') {
-                
+
                 landingConn.call(
                     'registerServer',
                     process.env.GAME_ID,
