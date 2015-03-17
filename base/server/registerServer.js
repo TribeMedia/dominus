@@ -6,7 +6,7 @@ var landingConn = DDP.connect(process.env.DOMINUS_BASE);
 Meteor.startup(function() {
     if (process.env.DOMINUS_BASE && process.env.GAME_ID && process.env.DOMINUS_KEY) {
         registerWithServer();
-        Meteor.setTimeout(function() {
+        Meteor.setInterval(function() {
             registerWithServer();
         }, 1000*60*10);
     }
@@ -17,12 +17,15 @@ var registerWithServer = function() {
 
     // TODO: find a better way to get the ip of the host from inside a docker container
     HTTP.get('http://api.ipify.org', {timeout:1000*60}, function(error, result) {
+
         if (error) {
             console.error(error);
+
         } else {
             var ip = result.content;
 
-            if (landingConn.status == 'connected') {
+            if (landingConn.status() == 'connected') {
+                
                 landingConn.call(
                     'registerServer',
                     process.env.GAME_ID,
@@ -36,8 +39,10 @@ var registerWithServer = function() {
                     os.freemem(),
                     os.cpus()
                 );
+
             } else {
                 console.error('not connected to home base');
+                landingConn.reconnect();
             }
         }
     });
