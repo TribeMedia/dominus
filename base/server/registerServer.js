@@ -27,7 +27,7 @@ var registerServer = function() {
         } else {
             var ip = result.content;
 
-            if (landingConn.status() == 'connected') {
+            if (landingConn.status().connected) {
 
                 landingConn.call(
                     'registerServer',
@@ -46,6 +46,7 @@ var registerServer = function() {
             } else {
                 console.error('not connected to home base');
                 console.error(landingConn.status());
+                landingConn.reconnect();
             }
         }
     });
