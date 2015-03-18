@@ -12,6 +12,7 @@ Meteor.methods({
             return;
         }
 
+        console.log('--- started pull');
         startedPull = true;
         new pullNewCode();
     }
