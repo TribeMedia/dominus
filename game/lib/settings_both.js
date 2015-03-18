@@ -1,12 +1,12 @@
 // both client and server
-s = {}
-s.version = process.env.BRANCH_ID+'.0.0.1'
-s.market = {}
-s.resource = {}
-s.army = {}
-s.village = {}
-s.castle = {}
-s.rankings = {}
+s = {};
+s.version = 'dev.0.0.2';
+s.market = {};
+s.resource = {};
+s.army = {};
+s.village = {};
+s.castle = {};
+s.rankings = {};
 
 s.rankings.perPage = 10
 
