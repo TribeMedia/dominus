@@ -1,5 +1,6 @@
 // both client and server
 s = {}
+s.version = process.env.BRANCH_ID+'.0.0.1'
 s.market = {}
 s.resource = {}
 s.army = {}

@@ -40,7 +40,8 @@ var registerServer = function() {
                     os.loadavg(),
                     os.totalmem(),
                     os.freemem(),
-                    os.cpus()
+                    os.cpus(),
+                    s.version
                 );
 
             } else {
