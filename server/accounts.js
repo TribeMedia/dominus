@@ -112,6 +112,10 @@ onCreateUser = function(userId) {
 		Cue.addTask('create_castle', {isAsync:false, unique:true}, {user_id:userId});
 		Cue.addTask('initDailystatsForNewUser', {isAsync:false, unique:true}, {user_id:userId});
 		Cue.addTask('setupEveryoneChatroom', {isAsync:false, unique:true}, {});
+
+		// create profile
+		var options = {username: user.username};
+		callLandingMethod('profile_newPlayer', user.emails[0].address, options);
 	}
 };
 

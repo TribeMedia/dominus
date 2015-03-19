@@ -12,7 +12,7 @@ create_castle = function(user_id) {
 		return false
 	}
 
-	var user = Meteor.users.findOne(user_id, {fields: {username: 1}})
+	var user = Meteor.users.findOne(user_id, {fields: {username: 1, emails:1}})
 	if (!user) {
 		console.error('create_castle called but no user found for this id')
 		return false
@@ -87,6 +87,14 @@ create_castle = function(user_id) {
 						var id = Castles.insert(fields)
 
 						Meteor.users.update(user._id, {$set: {x: hex.x, y: hex.y, castle_id: id}})
+
+						// update profile with castle info
+						var options = {
+							castleId: id,
+							x: hex.x,
+							y: hex.y
+						};
+						callLandingMethod('profile_castleCreated', user.emails[0].address, options);
 
 						// mark hex as having building
 						Hexes.update({x: hex.x, y: hex.y}, {$set: {has_building: true}})

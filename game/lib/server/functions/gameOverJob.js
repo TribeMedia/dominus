@@ -15,13 +15,13 @@ checkForGameOver = function() {
                 if (!hasBeenSent || !hasBeenSent.value) {
 
                     // find who won
-                    var winner = Meteor.users.findOne({is_dominus:true}, {fields:{_id:1}})
+                    var winner = Meteor.users.findOne({is_dominus:true}, {fields:{_id:1, emails:1}})
                     if (!winner) {
 
                         // if nobody is currently dominus see who was last dominus
                         var lastDominus = Settings.findOne({name: 'lastDominusUserId'})
                         if (lastDominus && lastDominus.value) {
-                            winner = Meteor.users.findOne(lastDominus.value, {fields:{_id:1}})
+                            winner = Meteor.users.findOne(lastDominus.value, {fields:{_id:1, emails:1}})
                         }
                     }
 
@@ -29,6 +29,10 @@ checkForGameOver = function() {
                         gAlert_gameOver(winner._id)
                         Settings.upsert({name: 'hasGameOverAlertBeenSent'}, {$set: {name: 'hasGameOverAlertBeenSent', value:true}})
                         Settings.upsert({name: 'isGameOver'}, {$set: {name: 'isGameOver', value:true}})
+
+                        // update profile
+                        var options = {};
+                        callLandingMethod('profile_wonGame', user.emails[0].address, options);
 
                     } else {
                         console.error('Game is over but no dominus found.')

@@ -53,8 +53,9 @@ remove_dominus = function() {
 
 // happens when there is a new dominus
 new_dominus_event = function(dominus_user) {
-	check(dominus_user, Object)
-	check(dominus_user._id, String)
+	check(dominus_user, Object);
+	check(dominus_user._id, String);
+	check(dominus.emails[0].address, String);
 
 	// make sure dominus and last dominus are not the same
 	var lastDominus = Settings.findOne({name: 'lastDominusUserId'})
@@ -74,6 +75,10 @@ new_dominus_event = function(dominus_user) {
 	}
 
 	// send notifications
-	gAlert_newDominus(dominus_user._id, lastDominusUserId)
-	alert_youAreDominus(dominus_user._id)
+	gAlert_newDominus(dominus_user._id, lastDominusUserId);
+	alert_youAreDominus(dominus_user._id);
+
+	// update profile
+	var options = {};
+	callLandingMethod('profile_becameDominus', user.emails[0].address, options);
 }

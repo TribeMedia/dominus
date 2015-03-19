@@ -144,6 +144,7 @@ Meteor.startup(function() {
 		Meteor.setInterval(function() {
 			Cue.addTask('gamestats_job', {isAsync:false, unique:true}, {});
 			Cue.addTask('updateIncomeRank', {isAsync:false, unique:true}, {});
+			Cue.addTask('updateVassalRank', {isAsync:false, unique:true}, {});
 			Cue.addTask('updateIncomeStats', {isAsync:false, unique:true}, {});
 			Cue.addTask('generateTree', {isAsync:false, unique:true}, {});
 		}, 1000 * 60 * 10);

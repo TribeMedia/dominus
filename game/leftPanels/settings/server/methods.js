@@ -28,7 +28,7 @@ Meteor.methods({
 	change_username: function(username) {
 		check(username, String)
 
-		var user = Meteor.users.findOne(Meteor.userId(), {fields: {is_king:1, username:1}})
+		var user = Meteor.users.findOne(Meteor.userId(), {fields: {is_king:1, username:1, emails:1}})
 		if (user) {
 			var previousUsername = user.username
 
@@ -69,6 +69,12 @@ Meteor.methods({
 			Meteor.users.update(Meteor.userId(), {$set: {username: username}})
 
 			gAlert_nameChange(Meteor.userId(), previousUsername, username)
+
+			// update profile
+			var options = {
+				newName: username,
+			};
+			callLandingMethod('profile_changedName', user.emails[0].address, options);
 
 			return true
 		} else {
@@ -178,6 +184,10 @@ deleteAccount = function(user_id) {
 
 	Castles.remove({user_id: user._id})
 	Hexes.update({x:user.x, y:user.y}, {$set: {has_building:false, nearby_buildings:false}})
+
+	// update profile
+	var options = {};
+	callLandingMethod('profile_accountDeleted', user.emails[0].address, options);
 
 	Meteor.users.remove({_id:user._id})
 

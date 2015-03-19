@@ -319,7 +319,7 @@ Cue.addJob('updateIncomeRank', {retryOnError:false, maxMs:1000*60*5}, function(t
 updateIncomeRank = function() {
 	var rank = 1
 	var prevIncome = null
-	Meteor.users.find({}, {sort: {income:-1}, fields: {income:1}}).forEach(function(user) {
+	Meteor.users.find({}, {sort: {income:-1}, fields: {income:1, emails:1}}).forEach(function(user) {
 
 		Dailystats.upsert({
 			user_id: user._id,
@@ -328,6 +328,12 @@ updateIncomeRank = function() {
 			$setOnInsert: {user_id:user._id, created_at: new Date()},
 			$set: {incomeRank:rank, updated_at:new Date()}
 		})
+
+		// update profile
+		var options = {
+			rankByIncome: rank,
+		};
+		callLandingMethod('profile_setRankByIncome', user.emails[0].address, options);
 
 		if (prevIncome) {
 			if (prevIncome != user.income) {
@@ -338,6 +344,46 @@ updateIncomeRank = function() {
 		}
 
 		prevIncome = user.income
+	})
+}
+
+
+
+Cue.addJob('updateVassalRank', {retryOnError:false, maxMs:1000*60*5}, function(task, done) {
+	updateVassalRank()
+	done()
+})
+
+
+
+updateVassalRank = function() {
+	var rank = 1
+	var prevNumVassals = null
+	Meteor.users.find({}, {sort: {num_allies_below:-1}, fields: {num_allies_below:1, emails:1}}).forEach(function(user) {
+
+		Dailystats.upsert({
+			user_id: user._id,
+			created_at: {$gte: statsBegin(), $lt: statsEnd()}
+		}, {
+			$setOnInsert: {user_id:user._id, created_at: new Date()},
+			$set: {vassalRank:rank, updated_at:new Date()}
+		})
+
+		// update profile
+		var options = {
+			rankByVassals: rank,
+		};
+		callLandingMethod('profile_setRankByVassals', user.emails[0].address, options);
+
+		if (prevNumVassals) {
+			if (prevNumVassals != user.num_allies_below) {
+				rank++
+			}
+		} else {
+			rank++
+		}
+
+		prevNumVassals = user.num_allies_below
 	})
 }
 

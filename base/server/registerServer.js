@@ -1,13 +1,9 @@
 var os = Npm.require('os');
-landingConn = null;
 
-// register server and game with dominus base
+// register server and game with dominus base every 10 min
 // dominus_key makes sure it's one of my servers
 Meteor.startup(function() {
     if (process.env.DOMINUS_BASE && process.env.GAME_ID && process.env.DOMINUS_KEY) {
-
-        landingConn = DDP.connect(process.env.DOMINUS_BASE);
-
         registerServer();
         Meteor.setInterval(function() {
             registerServer();
@@ -27,9 +23,9 @@ var registerServer = function() {
         } else {
             var ip = result.content;
 
-            if (landingConn.status().connected) {
+            if (landingConnection.status().connected) {
 
-                landingConn.call(
+                landingConnection.call(
                     'registerServer',
                     process.env.GAME_ID,
                     process.env.BRANCH_ID,
@@ -46,8 +42,8 @@ var registerServer = function() {
 
             } else {
                 console.error('not connected to home base');
-                console.error(landingConn.status());
-                landingConn.reconnect();
+                console.error(landingConnection.status());
+                landingConnection.reconnect();
             }
         }
     });
