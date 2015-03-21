@@ -12,7 +12,6 @@ Meteor.startup(function() {
 });
 
 var registerServer = function() {
-    console.log('--- registering server with '+process.env.DOMINUS_BASE);
 
     // TODO: find a better way to get the ip of the host from inside a docker container
     HTTP.get('http://api.ipify.org', {timeout:1000*60}, function(error, result) {
@@ -24,6 +23,7 @@ var registerServer = function() {
             var ip = result.content;
 
             if (landingConnection.status().connected) {
+                console.log('--- registering server with '+process.env.DOMINUS_BASE);
 
                 landingConnection.call(
                     'registerServer',

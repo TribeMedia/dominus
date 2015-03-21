@@ -34,6 +34,9 @@ checkForGameOver = function() {
                         var options = {};
                         callLandingMethod('profile_wonGame', user.emails[0].address, options);
 
+                        // let home base know that game is over
+                        landingConnection.call('gameHasEnded', process.env.GAME_ID, process.env.DOMINUS_KEY);
+
                     } else {
                         console.error('Game is over but no dominus found.')
                     }

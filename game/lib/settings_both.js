@@ -8,6 +8,7 @@ s.village = {};
 s.castle = {};
 s.rankings = {};
 
+s.game_start_date = moment("2015-03-14 1:00 pm -0700", "YYYY-MM-DD h:m a Z").toDate();
 s.rankings.perPage = 10
 
 s.serverMaxPlayers = 500

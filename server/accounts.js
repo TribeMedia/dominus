@@ -1,5 +1,6 @@
 Accounts.validateNewUser(function(user) {
 	var bannedEmails = EJSON.parse(process.env.BANNED_EMAILS);
+	check(bannedEmails, Array);
 	if (_.contains(bannedEmails, user.emails[0].address)) {
 		throw new Meteor.Error('403', 'User banned.');
 	} else {
@@ -120,6 +121,10 @@ onCreateUser = function(userId) {
 		// create profile
 		var options = {username: user.username};
 		callLandingMethod('profile_newPlayer', user.emails[0].address, options);
+
+		// let home base know that a new player has joined
+		var numPlayers = Meteor.users.find().count();
+		landingConnection.call('newPlayerJoinedGame', process.env.GAME_ID, process.env.DOMINUS_KEY, numPlayers);
 	}
 };
 
