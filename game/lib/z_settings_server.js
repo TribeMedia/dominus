@@ -1,5 +1,7 @@
 // settings per game
 
-if (process.env.GAME_ID == 'dev') {
+if (Meteor.isServer) {
+    if (process.env.GAME_ID == 'dev') {
 
+    }
 }
