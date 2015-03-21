@@ -85,6 +85,9 @@ subscribeToNewsletter = function(email, name) {
 				console.log(error);
 			}
 		});
+
+		// add to home base mailing list
+		landingConnection.call('addPlayerToMailinglist', process.env.DOMINUS_KEY, email, name);
 	}
 };
 
