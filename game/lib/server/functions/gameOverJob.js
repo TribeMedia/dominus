@@ -42,6 +42,17 @@ var gameOver = function(winner) {
     gAlert_gameOver(winner._id);
     Settings.upsert({name: 'hasGameOverAlertBeenSent'}, {$set: {name: 'hasGameOverAlertBeenSent', value:true}});
     Settings.upsert({name: 'isGameOver'}, {$set: {name: 'isGameOver', value:true}});
+    Settings.upsert({name: 'gameOverDate'}, {$set: {name: 'gameOverDate', value:new Date()}});
+
+    var winnerData = {
+        _id:winner._id,
+        username:winner.username,
+        x:winner.x,
+        y:winner.y,
+        castle_id:winner.castle_id
+        };
+
+    Settings.upsert({name: 'winner'}, {$set: {name: 'winner', value:winnerData}});
 
     // update profile
     var options = {};
@@ -49,6 +60,8 @@ var gameOver = function(winner) {
 
     // let home base know that game is over
     landingConnection.call('gameHasEnded', process.env.GAME_ID, process.env.DOMINUS_KEY);
+
+
 
     // ------------------------------
     // record results
