@@ -99,9 +99,10 @@ Meteor.publish('alertGameEndDate', function() {
 })
 
 
-Meteor.publish('isGameOver', function() {
-    return Settings.find({name:'isGameOver'})
-})
+// done elsewhere
+// Meteor.publish('isGameOver', function() {
+//     return Settings.find({name:'isGameOver'})
+// })
 
 
 Meteor.publish('lastDominusUserId', function() {

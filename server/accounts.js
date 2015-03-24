@@ -1,12 +1,11 @@
-Accounts.validateNewUser(function(user) {
-	var bannedEmails = EJSON.parse(process.env.BANNED_EMAILS);
-	check(bannedEmails, Array);
-	if (_.contains(bannedEmails, user.emails[0].address)) {
-		throw new Meteor.Error('403', 'User banned.');
-	} else {
-		return true;
-	}
-});
+// Accounts.validateNewUser(function(user) {
+// 	var bannedEmails = EJSON.parse(process.env.BANNED_EMAILS);
+// 	if (_.contains(bannedEmails, user.emails[0].address)) {
+// 		throw new Meteor.Error('403', 'User banned.');
+// 	} else {
+// 		return true;
+// 	}
+// });
 
 
 // this is called before validateNewUser()
@@ -104,9 +103,6 @@ Accounts.onLogin(function(data) {
 	// reset this
 	// flag for has notification that your account will soon been deleted been sent to this user
 	Meteor.users.update(data.user._id, {$set:{accountDelNotificationSent:false}});
-
-	console.log(data.connection.clientAddress);
-	console.log(data.connection.httpHeaders);
 });
 
 
