@@ -4,6 +4,17 @@ Template.gameOverAlert.helpers({
         if (setting && setting.value) {
             return true;
         }
+    },
+
+    winner: function() {
+    	return Settings.findOne({name:'winner'});
+    },
+
+    gameOverDate: function() {
+    	var gameOverDate = Settings.findOne({name:'gameOverDate'});
+    	if (gameOverDate) {
+    		return gameOverDate.value;
+    	}
     }
 });
 
