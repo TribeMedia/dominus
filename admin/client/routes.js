@@ -1,6 +1,15 @@
-Router.map(function() {
+Router.route('/admin/settings', function() {
+    this.layout('adminLayout');
+    this.render('adminSettings');
+})
 
-	this.route('admin')
+Router.route('/admin', function() {
+    this.layout('adminLayout');
+    this.render('admin');
+});
+
+
+Router.map(function() {
 
 	this.route('adminForums', {
 		path: '/admin/forums',

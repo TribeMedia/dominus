@@ -18,23 +18,7 @@ Meteor.methods({
 
 	admin_create_forum: function(name, desc) {
 		if (get_user_property("admin")) {
-			desc = desc.replace(/\r?\n/g, '<br />')
-
-			if (desc.length < 1) {
-				desc = null
-			}
-
-			if (name.length > 1) {
-				Forums.insert({
-					name: name,
-					description: desc,
-					order: Forums.find().count(),
-					numThreads: 0,
-					numMessages: 0,
-					created_at: new Date(),
-					updated_at: new Date()
-				})
-			}
+			createForum(name, desc);
 		}
 	},
 
@@ -62,3 +46,42 @@ Meteor.methods({
 	}
 
 })
+
+
+setupDefaultForums = function() {
+
+	// only create forums if there are no forums
+	var forums = Forums.find()
+	if (forums && forums.count() != 0) {
+		return;
+	}
+
+	console.log('--- setting up forums ---');
+	
+	createForum('Dominus News', '');
+	createForum('Dominus General', '');
+	createForum('Feature Requests', 'The Dominus roadmap is on <a href="https://trello.com/b/q40VdLBJ/dominus">Trello</a>.  Vote for features you would like added soon.');
+	createForum('Report a Bug', 'Bugs are tracked on <a href="https://github.com/dan335/dominus/issues">Github</a>.');
+	createForum('Everything Else', 'Anything not related to Dominus.');
+}
+
+
+createForum = function(name, desc) {
+	desc = desc.replace(/\r?\n/g, '<br />');
+
+	if (desc.length < 1) {
+		desc = null;
+	}
+
+	if (name.length > 1) {
+		Forums.insert({
+			name: name,
+			description: desc,
+			order: Forums.find().count(),
+			numThreads: 0,
+			numMessages: 0,
+			created_at: new Date(),
+			updated_at: new Date()
+		});
+	}
+}

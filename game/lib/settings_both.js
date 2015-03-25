@@ -8,10 +8,23 @@ s.village = {};
 s.castle = {};
 s.rankings = {};
 
-s.game_start_date = moment("2015-03-14 1:00 pm -0700", "YYYY-MM-DD h:m a Z").toDate();
-s.rankings.perPage = 10
+// not used anymore
+//s.game_start_date = moment("2015-03-14 1:00 pm -0700", "YYYY-MM-DD h:m a Z").toDate();
 
+// how long after the game ends do we show the game over popup
+// after this time expires the game closes login and resets
+s.gameOverPhaseTime = 1000 * 60 * 60 * 24 	// 24 hours
+
+// how long after the game is over and resets does it wait before starting a new game
+// this gives me time to update code and send out a newsletter
+// this also lets people know when a new game will start on the landing page
+s.gameClosedPhaseTime = 1000 * 60 * 60 * 48 	// 48 hours
+
+// close registration after this number of players create accounts
 s.serverMaxPlayers = 500
+
+// number of rankings per page in the rankings panel
+s.rankings.perPage = 10
 
 if (Meteor.isServer && process.env.NODE_ENV == 'development') {
 	// cheats

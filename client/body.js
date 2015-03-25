@@ -17,6 +17,12 @@ UI.registerHelper('date_time', function(jsDate) {
 	return moment(new Date(jsDate)).format('h:mm a')
 })
 
+UI.registerHelper('date_bootstrapInput', function(jsDate) {
+	Session.get('refresh_time_field');
+	var m = moment(new Date(jsDate));
+	return m.format('YYYY-MM-DDTHH:mm')
+})
+
 UI.registerHelper('date_month_day_year', function(jsDate) {
 	return moment(new Date(jsDate)).format('M/D/YY')
 })

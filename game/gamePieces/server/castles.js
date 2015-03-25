@@ -19,17 +19,8 @@ create_castle = function(user_id) {
 	}
 
 	// if there are no hexes then this is a new game
-	// create a new map and reset market
-	// set game end date to null
 	if (Hexes.find().count() == 0) {
-		console.log('--- creating new game ---')
-		generate_hexes(12)
-		reset_market()
-		Settings.upsert({name: 'gameEndDate'}, {$set: {name: 'gameEndDate', value: null}})
-		Settings.upsert({name: 'lastDominusUserId'}, {$set: {name: 'lastDominusUserId', value: null}})
-		Settings.upsert({name: 'taxesCollected'}, {$set: {name:'taxesCollected', value:0}})
-		Settings.upsert({name: 'hasGameOverAlertBeenSent'}, {$set: {name: 'hasGameOverAlertBeenSent', value:false}})
-		Settings.upsert({name: 'isGameOver'}, {$set: {name: 'isGameOver', value:false}})
+		setupNewGame();
 	}
 
 	var found = false
@@ -102,19 +93,20 @@ create_castle = function(user_id) {
 						built_castle = true		// forEach is async?
 
 						if (has_added_rings) {
-							// add some rings of border hexes so that new people aren't on the edge
-							add_ring(true)
-							add_ring(true)
-							add_ring(true)
-							add_ring(true)
-							add_ring(true)
 
-							var numHexes = Hexes.find().count()
-							var numRings = Hexes.findOne({}, {sort:{x:-1}, limit:1}).x
-							gAlert_mapExpanded(numHexes, numRings)
-
-							// rebake map
 							Meteor.defer(function() {
+								// add some rings of border hexes so that new people aren't on the edge
+								add_ring(true)
+								add_ring(true)
+								add_ring(true)
+								add_ring(true)
+								add_ring(true)
+
+								var numHexes = Hexes.find().count()
+								var numRings = Hexes.findOne({}, {sort:{x:-1}, limit:1}).x
+								gAlert_mapExpanded(numHexes, numRings)
+
+								// rebake map
 								var mapbaker = new Mapbaker();
 								mapbaker.bakeHexes();
 							});

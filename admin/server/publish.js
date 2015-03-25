@@ -40,3 +40,7 @@ Meteor.publish('adminRoomchats', function(chatroom_id) {
 		this.ready();
 	}
 });
+
+admin_publish('adminSettings', function() {
+	return Settings.find();
+})

@@ -1,11 +1,13 @@
 <template name="gameOverAlert">
     {{#if show}}
         <div id="gameOverAlert" class="popupPanelContainer">
-            <h4>Game Over</h4>
-            <div>{{winner.username}} won on {{calendar_date gameOverDate}}</div>
-            <span class="light_text">
-                asdf
-            </span>
+	        <div class="popupPanelBg">
+	            <h3>Game Over</h3>
+	            <div><a href="" id="gameOverUserLink">{{winner.username}}</a> wins!  Congrats!</div>
+	            <span class="light_text">
+	                This game will shut down on.  The next game on this server will start on.
+	            </span>
+            </div>
         </div>
     {{/if}}
 </template>

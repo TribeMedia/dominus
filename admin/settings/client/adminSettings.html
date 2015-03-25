@@ -1,0 +1,111 @@
+<template name="adminSettings">
+
+	<div class="form-horizontal">
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Game Start Date</label>
+			<div class="col-sm-7">
+				<input type="datetime-local" class="form-control formInput" value="{{date_bootstrapInput gameStartDate}}">
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-primary" id="gameStartDateButton">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Game End Date</label>
+			<div class="col-sm-7">
+				<input type="datetime-local" class="form-control" value="{{date_bootstrapInput gameEndDate}}">
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-primary">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Is Game Over</label>
+			<div class="col-sm-7">
+				<input type="checkbox" class="form-control" value="{{isGameOver}}">
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-primary">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Game Over Date</label>
+			<div class="col-sm-7">
+				<input type="datetime-local" class="form-control" value="{{date_bootstrapInput gameOverDate}}">
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-primary">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Game Reset Date</label>
+			<div class="col-sm-7">
+				<input type="datetime-local" class="form-control" value="{{date_bootstrapInput gameResetDate}}">
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-primary">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">hasGameOverAlertBeenSent</label>
+			<div class="col-sm-7">
+				<input type="checkbox" class="form-control" value="{{hasGameOverAlertBeenSent}}">
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-primary">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Last Dominus User Id</label>
+			<div class="col-sm-7">
+				<input type="text" class="form-control" value="{{lastDominusUserId}}">
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-primary">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Winner</label>
+			<div class="col-sm-7">
+				<input type="text" class="form-control" value="{{winner}}">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Player Count</label>
+			<div class="col-sm-7">
+				<input type="number" class="form-control" value="{{playerCount}}">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Village Count</label>
+			<div class="col-sm-7">
+				<input type="number" class="form-control" value="{{villageCount}}">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Taxes Collected</label>
+			<div class="col-sm-7">
+				<input type="number" class="form-control" value="{{taxesCollected}}">
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+
+
+	</div>
+
+
+
+</template>

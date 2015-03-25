@@ -3,6 +3,8 @@ Cue.addJob('checkForGameOver', {retryOnError:false, maxMs:1000*60*5}, function(t
     done();
 });
 
+
+// when someone becomes dominus gameEndDate is set
 checkForGameOver = function() {
     var end = Settings.findOne({name: 'gameEndDate'});
     if (end && end.value !== null) {
@@ -10,7 +12,11 @@ checkForGameOver = function() {
         if (endDate) {
             if (moment().isAfter(endDate)) {
 
-                // has alert already been sent
+                // game is over! yay!
+
+                // we should send an alert for this!
+                // has alert already been sent?
+                // hasBeenSend makes sure this function isn't run twice
                 var hasBeenSent = Settings.findOne({name:'hasGameOverAlertBeenSent'});
                 if (!hasBeenSent || !hasBeenSent.value) {
 
@@ -44,6 +50,18 @@ var gameOver = function(winner) {
     Settings.upsert({name: 'isGameOver'}, {$set: {name: 'isGameOver', value:true}});
     Settings.upsert({name: 'gameOverDate'}, {$set: {name: 'gameOverDate', value:new Date()}});
 
+    // go ahead and set game reset date and game start date here
+    // so that we can override them manually in the admin panel if we want
+
+    // this is the time when the game over popup will go away and the game will be reset
+    var gameResetDate = moment().add(s.gameOverPhaseTime, 'ms');
+    Settings.upsert({name: 'gameResetDate'}, {$set: {name: 'gameResetDate', value:gameResetDate}});
+
+    // this is when the next game will start
+    var gameStartDate = moment().add(s.gameOverPhaseTime, 'ms').add(s.gameClosedPhaseTime, 'ms');
+    Settings.upsert({name: 'gameStartDate'}, {$set: {name: 'gameStartDate', value:gameStartDate}});
+    
+    // store who won for popup
     var winnerData = {
         _id:winner._id,
         username:winner.username,
@@ -54,7 +72,7 @@ var gameOver = function(winner) {
 
     Settings.upsert({name: 'winner'}, {$set: {name: 'winner', value:winnerData}});
 
-    // update profile
+    // update user's profile at home base
     var options = {};
     callLandingMethod('profile_wonGame', winner.emails[0].address, options);
 
