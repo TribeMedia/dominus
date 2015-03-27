@@ -12,14 +12,19 @@ Template.landing.helpers({
 			// game has not started yet
 			return 'Game '+s.game_number+' starts in '+ start.fromNow()+'.'
 		}
+	},
+
+	gameName: function() {
+
+	},
+
+	gameDescription: function() {
+		
 	}
 })
 
 
 Template.landing.rendered = function() {
-
-	Session.set('landingForm', 'landingCreateAccount')
-
 	setViewport()
 	setBackground()
 	window.onresize = function() {
@@ -32,14 +37,9 @@ Template.landing.rendered = function() {
 Template.landing.created = function() {
 	var self = this
 
-	self.subs = new ReadyManager()
+	Session.set('landingForm', 'landingCreateAccount')
 
-	self.autorun(function() {
-		self.subs.subscriptions([{
-			groupName: 'playerCount',
-			subscriptions: [Meteor.subscribe('playerCount').ready()]
-		}])
-	})
+	this.subscribe('playerCount');
 }
 
 var setBackground = function() {
@@ -68,55 +68,12 @@ var setViewport = function() {
 }
 
 
-Template.landingCreateAccount.helpers({
-	serverAtMaxPlayers: function() {
-		var numPlayers = Settings.findOne({name:'playerCount'})
-		if (numPlayers) {
-			if (numPlayers.value >= s.serverMaxPlayers) {
-				return true
-			}
-		}
-	}
-})
 
-Template.landingCreateAccount.events({
-	'click #landingSigninLink': function(event, template) {
-		event.preventDefault()
-		Session.set('landingForm', 'landingSignin')
-	}
-})
-
-
-Template.landingSignin.events({
-	'click #landingCreateAccountLink': function(event, template) {
-		event.preventDefault()
-		Session.set('landingForm', 'landingCreateAccount')
-	},
-
-	'click #landingForgotPasswordLink': function(event, template) {
-		event.preventDefault()
-		Session.set('landingForm', 'landingForgotPassword')
-	},
-})
-
-
-Template.landingForgotPassword.events({
-	'click #landingCreateAccountLink': function(event, template) {
-		event.preventDefault()
-		Session.set('landingForm', 'landingCreateAccount')
-	},
-
-	'click #landingSigninLink': function(event, template) {
-		event.preventDefault()
-		Session.set('landingForm', 'landingSignin')
-	}
-})
-
+// animation
 
 var loginFormRendered = function() {
 	this.find('.formContainer').parentNode._uihooks = landingLoginFormAnimation
 }
-
 
 Template.landingSignin.rendered = loginFormRendered
 Template.landingCreateAccount.rendered = loginFormRendered

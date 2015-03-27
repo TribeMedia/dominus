@@ -1,4 +1,19 @@
 Template.adminSettings.helpers({
+
+	gameName: function() {
+		var setting = Settings.findOne({name:'gameName'});
+		if (setting) {
+			return setting.value;
+		}
+	},
+
+	gameDescription: function() {
+		var setting = Settings.findOne({name:'gameDescription'});
+		if (setting) {
+			return setting.value;
+		}
+	},
+
 	gameStartDate: function() {
 		var setting = Settings.findOne({name:'gameStartDate'});
 		if (setting) {
@@ -79,9 +94,18 @@ Template.adminSettings.helpers({
 
 
 Template.adminSettings.events({
+	'click #gameNameButton': function(event, template) {
+		var input = template.find('#gameNameInput');
+	},
+
+	'click #gameDescriptionButton': function(event, template) {
+		var input = template.find('#gameDescriptionInput');
+	},
+
 	'click #gameStartDateButton': function(event, template) {
-		var input = template.find('.formInput');
-		console.log($(input).val());
+		var dateInput = template.find('#gameStartDateInput');
+		var timeInput = template.find('#gameStartTimeInput');
+		Meteor.call('admin_setGameStartDate', dateInput.value, timeInput.value);
 	}
 })
 

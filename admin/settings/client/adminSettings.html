@@ -1,22 +1,49 @@
 <template name="adminSettings">
 
 	<div class="form-horizontal">
+
 		<div class="form-group">
-			<label class="col-sm-2 control-label">Game Start Date</label>
+			<label class="col-sm-2 control-label">Game Name</label>
 			<div class="col-sm-7">
-				<input type="datetime-local" class="form-control formInput" value="{{date_bootstrapInput gameStartDate}}">
+				<input type="text" class="form-control" id="gameNameInput" value="{{gameName}}">
 			</div>
 			<div class="col-sm-3">
+				<button class="btn btn-primary" id="gameNameButton">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Game Description</label>
+			<div class="col-sm-7">
+				<input type="text" class="form-control" id="gameDescriptionInput" value="{{gameDescription}}">
+			</div>
+			<div class="col-sm-3">
+				<button class="btn btn-primary" id="gameDescriptionButton">Save</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-sm-2 control-label">Game Start Date</label>
+			<div class="col-sm-3">
+				<input type="date" class="form-control" id="gameStartDateInput" value="{{date_inputDate gameStartDate}}">
+			</div>
+			<div class="col-sm-3">
+				<input type="time" class="form-control" id="gameStartTimeInput" value="{{date_inputTime gameStartDate}}">
+			</div>
+			<div class="col-sm-4">
 				<button class="btn btn-primary" id="gameStartDateButton">Save</button>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Game End Date</label>
-			<div class="col-sm-7">
-				<input type="datetime-local" class="form-control" value="{{date_bootstrapInput gameEndDate}}">
+			<div class="col-sm-3">
+				<input type="date" class="form-control" value="{{date_inputDate gameEndDate}}">
 			</div>
 			<div class="col-sm-3">
+				<input type="time" class="form-control" value="{{date_inputTime gameEndDate}}">
+			</div>
+			<div class="col-sm-4">
 				<button class="btn btn-primary">Save</button>
 			</div>
 		</div>
@@ -33,20 +60,26 @@
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Game Over Date</label>
-			<div class="col-sm-7">
-				<input type="datetime-local" class="form-control" value="{{date_bootstrapInput gameOverDate}}">
+			<div class="col-sm-3">
+				<input type="date" class="form-control dateInput" value="{{date_inputDate gameOverDate}}">
 			</div>
 			<div class="col-sm-3">
+				<input type="time" class="form-control timeInput" value="{{date_inputTime gameOverDate}}">
+			</div>
+			<div class="col-sm-4">
 				<button class="btn btn-primary">Save</button>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Game Reset Date</label>
-			<div class="col-sm-7">
-				<input type="datetime-local" class="form-control" value="{{date_bootstrapInput gameResetDate}}">
+			<div class="col-sm-3">
+				<input type="date" class="form-control dateInput" value="{{date_inputDate gameResetDate}}">
 			</div>
 			<div class="col-sm-3">
+				<input type="time" class="form-control timeInput" value="{{date_inputTime gameResetDate}}">
+			</div>
+			<div class="col-sm-4">
 				<button class="btn btn-primary">Save</button>
 			</div>
 		</div>

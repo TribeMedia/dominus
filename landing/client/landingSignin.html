@@ -1,0 +1,20 @@
+<template name="landingSignin">
+	{{> aSocialError}}
+	{{> aGoogleButton}}
+	{{> aFacebookButton}}
+
+	<br>
+	<div class="divider">
+		<hr class="left">or<hr class="right"><div class="after"></div>
+	</div>
+	<br>
+
+	<div class="loginTitle">Sign In</div>
+	<br>
+	<div class="formContainer">
+		{{> aSignin}}
+	</div>
+	<br>
+	<div class="loginLink"><a href="" id="landingCreateAccountLink">Create Account</a></div>
+	<div class="loginLink"><a href="" id="landingForgotPasswordLink">Forgot Password</a></div>
+</template>

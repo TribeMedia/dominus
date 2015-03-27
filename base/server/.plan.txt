@@ -1,0 +1,49 @@
+set settings in game not base so that game code and base code don't have to match
+	game name
+	game description
+	start date
+
+	update base when they change
+
+
+every 10 min server lets base know server info - cpu usage, free mem
+
+game notifies server when
+	server stats up
+		lets base know game info
+		send gameId and get game name and description for landing page
+			push to game when changed at base
+	game ends
+		send results
+	new player
+		create/update profile
+	castle created
+	changed name
+	became dominus
+	won game
+	rank changed - income and number of vassals
+	account deleted
+	settings change
+		game name
+		description
+		start date
+	
+
+when game ends - Settings.isGameOver & Settings.gameEndDate
+	notify base
+	show game over popup for 24 hours
+	disable new accounts
+	show when next game will start
+
+after 24 hours reset game - Settings.gameEndDate + s.gameOverPhaseTime
+	close login
+	stop jobs
+	reset database
+	set start date
+	email dan
+	pull new code
+
+after 48 hours (or when start date is set to) - Settings.gameStartDate
+	setupNewGame()
+	open registration and login
+	notify base that game has started
