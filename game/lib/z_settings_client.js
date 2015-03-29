@@ -1,5 +1,7 @@
 // settings per game
 
-if (Meteor.settings.public.GAME_ID == 'dev') {
+if (Meteor.isClient) {
+    if (Meteor.settings.public.GAME_ID == 'dev') {
 
+    }
 }

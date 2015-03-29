@@ -9,10 +9,17 @@
             <div class="panel-body">
                 <p>Inactive players are deleted to make room for new players.</p>
 
-                <p>Players who sign in with a password (not Google or Facebook) and have not verified their email are deleted after 48 hours.</p>
-                <p>Players with no villages or vassals are deleted after not logging in for 48 hours.</p>
+                {{#if s.inactives.deleteUnverifiedEmails}}
+                    <p>Players who sign in with a password (not Google or Facebook) and have not verified their email are deleted after 48 hours.</p>
+                {{/if}}
 
-                <p>All players are deleted after not logging in for 10 days.</p>
+                {{#if s.inactives.deleteNoVillagesOrVassals}}
+                    <p>Players with no villages or vassals are deleted after not logging in for 48 hours.</p>
+                {{/if}}
+
+                {{#if s.inactives.deleteEveryoneElse}}
+                    <p>All players are deleted after not logging in for 10 days.</p>
+                {{/if}}
 
                 <p>You will receive an email reminder 24 hours hours before your account is deleted.</p>
             </div>
