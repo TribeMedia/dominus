@@ -13,24 +13,24 @@ s.rankings = {};
 
 // how long after the game ends do we show the game over popup
 // after this time expires the game closes login and resets
-s.gameOverPhaseTime = 1000 * 60 * 60 * 24 	// 24 hours
+s.gameOverPhaseTime = 1000 * 60 * 60 * 24; 	// 24 hours
 
 // how long after the game is over and resets does it wait before starting a new game
 // this gives me time to update code and send out a newsletter
 // this also lets people know when a new game will start on the landing page
-s.gameClosedPhaseTime = 1000 * 60 * 60 * 48 	// 48 hours
+s.gameClosedPhaseTime = 1000 * 60 * 60 * 48; 	// 48 hours
 
 // close registration after this number of players create accounts
-s.serverMaxPlayers = 500
+s.serverMaxPlayers = 500;
 
 // number of rankings per page in the rankings panel
-s.rankings.perPage = 10
+s.rankings.perPage = 10;
 
 if (Meteor.isServer && process.env.NODE_ENV == 'development') {
 	// cheats
-	s.resource.interval = 1000 * 30
-	s.battle_interval = 1000 * 30
-	s.village.max_can_have = 6
+	s.resource.interval = 1000 * 30;
+	s.battle_interval = 1000 * 30;
+	s.village.max_can_have = 6;
 } else {
 	s.resource.interval = 1000 * 60 * 10;
 	s.battle_interval = 1000 * 60 * 4;

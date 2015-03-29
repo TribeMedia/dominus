@@ -9,10 +9,8 @@ set settings in game not base so that game code and base code don't have to matc
 every 10 min server lets base know server info - cpu usage, free mem
 
 game notifies server when
-	server stats up
+	server starts up
 		lets base know game info
-		send gameId and get game name and description for landing page
-			push to game when changed at base
 	game ends
 		send results
 	new player
@@ -27,7 +25,7 @@ game notifies server when
 		game name
 		description
 		start date
-	
+
 
 when game ends - Settings.isGameOver & Settings.gameEndDate
 	notify base

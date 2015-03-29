@@ -90,16 +90,18 @@ Template.adminSettings.helpers({
 			return setting.value;
 		}
 	},
-})
+});
 
 
 Template.adminSettings.events({
 	'click #gameNameButton': function(event, template) {
 		var input = template.find('#gameNameInput');
+		Meteor.call('admin_setGameName', input.value);
 	},
 
 	'click #gameDescriptionButton': function(event, template) {
 		var input = template.find('#gameDescriptionInput');
+		Meteor.call('admin_setGameDescription', input.value);
 	},
 
 	'click #gameStartDateButton': function(event, template) {
@@ -107,9 +109,9 @@ Template.adminSettings.events({
 		var timeInput = template.find('#gameStartTimeInput');
 		Meteor.call('admin_setGameStartDate', dateInput.value, timeInput.value);
 	}
-})
+});
 
 
 Template.adminSettings.onCreated(function() {
 	this.subscribe('adminSettings');
-})
+});

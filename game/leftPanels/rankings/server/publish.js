@@ -1,6 +1,6 @@
 Meteor.publish('playerCount', function() {
-	return Settings.find({name:'playerCount'})
-})
+	return Settings.find({name:'playerCount'});
+});
 
 Meteor.publish('villageCount', function() {
 	return Settings.find({name:'villageCount'})

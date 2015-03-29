@@ -9,7 +9,7 @@ checkForGameOver = function() {
     var end = Settings.findOne({name: 'gameEndDate'});
     if (end && end.value !== null) {
         var endDate = moment(end.value);
-        if (endDate) {
+        if (endDate && endDate.isValid()) {
             if (moment().isAfter(endDate)) {
 
                 // game is over! yay!
@@ -45,6 +45,8 @@ checkForGameOver = function() {
 
 
 var gameOver = function(winner) {
+    console.log('--- game over ---');
+
     gAlert_gameOver(winner._id);
     Settings.upsert({name: 'hasGameOverAlertBeenSent'}, {$set: {name: 'hasGameOverAlertBeenSent', value:true}});
     Settings.upsert({name: 'isGameOver'}, {$set: {name: 'isGameOver', value:true}});
@@ -60,7 +62,7 @@ var gameOver = function(winner) {
     // this is when the next game will start
     var gameStartDate = moment().add(s.gameOverPhaseTime, 'ms').add(s.gameClosedPhaseTime, 'ms');
     Settings.upsert({name: 'gameStartDate'}, {$set: {name: 'gameStartDate', value:gameStartDate}});
-    
+
     // store who won for popup
     var winnerData = {
         _id:winner._id,
@@ -168,4 +170,19 @@ var gameOver = function(winner) {
     });
 
     landingConnection.call('addResultsFromGame', process.env.GAME_ID, process.env.DOMINUS_KEY, results);
+
+    emailGameOverAlert();
+};
+
+
+// send email to admin letting them know that a game ended
+var emailGameOverAlert = function() {
+    var text = 'A game has ended'.
+
+    Email.send({
+        to: process.env.DOMINUS_ADMIN_EMAIL,
+        from: process.env.DOMINUS_ADMIN_EMAIL,
+        subject: 'Dominus Alert - Game '+process.env.GAME_ID+' Over',
+        text: text
+    });
 };

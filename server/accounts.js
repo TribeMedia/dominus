@@ -1,11 +1,29 @@
-// Accounts.validateNewUser(function(user) {
-// 	var bannedEmails = EJSON.parse(process.env.BANNED_EMAILS);
-// 	if (_.contains(bannedEmails, user.emails[0].address)) {
-// 		throw new Meteor.Error('403', 'User banned.');
-// 	} else {
-// 		return true;
-// 	}
-// });
+Accounts.validateNewUser(function(user) {
+	// TODO: fix this
+	// var bannedEmails = EJSON.parse(process.env.BANNED_EMAILS);
+	// if (_.contains(bannedEmails, user.emails[0].address)) {
+	// 	throw new Meteor.Error('403', 'User banned.');
+	// } else {
+	// 	return true;
+	// }
+
+	if (user.emails[0].address == process.env.DOMINUS_ADMIN_EMAIL) {
+		return true;
+	}
+
+	// only let admin create account if before start date
+	var setting = Settings.findOne({name:'gameStartDate'});
+	if (setting && setting.value !== null) {
+		var startDate = moment(new Date(setting.value));
+		if (startDate.isValid()) {
+			if (moment().isAfter(startDate)) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+});
 
 
 // this is called before validateNewUser()

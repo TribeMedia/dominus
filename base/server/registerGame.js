@@ -3,6 +3,11 @@ var maxTries = 30;
 
 Meteor.startup(function() {
     registerGame();
+
+    // pass DOMINUS_BASE to client
+    // insert into settings
+    // this is used for links
+    Settings.upsert({name:'dominusBase'}, {$set: {name:'dominusBase', value:process.env.DOMINUS_BASE}});
 });
 
 var registerGame = function() {
@@ -15,9 +20,25 @@ var registerGame = function() {
             hasEnded = setting.value;
         }
 
+        var gameName = process.env.GAME_ID;
+        setting = Settings.findOne({name: 'gameName'});
+        if (setting) {
+            gameName = setting.value;
+        }
+
+        var gameDescription = 'New game.';
+        setting = Settings.findOne({name: 'gameDescription'});
+        if (setting) {
+            gameDescription = setting.value;
+        }
+
         var numPlayers = Meteor.users.find().count();
 
-        var startDate = s.game_start_date;
+        var startDate= null;
+        setting = Settings.findOne({name: 'startDate'});
+        if (setting) {
+            startDate = setting.value;
+        }
 
         var maxPlayers = s.serverMaxPlayers;
 
@@ -28,7 +49,9 @@ var registerGame = function() {
             numPlayers,
             startDate,
             hasEnded,
-            maxPlayers
+            maxPlayers,
+            gameName,
+            gameDescription
         );
 
     } else {

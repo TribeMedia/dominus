@@ -19,6 +19,8 @@ create_castle = function(user_id) {
 	}
 
 	// if there are no hexes then this is a new game
+	// this is now done after game is reset
+	// this might still happen if admin creates an account on a new game on a new server
 	if (Hexes.find().count() == 0) {
 		setupNewGame();
 	}

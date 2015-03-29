@@ -61,4 +61,8 @@ Router.map(function() {
 		waitOn: function() { return Meteor.subscribe('admin_chatrooms')}
 	})
 
+    this.route('adminLogin', {
+        path: '/admin/login',
+    })
+
 });

@@ -160,6 +160,7 @@ Meteor.startup(function() {
 		// check to see if game is over and send alert
 		Meteor.setInterval(function() {
 			Cue.addTask('checkForGameOver', {isAsync:false, unique:true}, {});
+			Cue.addTask('checkForGameReset', {isAsync:false, unique:true}, {});
 		}, 1000 * 60);
 	}
 });

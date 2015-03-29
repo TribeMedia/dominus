@@ -1,40 +1,34 @@
 <template name="landingCreateAccount">
-	{{#if serverAtMaxPlayers}}
+	{{#if gameIsFull}}
 
 		<h3>This game is full.</h3>
 		<br>
 
-		<a href="">Go here</a> to find another game.<br>
+		<a href="">Go here</a> to see the list of games.<br>
 
 		<br>
 		<div class="loginLink"><a href="" id="landingSigninLink">Sign In</a></div>
 
 	{{else}}
 
-		{{#if gameIsOver}}
+		{{> aSocialError}}
+		{{> aGoogleButton}}
+		{{> aFacebookButton}}
 
-		{{else}}
+		<br>
+		<div class="divider">
+			<hr class="left">or<hr class="right"><div class="after"></div>
+		</div>
+		<br>
 
-			{{> aSocialError}}
-			{{> aGoogleButton}}
-			{{> aFacebookButton}}
+		<div class="loginTitle">Create an an account.</div>
+		<br>
 
-			<br>
-			<div class="divider">
-				<hr class="left">or<hr class="right"><div class="after"></div>
-			</div>
-			<br>
-
-			<div class="loginTitle">Create an an account.</div>
-			<br>
-
-			<div class="formContainer">
-				{{> aCreateAccount}}
-			</div>
-			<br>
-			<div class="loginLink"><a href="" id="landingSigninLink">Sign In</a></div>
-
-		{{/if}}
+		<div class="formContainer">
+			{{> aCreateAccount}}
+		</div>
+		<br>
+		<div class="loginLink"><a href="" id="landingSigninLink">Sign In</a></div>
 
 	{{/if}}
 </template>

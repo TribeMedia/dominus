@@ -7,21 +7,37 @@
 			A free open source multiplayer strategy game.
 		</div>
 
-		<div id="landingBanner">
-			<div class="landingPad">
-				<div>
-					
-				</div>
+		{{#if Template.subscriptionsReady}}
 
-				<div style="text-align:left;margin-top:20px;">
-					{{startText}}
+			<div id="landingBanner">
+				<div class="landingPad" style="">
+					<div style="font-size:175%;text-align:center;">
+						{{gameName}}
+					</div>
+
+					<div style="margin-top:10px;font-size:120%">
+						{{gameDescription}}
+					</div>
+
+					<div style="margin-top:20px;color:#444;font-size:85%;">
+						{{#if gameHasStarted}}
+							This game started {{date_from_now gameStartDate}} {{date_calendar gameStartDate}}. <a href="{{dominusBase}}">Click here</a> to return to the list of games.
+						{{/if}}
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="landingPad" id="passwordLoginContainer">
-			{{> UI.dynamic template=form}}
-		</div>
+			<div class="landingPad" id="passwordLoginContainer">
+				{{#if gameHasStarted}}
+					{{> UI.dynamic template=form}}
+				{{else}}
+					{{> landingStartSoon}}
+				{{/if}}
+			</div>
+
+		{{else}}
+			{{> loading}}
+		{{/if}}
 
 		<div id="landingFooter">
 			<div class="landingPad" style="text-align:center;">

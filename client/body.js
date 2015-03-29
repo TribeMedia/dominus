@@ -9,7 +9,7 @@ UI.registerHelper('date_from_now', function(jsDate) {
 
 UI.registerHelper('date_calendar', function(jsDate) {
 	Session.get('refresh_time_field')
-	return moment(new Date(jsDate)).calendar()
+	return moment(new Date(jsDate)).calendar().toLowerCase();
 })
 
 UI.registerHelper('date_time', function(jsDate) {
@@ -20,16 +20,14 @@ UI.registerHelper('date_time', function(jsDate) {
 // for input type=date
 UI.registerHelper('date_inputDate', function(jsDate) {
 	var m = moment(new Date(jsDate));
-	var m = moment();
 	return m.format('YYYY-MM-DD');
-})
+});
 
 // for input type=time
 UI.registerHelper('date_inputTime', function(jsDate) {
 	var m = moment(new Date(jsDate));
-	var m = moment();
 	return m.format('HH:mm');
-})
+});
 
 UI.registerHelper('date_month_day_year', function(jsDate) {
 	return moment(new Date(jsDate)).format('M/D/YY')
