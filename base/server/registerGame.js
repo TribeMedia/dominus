@@ -35,7 +35,7 @@ var registerGame = function() {
         var numPlayers = Meteor.users.find().count();
 
         var startDate= null;
-        setting = Settings.findOne({name: 'startDate'});
+        setting = Settings.findOne({name: 'gameStartDate'});
         if (setting) {
             startDate = setting.value;
         }
