@@ -193,4 +193,8 @@ deleteAccount = function(user_id) {
 
 	Cue.addTask('setupEveryoneChatroom', {isAsync:false, unique:true}, {})
 	Cue.addTask('check_for_dominus', {isAsync:false, unique:true}, {})
+
+	// let home base know that a player was deleted
+	var numPlayers = Meteor.users.find().count();
+	landingConnection.call('playerDeleted', process.env.GAME_ID, process.env.DOMINUS_KEY, numPlayers);
 }
