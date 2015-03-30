@@ -7,7 +7,10 @@ Template.gameOverAlert.helpers({
     },
 
     winner: function() {
-    	return Settings.findOne({name:'winner'});
+    	var setting = Settings.findOne({name:'winner'});
+        if (setting) {
+            return setting.value;
+        }
     },
 
     gameOverDate: function() {

@@ -108,7 +108,25 @@ Template.adminSettings.events({
 		var dateInput = template.find('#gameStartDateInput');
 		var timeInput = template.find('#gameStartTimeInput');
 		Meteor.call('admin_setGameStartDate', dateInput.value, timeInput.value);
-	}
+	},
+
+	'click #gameEndDateButton': function(event, template) {
+		var dateInput = template.find('#gameEndDateInput');
+		var timeInput = template.find('#gameEndTimeInput');
+		Meteor.call('admin_setGameEndDate', dateInput.value, timeInput.value);
+	},
+
+	'click #gameOverDateButton': function(event, template) {
+		var dateInput = template.find('#gameOverDateInput');
+		var timeInput = template.find('#gameOverTimeInput');
+		Meteor.call('admin_setGameOverDate', dateInput.value, timeInput.value);
+	},
+
+	'click #gameResetDateButton': function(event, template) {
+		var dateInput = template.find('#gameResetDateInput');
+		var timeInput = template.find('#gameResetTimeInput');
+		Meteor.call('admin_setGameResetDate', dateInput.value, timeInput.value);
+	},
 });
 
 

@@ -18,5 +18,35 @@ Meteor.methods({
 		} else {
 			console.error('error saving start date');
 		}
-	}
+	},
+
+	admin_setGameEndDate: function(date, time) {
+		var m = moment(date+' '+time);
+		if (m.isValid()) {
+			Settings.upsert({name:'gameEndDate'}, {$set: {name:'gameEndDate', value:m.toDate()}});
+			//setGameInfo({startDate:m.toDate()});
+		} else {
+			console.error('error saving end date');
+		}
+	},
+
+	admin_setGameOverDate: function(date, time) {
+		var m = moment(date+' '+time);
+		if (m.isValid()) {
+			Settings.upsert({name:'gameOverDate'}, {$set: {name:'gameOverDate', value:m.toDate()}});
+			//setGameInfo({startDate:m.toDate()});
+		} else {
+			console.error('error saving game over date');
+		}
+	},
+
+	admin_setGameResetDate: function(date, time) {
+		var m = moment(date+' '+time);
+		if (m.isValid()) {
+			Settings.upsert({name:'gameResetDate'}, {$set: {name:'gameResetDate', value:m.toDate()}});
+			//setGameInfo({startDate:m.toDate()});
+		} else {
+			console.error('error saving game reset date');
+		}
+	},
 });

@@ -38,56 +38,55 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Game End Date</label>
 			<div class="col-sm-3">
-				<input type="date" class="form-control" value="{{date_inputDate gameEndDate}}">
+				<input type="date" class="form-control" id="gameEndDateInput" value="{{date_inputDate gameEndDate}}">
 			</div>
 			<div class="col-sm-3">
-				<input type="time" class="form-control" value="{{date_inputTime gameEndDate}}">
+				<input type="time" class="form-control" id="gameEndTimeInput" value="{{date_inputTime gameEndDate}}">
 			</div>
 			<div class="col-sm-4">
-				<button class="btn btn-primary">Save</button>
+				<button class="btn btn-primary" id="gameEndDateButton">Save</button>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Is Game Over</label>
 			<div class="col-sm-7">
-				<input type="checkbox" class="form-control" value="{{isGameOver}}">
+				<input type="checkbox" class="form-control" checked="{{isGameOver}}">
 			</div>
 			<div class="col-sm-3">
-				<button class="btn btn-primary">Save</button>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Game Over Date</label>
 			<div class="col-sm-3">
-				<input type="date" class="form-control dateInput" value="{{date_inputDate gameOverDate}}">
+				<input type="date" class="form-control dateInput" id="gameOverDateInput" value="{{date_inputDate gameOverDate}}">
 			</div>
 			<div class="col-sm-3">
-				<input type="time" class="form-control timeInput" value="{{date_inputTime gameOverDate}}">
+				<input type="time" class="form-control timeInput" id="gameOverTimeInput" value="{{date_inputTime gameOverDate}}">
 			</div>
 			<div class="col-sm-4">
-				<button class="btn btn-primary">Save</button>
+				<button class="btn btn-primary" id="gameOverDateButton">Save</button>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label">Game Reset Date</label>
 			<div class="col-sm-3">
-				<input type="date" class="form-control dateInput" value="{{date_inputDate gameResetDate}}">
+				<input type="date" class="form-control dateInput" id="gameResetDateInput" value="{{date_inputDate gameResetDate}}">
 			</div>
 			<div class="col-sm-3">
-				<input type="time" class="form-control timeInput" value="{{date_inputTime gameResetDate}}">
+				<input type="time" class="form-control timeInput" id="gameResetTimeInput" value="{{date_inputTime gameResetDate}}">
 			</div>
 			<div class="col-sm-4">
-				<button class="btn btn-primary">Save</button>
+				<button class="btn btn-primary" id="gameResetDateButton">Save</button>
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="col-sm-2 control-label">hasGameOverAlertBeenSent</label>
 			<div class="col-sm-7">
-				<input type="checkbox" class="form-control" value="{{hasGameOverAlertBeenSent}}">
+				<input type="checkbox" class="form-control" checked="{{hasGameOverAlertBeenSent}}">
 			</div>
 			<div class="col-sm-3">
 				<button class="btn btn-primary">Save</button>

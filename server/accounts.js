@@ -7,6 +7,7 @@ Accounts.validateNewUser(function(user) {
 	// 	return true;
 	// }
 
+	// admin can always create account
 	if (user.emails[0].address == process.env.DOMINUS_ADMIN_EMAIL) {
 		return true;
 	}

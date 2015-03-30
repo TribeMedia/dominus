@@ -8,8 +8,10 @@ Cue.addJob('checkForGameOver', {retryOnError:false, maxMs:1000*60*5}, function(t
 checkForGameOver = function() {
     var end = Settings.findOne({name: 'gameEndDate'});
     if (end && end.value !== null) {
-        var endDate = moment(end.value);
+
+        var endDate = moment(new Date(end.value));
         if (endDate && endDate.isValid()) {
+
             if (moment().isAfter(endDate)) {
 
                 // game is over! yay!
@@ -18,10 +20,12 @@ checkForGameOver = function() {
                 // has alert already been sent?
                 // hasBeenSend makes sure this function isn't run twice
                 var hasBeenSent = Settings.findOne({name:'hasGameOverAlertBeenSent'});
+
                 if (!hasBeenSent || !hasBeenSent.value) {
 
                     // find who won
-                    var winner = Meteor.users.findOne({is_dominus:true}, {fields:{_id:1, emails:1, username:1}});
+                    var winner = Meteor.users.findOne({is_dominus:true}, {fields:{_id:1, emails:1, username:1, x:1, y:1, castle_id:1}});
+
                     if (!winner) {
 
                         // if nobody is currently dominus see who was last dominus
@@ -56,11 +60,11 @@ var gameOver = function(winner) {
     // so that we can override them manually in the admin panel if we want
 
     // this is the time when the game over popup will go away and the game will be reset
-    var gameResetDate = moment().add(s.gameOverPhaseTime, 'ms');
+    var gameResetDate = moment().add(s.gameOverPhaseTime, 'ms').toDate();
     Settings.upsert({name: 'gameResetDate'}, {$set: {name: 'gameResetDate', value:gameResetDate}});
 
     // this is when the next game will start
-    var gameStartDate = moment().add(s.gameOverPhaseTime, 'ms').add(s.gameClosedPhaseTime, 'ms');
+    var gameStartDate = moment().add(s.gameOverPhaseTime, 'ms').add(s.gameClosedPhaseTime, 'ms').toDate();
     Settings.upsert({name: 'gameStartDate'}, {$set: {name: 'gameStartDate', value:gameStartDate}});
 
     // store who won for popup
@@ -128,7 +132,7 @@ var gameOver = function(winner) {
             username:user.username,
             rank:rank,
             email:user.emails[0].address,
-            income:income
+            income:user.income
         };
         results.income.push(player);
         rank++;
@@ -142,8 +146,8 @@ var gameOver = function(winner) {
             username:user.username,
             rank:rank,
             email:user.emails[0].address,
-            lostSoldiersWorth:losses_worth,
-            lostSoldiersNum:losses_num
+            lostSoldiersWorth:user.losses_worth,
+            lostSoldiersNum:user.losses_num
         };
         results.lostSoldiers.push(player);
         rank++;
@@ -177,7 +181,9 @@ var gameOver = function(winner) {
 
 // send email to admin letting them know that a game ended
 var emailGameOverAlert = function() {
-    var text = 'A game has ended'.
+    var text = 'A game has ended.';
+
+    //mandrillSendTemplate('admin-game-over', process.env.DOMINUS_ADMIN_EMAIL, process.env.DOMINUS_ADMIN_EMAIL);
 
     Email.send({
         to: process.env.DOMINUS_ADMIN_EMAIL,
