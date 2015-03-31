@@ -33,10 +33,15 @@ var startResetGame = function() {
 	Cue.stop();
 	Cue.dropTasks();
 
+    var delay = 1000*60*5;
+    if (process.env.NODE_ENV == 'development') {
+        delay = 1000*15;
+    }
+
     // delay 5 min
     Meteor.setTimeout(function() {
         resetGame();
-    }, 1000*60*5);
+    }, delay);
 };
 
 
@@ -62,7 +67,7 @@ var resetGame = function() {
         gameName = setting.value;
     }
 
-    setting = Settings.findOne({name:'gameName'});
+    setting = Settings.findOne({name:'gameDescription'});
     if (setting) {
         gameDescription = setting.value;
     }
@@ -100,14 +105,18 @@ var resetGame = function() {
     Settings.insert({name:'gameStartDate', value:startDate.toDate()});
     Settings.insert({name:'gameName', value:gameName});
     Settings.insert({name:'gameDescription', value:gameDescription});
-    setupNewGame();
-
-    emailGameResetAlert();
 
     // let home base know that game has been reset
     landingConnection.call('gameReset', process.env.GAME_ID, process.env.DOMINUS_KEY);
 
-    new pullNewCode();
+    emailGameResetAlert();
+
+    // must be called after landingConnection.gameReset
+    setupNewGame();
+
+    if (process.env.NODE_ENV != 'development') {
+        new pullNewCode();
+    }
 };
 
 

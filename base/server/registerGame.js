@@ -10,7 +10,7 @@ Meteor.startup(function() {
     Settings.upsert({name:'dominusBase'}, {$set: {name:'dominusBase', value:process.env.DOMINUS_BASE}});
 });
 
-var registerGame = function() {
+registerGame = function() {
     if (landingConnection.status().connected) {
         console.log('--- registering game with '+process.env.DOMINUS_BASE);
 

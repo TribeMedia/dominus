@@ -6,11 +6,11 @@ if (Meteor.settings.public.GAME_ID == 'dev') {
     // length of time added to game end clock when there is a new dominus
     s.time_til_game_end_when_new_dominus = 1000 * 60 * 60 * 24 * 2; 	// 2 days
 
-    s.resource.gained_at_hex = 4;
+    s.resource.gained_at_hex = 6;
 
     s.army.stats = {
         footmen: {
-            offense: 10,
+            offense: 15,
             defense: 10,
             speed: 15
         },
@@ -25,7 +25,7 @@ if (Meteor.settings.public.GAME_ID == 'dev') {
             speed: 11
         },
         cavalry: {
-            offense: 13,
+            offense: 18,
             defense: 5,
             speed: 33
         },
@@ -33,7 +33,7 @@ if (Meteor.settings.public.GAME_ID == 'dev') {
             offense: 1,
             defense: 1,
             speed: 7,
-            bonus_against_buildings: 60
+            bonus_against_buildings: 80
         }
     };
 }

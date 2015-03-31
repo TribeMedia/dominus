@@ -13,4 +13,7 @@ setupNewGame = function() {
 	Settings.upsert({name: 'isGameOver'}, {$set: {name: 'isGameOver', value:false}});
 	Settings.upsert({name: 'gameOverDate'}, {$set: {name: 'gameOverDate', value:null}});
 	Settings.upsert({name: 'gameResetDate'}, {$set: {name: 'gameResetDate', value:null}});
+
+	// register game with base
+	registerGame();
 };
