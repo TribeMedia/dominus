@@ -34,6 +34,10 @@ Template.menu.helpers({
 		if (Session.get('show_forum_panel')) { return 'active' } else { return '' }
 	},
 
+	forumsActive: function() {
+		if (Session.get('showForumsPanel')) { return 'active'; } else { return ''; }
+	},
+
 	rankings_active: function() {
 		if (Session.get('show_rankings_panel')) { return 'active' } else { return '' }
 	},
@@ -157,6 +161,16 @@ Template.menu.events({
 		}
 	},
 
+	'click #showForumsButton': function(event, template) {
+		if (Session.get('showForumsPanel')) {
+			Session.set('showForumsPanel', false)
+			Cookie.set('forum_close', new Date(), {years: 10})
+		} else {
+			Session.set('showForumsPanel', true)
+			Cookie.clear('forum_close')
+		}
+	},
+
 	'click #show_alerts_panel_button': function(event, template) {
 		if (Session.get('show_alerts_panel')) {
 			Session.set('show_alerts_panel', false)
@@ -229,7 +243,7 @@ Template.menu.rendered = function() {
 		Meteor.subscribe('market')
 		Meteor.subscribe('recentchats')
 		Meteor.subscribe('latest_forum_posts')
-		
+
 		// villages must always be loaded
 		// so that we know how many villages a player has
 		Meteor.subscribe('left_panel_villages')

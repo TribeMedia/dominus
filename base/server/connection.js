@@ -1,6 +1,7 @@
 landingConnection = DDP.connect(process.env.DOMINUS_BASE);
 
 
+
 callLandingMethod = function(methodName, email, options) {
     if (landingConnection.status().connected) {
         Meteor.defer(function() {
