@@ -9,5 +9,5 @@ prepareTextForForum = function(text) {
 	// })
 
 	// trying this instead of above
-	return text.replace(/<(?!br\s*\/?)[^>]+>/g, '')
-}
+	return text.replace(/<(?!br\s*\/?)[^>]+>/g, '');
+};

@@ -1,16 +1,17 @@
 Template.forum.helpers({
-    tags: function() {
-        return Forumtags.find();
+    template: function() {
+        return Session.get('forumTemplate');
     }
 });
 
 
+
 Template.forum.onCreated(function() {
+    Session.setDefault('forumTemplate', 'forumList');
+
     this.autorun(function() {
         if (landingConnection.status().connected) {
-            console.log('subscribing to forumtags')
             var status = landingConnection.subscribe('forumtags');
-            console.log(status.ready())
         }
     });
 });

@@ -1,10 +1,5 @@
 <template name="forum">
     <div id="forumsPanel">
-
-        {{#each tags}}
-            {{name}}
-        {{else}}
-            no tags
-        {{/each}}
+        {{> Template.dynamic template=template}}
     </div>
 </template>
