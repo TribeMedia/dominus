@@ -1,7 +1,6 @@
 landingConnection = DDP.connect(Meteor.settings.public.baseUrl);
 
 
-
 if (Meteor.isServer) {
     callLandingMethod = function(methodName, email, options) {
         if (landingConnection.status().connected) {
