@@ -201,19 +201,6 @@ create_lord_and_vassal = function(lord_id, vassal_id) {
 		console.error('vassal must not have a lord');
 	}
 
-	// set vassal and vassal's allies below's king to king of lord
-	var newKing = null;
-	if (lord.is_king) {
-		newKing = lord._id;
-	} else if (lord.king){
-		newKing = lord.king;
-	} else {
-		console.log('lord '+lord_id);
-		console.log('vassal '+vassal_id);
-		console.error('lords king is not set');
-	}
-	Meteor.users.update({_id:{$in:vassal.allies_below}}, {$set:{king:newKing}}, {multi:true});
-
 	// set lord and remove king
 	Meteor.users.update(vassal_id, {$set: {
 		lord: lord_id,
@@ -225,23 +212,37 @@ create_lord_and_vassal = function(lord_id, vassal_id) {
 		vassals: vassal_id
 	}});
 
-	// allies_above and allies
+	// set vassal and vassal's allies below's king to king of lord
+	// must happen after setting lord
+	var newKing = null;
+	if (lord.is_king) {
+		newKing = lord._id;
+	} else if (lord.king){
+		newKing = lord.king;
+	} else {
+		newKing = getKingOf(vassal_id);
+	}
+	var setKingIds = _.union(vassal.allies_below, vassal._id, lord._id);
+	Meteor.users.update({_id:{$in:setKingIds}}, {$set:{king:newKing}}, {multi:true});
+
+	// allies_above
 	// add lord and lord's allies_above to 		vassal and vassal's allies below allies_above
-	// add lord and lord's allies_above to		vassal and vassal's allies below allies
 	var addIds = _.union(lord.allies_above, [lord._id]);
 	var addUsers = _.union(vassal.allies_below, [vassal._id]);
 	Meteor.users.update({_id: {$in:addUsers}}, {$addToSet: {allies_above:{$each:addIds}}}, {multi:true});
 
-	// allies_below and allies
+	// allies_below
 	// add vassal and vassal's allies_below to 	lord and lord's allies above allies_below
-	// add vassal and vassal's allies_below to	lord and lord's allies above allies
 	var addVassalIds = _.union(vassal.allies_below, [vassal._id]);
 	var addVassalUsers = _.union(lord.allies_above, [lord._id]);
 	Meteor.users.update({_id: {$in:addVassalUsers}}, {$addToSet: {allies_below:{$each:addVassalIds}}}, {multi:true});
 
 	// team
 	// add vassal and vassal's allies_below to lord's team
-	var team = _.union(lord.team, [lord._id, vassal._id], vassal.allies_below);
+	// this does not work for some reason
+	//var team = _.union(lord.team, [lord._id, vassal._id], vassal.allies_below);
+	// use this slower way instead
+	var team = getTeamOf(newKing);
 	Meteor.users.update({_id:{$in:team}}, {$set:{team:team}}, {multi:true});
 
 	// update count of everyone who was changed
@@ -288,5 +289,34 @@ update_vassal_ally_count = function(user_id) {
 
 		Meteor.users.update(user_id, {$set: {num_team:num_team, num_vassals: num_vassals, num_allies_above: num_allies_above, num_allies_below: num_allies_below}});
 		Cue.addTask('dailystats_num_allies', {isAsync:true, unique:false}, {user_id:user_id});
+	}
+};
+
+
+
+getKingOf = function(userId) {
+	var user = Meteor.users.findOne(userId, {fields: {lord:1}});
+	if (user) {
+		if (user.lord) {
+			return getKingOf(user.lord);
+		} else {
+			return userId;
+		}
+	} else {
+		console.error('error finding lord in getKingOf()');
+	}
+};
+
+getTeamOf = function(userId) {
+	var kingId = getKingOf(userId);
+	if (kingId) {
+		var king = Meteor.users.findOne(kingId, {fields: {allies_below:1}});
+		if (king) {
+			return _.union(king.allies_below, king._id);
+		} else {
+			console.error('error finding user in getTeamOf()');
+		}
+	} else {
+		console.error('error finding king in getTeamOf()');
 	}
 };
