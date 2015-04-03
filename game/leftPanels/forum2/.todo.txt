@@ -1,0 +1,7 @@
+show more
+sorting
+    latest
+    new
+    top
+filter by category
+filter by new

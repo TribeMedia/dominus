@@ -19,3 +19,37 @@
 .panelDarkBg {
     background-color: @panel_bg;
 }
+
+#forumTopicTable {
+    thead {
+        tr {
+            background-color:@panel_bg;
+        }
+
+        td {
+            color:#bbb;
+        }
+    }
+
+    tbody {
+        td.topRow {
+            font-size:130%;
+            padding-top:10px;
+            padding-bottom:2px;
+        }
+
+        td.bottomRow {
+            padding-top:0px;
+            padding-bottom:10px;
+            font-size:95%;
+        }
+
+        tr:nth-child(4n), tr:nth-child(4n-1) {
+            background-color:fadeOut(@panel_bg, 15%);
+        }
+
+        tr:nth-child(4n-2), tr:nth-child(4n-3) {
+            background-color:lighten(@panel_bg, 15%);
+        }
+    }
+}

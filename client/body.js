@@ -17,6 +17,11 @@ UI.registerHelper('date_time', function(jsDate) {
 	return moment(new Date(jsDate)).format('h:mm a')
 })
 
+UI.registerHelper('date_twitter', function(jsDate) {
+	Session.get('refresh_time_field');
+	return moment(new Date(jsDate)).twitter();
+});
+
 // for input type=date
 UI.registerHelper('date_inputDate', function(jsDate) {
 	var m = moment(new Date(jsDate));

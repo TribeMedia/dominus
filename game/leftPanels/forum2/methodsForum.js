@@ -19,7 +19,7 @@ Meteor.methods({
             throw new Meteor.Error('Text too long, 5000 characters max.');
         }
 
-        var fields = {username:1, x:1, y:1, castle_id:1};
+        var fields = {username:1, x:1, y:1, castle_id:1, emails:1};
         var user = Meteor.users.findOne(Meteor.userId(), {fields:fields});
 
         if (!user) {
@@ -37,47 +37,38 @@ Meteor.methods({
             var topicData = {
                 title: title,
                 tagId: tagId,
-                userId: user._id,
-                username: user.username,
-                lastPostUsername: user.username,
-                created_at: new Date(),
-                updated_at: new Date(),
-                numPosts: 1,
-                numViews: 0
+                gameId: process.env.GAME_ID,
             };
 
             var postData = {
                 tagId: tagId,
                 userId: user._id,
                 username: user.username,
-                created_at: new Date(),
-                updated_at: new Date(),
                 text: prepareTextForForum(text),
                 castleX: user.x,
                 castleY: user.y,
-                castleId: user.castle_id
+                castleId: user.castle_id,
+                gameId: process.env.GAME_ID,
+                email: user.emails[0].address
             };
 
-            landingConnection.call('forumInsertTopic', topicData, function(error, topicId) {
+            landingConnection.call('forumInsertTopic', process.env.DOMINUS_KEY, topicData, function(error, topicId) {
                 if (error) {
                     throw new Meteor.Error('Error inserting topic.');
                 } else {
 
                     postData.topicId = topicId;
 
-                    landingConnection.call('forumInsertPost', postData, function(error, postId) {
+                    landingConnection.call('forumInsertPost', process.env.DOMINUS_KEY, postData, function(error, postId) {
                         if (error) {
 
                             Meteor.defer(function() {
-                                landingConnection.call('forumRemoveTopic', topicId);
+                                landingConnection.call('forumRemoveTopic', process.env.DOMINUS_KEY, topicId);
                             });
                             throw new Meteor.Error('Error inserting post.');
 
                         } else {
 
-                            Meteor.defer(function() {
-                                landingConnection.call('forumAddTopicToTag', tagId);
-                            });
                         }
                     });
                 }

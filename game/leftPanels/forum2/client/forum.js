@@ -15,3 +15,8 @@ Template.forum.onCreated(function() {
         }
     });
 });
+
+
+Template.forum.onRendered(function() {
+    this.firstNode.parentNode._uihooks = leftPanelAnimation;
+});
