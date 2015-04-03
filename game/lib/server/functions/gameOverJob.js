@@ -31,7 +31,7 @@ checkForGameOver = function() {
                         // if nobody is currently dominus see who was last dominus
                         var lastDominus = Settings.findOne({name: 'lastDominusUserId'});
                         if (lastDominus && lastDominus.value) {
-                            winner = Meteor.users.findOne(lastDominus.value, {fields:{_id:1, emails:1}});
+                            winner = Meteor.users.findOne(lastDominus.value, {fields:{_id:1, emails:1, username:1, x:1, y:1, castle_id:1}});
                         }
                     }
 
