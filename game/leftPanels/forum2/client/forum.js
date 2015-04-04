@@ -11,7 +11,12 @@ Template.forum.onCreated(function() {
 
     this.autorun(function() {
         if (landingConnection.status().connected) {
-            var status = landingConnection.subscribe('forumtags');
+            landingConnection.subscribe('forumtags');
+
+            var profile = Profiles.findOne({}, {fields:{_id:1}});
+            if (profile) {
+                landingConnection.subscribe('forumReadsByProfile', profile._id);
+            }
         }
     });
 });

@@ -5,3 +5,6 @@ sorting
     top
 filter by category
 filter by new
+security
+inc view counter
+paginate

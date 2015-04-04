@@ -1,6 +1,9 @@
 <template name="forumListTopic">
     <tr>
         <td class="topRow" colspan="5">
+            {{#if isNewTopic}}
+                <span class="badge">!</span>
+            {{/if}}
             <a href="" class="forumListTopicLink">
                 {{title}}
             </a>
@@ -10,7 +13,7 @@
         <td class="bottomRow">
             {{lastPostUser.username}}
         </td>
-        <td class="bottomRow" style="text-align:center;">{{tagName}}</td>
+        <td class="bottomRow">{{tagName}}</td>
         <td class="bottomRow" style="text-align:center;">{{round numPosts}}</td>
         <td class="bottomRow" style="text-align:center;">{{round numViews}}</td>
         <td class="bottomRow" style="text-align:center;">{{date_twitter updatedAt}}</td>

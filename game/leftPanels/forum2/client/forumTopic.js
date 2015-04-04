@@ -1,6 +1,23 @@
 Template.forumTopic.helpers({
     posts: function() {
         return Forumposts.find();
+    },
+
+    topic: function() {
+        var topicId = Session.get('forumTopicId');
+        if (topicId) {
+            return Forumtopics.findOne(topicId);
+        }
+    },
+
+    tag: function() {
+        var topicId = Session.get('forumTopicId');
+        if (topicId) {
+            var topic = Forumtopics.findOne(topicId);
+            if (topic) {
+                return Forumtags.findOne(topic.tagId);
+            }
+        }
     }
 });
 
@@ -19,10 +36,11 @@ Template.forumTopic.onCreated(function() {
         var topicId = Session.get('forumTopicId');
         if (topicId) {
             if (landingConnection.status().connected) {
-                if (Template.currentData()) {
-                    var status = landingConnection.subscribe('forumTopicAndPosts', topicId);
-                }
+                var status = landingConnection.subscribe('forumTopicAndPosts', topicId);
             }
         }
     });
+
+    // mark as read
+    Meteor.call('forumTopicReadByUser', Session.get('forumTopicId'));
 });

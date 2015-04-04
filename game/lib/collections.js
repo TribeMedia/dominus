@@ -1,13 +1,17 @@
-Dailystats = new Meteor.Collection('dailystats')
-Gamestats = new Meteor.Collection('gamestats')
+Dailystats = new Mongo.Collection('dailystats');
+Gamestats = new Mongo.Collection('gamestats');
 //Jobstats = new Meteor.Collection('jobstats')
 
 if (Meteor.isServer) {
-	Dailystats.allow({insert: false, update: false, remove: false})
-	Meteor.users.allow({insert: false, update: false, remove: false})
-	Gamestats.allow({insert: false, update: false, remove: false})
+	Dailystats.allow({insert: false, update: false, remove: false});
+	Meteor.users.allow({insert: false, update: false, remove: false});
+	Gamestats.allow({insert: false, update: false, remove: false});
 	//Jobstats.allow({insert: false, update: false, remove: false})
 }
+
+Meteor.startup(function() {
+	Profiles = new Mongo.Collection('profiles', {connection:landingConnection});
+});
 
 // // //log every find
 // Meteor.startup(function () {

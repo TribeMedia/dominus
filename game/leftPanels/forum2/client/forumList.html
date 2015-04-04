@@ -3,30 +3,28 @@
         <div class="pad_group">
             <div class="btn-group btn-group-justified" role="group" style="margin-bottom:10px;">
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Sorted by latest posts.">Latest</button>
+                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Sorted by latest posts." id="forumLatestButton">New Posts</button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Sorted by newest topics.">New</button>
+                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Sorted by newest topics." id="forumNewButton">New Topics</button>
                 </div>
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Topics with unread posts.">Unread</button>
-                </div>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="The most active topics.">Top</button>
+                    <button type="button" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="The most active topics in the past month." id="forumTopButton">Most Posts</button>
                 </div>
             </div>
 
             <div style="float:left;">
-                <select class="form-control">
-                    <option>All</option>
+                <select class="form-control" id="forumTagSelect">
+                    <option value="all" {{isAllSelectedCategory}}>All</option>
                     {{#each tags}}
-                        <option value="{{_id}}">{{name}}</option>
+                        <option value="{{_id}}" {{isSelectedCategory}}>{{name}}</option>
                     {{/each}}
                 </select>
             </div>
 
             <div style="float:right;">
                 <button id="newTopicButton" class="btn btn-primary">New Topic</button>
+                <button id="markAllReadButton" class="btn btn-primary">Mark All Read</button>
             </div>
 
             <div style="clear:both;"></div>
@@ -39,7 +37,7 @@
                 <thead>
                     <tr>
                         <td>Last Post By</td>
-                        <td style="text-align:center;">Category</td>
+                        <td>Category</td>
                         <td style="text-align:center;">Posts</td>
                         <td style="text-align:center;">Views</td>
                         <td style="text-align:center;">Activity</td>
@@ -51,6 +49,10 @@
                     {{/each}}
                 </tbody>
             </table>
+        </div>
+
+        <div class="pad_group" style="margin:10px 0px;">
+            <button type="button" class="btn btn-primary btn-block" id="showMoreButton">Show More</button>
         </div>
     </div>
 </template>

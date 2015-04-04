@@ -43,7 +43,16 @@ Template.game.helpers({
 
 
 Template.game.created = function() {
-	var self = this
+	var self = this;
+
+	self.autorun(function() {
+		if (landingConnection.status().connected) {
+			var user = Meteor.users.findOne(Meteor.userId(), {fields:{emails:1}});
+			if (user) {
+				landingConnection.subscribe('profile', user.emails[0].address);
+			}
+		}
+	});
 
 
 	// round to nearest x so that there is more of a chance of subscribing to a previous subscription
@@ -152,5 +161,6 @@ Template.game.rendered = function() {
 
 
 Meteor.startup(function () {
-	Meteor.subscribe('user_data')
+	Meteor.subscribe('user_data');
+	landingConnection.subscribe('forumLatestPostDate');
 })

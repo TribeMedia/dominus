@@ -81,5 +81,18 @@ Meteor.startup(function() {
 			num += selected_units[type]
 		})
 		return num
-	}
-})
+	};
+
+	// get game info from base and put it into a session variable
+	Tracker.autorun(function() {
+		if (landingConnection.status().connected) {
+			landingConnection.call('getGameInfo', Meteor.settings.public.GAME_ID, function(error, result) {
+				if (error) {
+					console.error(error);
+				} else {
+					Session.set('gameInfo', result);
+				}
+			});
+		}
+	});
+});
