@@ -53,17 +53,6 @@
 				</a>
 			</li>
 
-			<li class="{{forum_active}}">
-				<a href="#" id="show_forum_panel_button" data-toggle="tooltip" data-placement="bottom" title="Forums">
-					{{#if smallScreen}}
-						<i class="fa fa-pencil fa-lg"></i>
-					{{else}}
-						Forums
-					{{/if}}
-					<span class="badge">{{#if is_new_forum_post}}!{{/if}}</span>
-				</a>
-			</li>
-
 			<li class="{{forumsActive}}">
 				<a href="#" id="showForumsButton" data-toggle="tooltip" data-placement="bottom" title="Forums">
 					{{#if smallScreen}}
@@ -71,6 +60,7 @@
 					{{else}}
 						Forums
 					{{/if}}
+					{{#if isNewForumPost}}<span class="badge">!</span>{{/if}}
 				</a>
 			</li>
 

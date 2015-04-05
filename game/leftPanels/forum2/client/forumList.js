@@ -61,6 +61,10 @@ Template.forumList.events({
 
     'click #forumTopButton': function() {
         Session.set('forumSort', 'numPosts');
+    },
+
+    'click #markAllReadButton': function() {
+        Meteor.call('forumMarkAllRead');
     }
 });
 
@@ -90,4 +94,12 @@ Template.forumList.onCreated(function() {
             );
         }
     });
+});
+
+Template.forumList.onRendered(function() {
+    Cookie.set('forumList', moment().add(1, 'seconds').toDate(), {years: 10});
+});
+
+Template.forumList.onDestroyed(function() {
+    Cookie.set('forumList', moment().add(1, 'seconds').toDate(), {years: 10});
 });

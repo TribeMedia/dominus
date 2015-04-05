@@ -26,6 +26,7 @@ Template.forumNewTopic.events({
                 $(alert).show();
                 $(alert).text(error.error);
             } else {
+                Cookie.set('forumList', moment().add(1, 'seconds').toDate(), {years: 10});
                 Session.set('forumTemplate', 'forumList');
             }
         });

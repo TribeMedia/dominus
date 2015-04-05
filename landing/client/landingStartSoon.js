@@ -13,3 +13,8 @@ Template.landingStartSoon.helpers({
         }
     }
 });
+
+
+Template.landingStartSoon.onCreated(function() {
+    this.subscribe('dominusBase');
+});

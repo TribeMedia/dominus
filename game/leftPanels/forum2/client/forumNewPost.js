@@ -18,7 +18,8 @@ Template.forumNewPost.events({
                 $(alert).show();
                 $(alert).text(error.error);
             } else {
-                $(textarea).text('');
+                Cookie.set('forumList', moment().add(1, 'seconds').toDate(), {years: 10});
+                $(textarea).val('');
             }
         });
     }

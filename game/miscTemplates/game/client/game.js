@@ -31,7 +31,6 @@ Template.game.helpers({
 	show_market_panel: function() { return Session.get('show_market_panel') },
 	show_settings_panel: function() { return Session.get('show_settings_panel') },
 	show_chatrooms_panel: function() { return Session.get('show_chatrooms_panel') },
-	show_forum_panel: function() { return Session.get('show_forum_panel') },
 	showForumsPanel: function() { return Session.get('showForumsPanel'); },
 	show_rankings_panel: function() { return Session.get('show_rankings_panel') },
 	show_alerts_panel: function() { return Session.get('show_alerts_panel') },
@@ -47,10 +46,14 @@ Template.game.created = function() {
 
 	self.autorun(function() {
 		if (landingConnection.status().connected) {
+			// user profile
 			var user = Meteor.users.findOne(Meteor.userId(), {fields:{emails:1}});
 			if (user) {
 				landingConnection.subscribe('profile', user.emails[0].address);
 			}
+
+			// for unread forum posts
+			landingConnection.subscribe('forumLatestPostDate');
 		}
 	});
 
@@ -162,5 +165,4 @@ Template.game.rendered = function() {
 
 Meteor.startup(function () {
 	Meteor.subscribe('user_data');
-	landingConnection.subscribe('forumLatestPostDate');
 })

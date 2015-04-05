@@ -30,10 +30,6 @@ Template.menu.helpers({
 		if (Session.get('show_chatrooms_panel')) { return 'active' } else { return '' }
 	},
 
-	forum_active: function() {
-		if (Session.get('show_forum_panel')) { return 'active' } else { return '' }
-	},
-
 	forumsActive: function() {
 		if (Session.get('showForumsPanel')) { return 'active'; } else { return ''; }
 	},
@@ -55,28 +51,33 @@ Template.menu.helpers({
 	},
 
 	store_active: function() {
-		if (Session.get('show_store_panel')) { return 'active' } else { return '' }
+		if (Session.get('show_store_panel')) { return 'active'; } else { return ''; }
 	},
 
 	tree_active: function() {
-		if (Session.get('show_tree_panel')) { return 'active' } else { return '' }
+		if (Session.get('show_tree_panel')) { return 'active'; } else { return ''; }
 	},
 
-	is_new_forum_post: function() {
-		if (!Session.get('show_forum_panel')) {
-			var latest_post = Latestmessages.findOne({}, {fields: {updated_at:1}, sort: {updated_at:-1}})
-			if (latest_post) {
-				var forum_close_date = Cookie.get('forum_close')
-				if (forum_close_date) {
-					if (moment(new Date(latest_post.updated_at)).isAfter(moment(new Date(forum_close_date)))) {
-						return true
-					}
-				} else {
-					return true
-				}
+	isNewForumPost: function() {
+		if (Session.get('forumTemplate') == 'forumList') {
+			return false;
+		}
+
+		// posts older than two weeks are not new
+		var cutoff = moment().subtract(2, 'weeks');
+		var postDate = moment(new Date(this.createdAt));
+		if (postDate.isBefore(cutoff)) {
+			return false;
+		}
+
+		var lastPostDate = Forumlatestpost.findOne();
+		if (lastPostDate) {
+			var lastPost = moment(new Date(lastPostDate.latestPost));
+			var viewedForumList = Cookie.get('forumList');
+			if (moment(new Date(viewedForumList)).isBefore(lastPost)) {
+				return true;
 			}
 		}
-		return false
 	},
 
 	is_new_chat: function() {
@@ -151,16 +152,6 @@ Template.menu.events({
 		}
 	},
 
-	'click #show_forum_panel_button': function(event, template) {
-		if (Session.get('show_forum_panel')) {
-			Session.set('show_forum_panel', false)
-			Cookie.set('forum_close', new Date(), {years: 10})
-		} else {
-			Session.set('show_forum_panel', true)
-			Cookie.clear('forum_close')
-		}
-	},
-
 	'click #showForumsButton': function(event, template) {
 		if (Session.get('showForumsPanel')) {
 			Session.set('showForumsPanel', false)
@@ -229,7 +220,7 @@ Template.menu.rendered = function() {
 	Session.setDefault('show_admin_panel', false)
 	Session.setDefault('show_market_panel', false)
 	Session.setDefault('show_settings_panel', false)
-	Session.setDefault('show_forum_panel', false)
+	Session.setDefault('showForumsPanel', false)
 	Session.setDefault('show_chatrooms_panel', false)
 	Session.setDefault('show_rankings_panel', false)
 	Session.setDefault('show_stats_panel', false)
@@ -242,7 +233,6 @@ Template.menu.rendered = function() {
 		Meteor.subscribe('room_list')
 		Meteor.subscribe('market')
 		Meteor.subscribe('recentchats')
-		Meteor.subscribe('latest_forum_posts')
 
 		// villages must always be loaded
 		// so that we know how many villages a player has

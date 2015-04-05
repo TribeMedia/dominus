@@ -5,7 +5,6 @@ setupNewGame = function() {
 	console.log('--- creating new game ---');
 	generate_hexes(8);
 	reset_market();
-	setupDefaultForums();
 	Settings.upsert({name: 'gameEndDate'}, {$set: {name: 'gameEndDate', value: null}});
 	Settings.upsert({name: 'lastDominusUserId'}, {$set: {name: 'lastDominusUserId', value: null}});
 	Settings.upsert({name: 'taxesCollected'}, {$set: {name:'taxesCollected', value:0}});

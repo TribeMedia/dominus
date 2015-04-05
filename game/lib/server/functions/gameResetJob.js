@@ -95,9 +95,6 @@ var resetGame = function() {
     Rooms.remove({});
     Roomchats.remove({});
     Recentchats.remove({});
-    Forums.remove({});
-    Threads.remove({});
-    Messages.remove({});
     Latestmessages.remove({});
     Markethistory.remove({});
     Market.remove({});

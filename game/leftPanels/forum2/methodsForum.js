@@ -136,5 +136,15 @@ Meteor.methods({
                 landingConnection.call('forumTopicReadByUser', process.env.DOMINUS_KEY, topicId, user.emails[0].address);
             }
         }
+    },
+
+
+    forumMarkAllRead: function() {
+        if (!this.isSimulation) {
+            var user = Meteor.users.findOne(Meteor.userId(), {fields:{emails:1}});
+            if (user) {
+                landingConnection.call('forumMarkAllRead', process.env.DOMINUS_KEY, user.emails[0].address);
+            }
+        }
     }
 });

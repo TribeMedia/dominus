@@ -11,11 +11,6 @@ Router.route('/admin', function() {
 
 Router.map(function() {
 
-	this.route('adminForums', {
-		path: '/admin/forums',
-		waitOn: function() { return Meteor.subscribe('admin_forums'); }
-	});
-
 	this.route('adminCharges', {
 		path: '/admin/charges',
 		waitOn: function() { return Meteor.subscribe('admin_charges'); }
