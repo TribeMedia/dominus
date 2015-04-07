@@ -30,7 +30,25 @@ Template.forumList.helpers({
         if (Session.get('forumCategory') == 'all') {
             return 'selected';
         }
-    }
+    },
+
+    isNewPostsSelected: function() {
+        if (Session.get('forumSort') == 'post') {
+            return 'active';
+        }
+    },
+
+    isNewTopicsSelected: function() {
+        if (Session.get('forumSort') == 'topic') {
+            return 'active';
+        }
+    },
+
+    isMostPostsSelected: function() {
+        if (Session.get('forumSort') == 'numPosts') {
+            return 'active';
+        }
+    },
 });
 
 
