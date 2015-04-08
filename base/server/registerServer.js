@@ -43,7 +43,6 @@ var registerServer = function() {
             } else {
                 console.error('not connected to home base');
                 console.error(landingConnection.status());
-                landingConnection.reconnect();
             }
         }
     });

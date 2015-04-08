@@ -30,7 +30,7 @@ email@1.0.6
 facebook@1.2.0
 facts@1.0.4
 fastclick@1.0.3
-fongandrew:find-and-modify@0.2.0
+fongandrew:find-and-modify@0.2.1
 fortawesome:fontawesome@4.3.0
 geojson-utils@1.0.3
 google@1.1.5
@@ -65,7 +65,7 @@ miro:mailchimp-lists@1.0.0
 mizzao:timesync@0.3.1
 mizzao:user-status@0.6.4
 mobile-status-bar@1.0.3
-momentjs:moment@2.9.0
+momentjs:moment@2.10.0
 mongo@1.1.0
 mongo-livedata@1.0.8
 mrgalaxy:stripe@2.1.0
