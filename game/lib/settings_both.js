@@ -1,11 +1,11 @@
 // both client and server
 s = {};
-s.version = '0.0.14';
+s.version = '0.0.15';
 s.market = {};
 s.resource = {};
 s.army = {};
 s.village = {};
-s.castle = {};
+s.castle = {};j
 s.rankings = {};
 
 // not used anymore
