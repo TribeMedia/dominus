@@ -29,6 +29,7 @@ var registerServer = function() {
                     'registerServer',
                     process.env.GAME_ID,
                     process.env.BRANCH_ID,
+                    process.env.SUBDOMAIN,
                     process.env.DOMINUS_WORKER,
                     process.env.DOMINUS_KEY,
                     ip,
