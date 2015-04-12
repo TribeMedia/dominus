@@ -16,9 +16,9 @@ Template.store_panel_item.helpers({
 	},
 
 	i_own: function() {
-		var user = Meteor.users.findOne(Meteor.userId(), {fields: {purchases:1}});
-		if (user && user.purchases && user.purchases[this.type]) {
-			if (_.indexOf(user.purchases[this.type], this.id) != -1) {
+		var prefs = Prefs.findOne({}, {fields: {purchases:1}});
+		if (prefs && prefs.purchases && prefs.purchases[this.type]) {
+			if (_.indexOf(prefs.purchases[this.type], this.id) != -1) {
 				return true;
 			}
 		}

@@ -7,76 +7,78 @@ Template.rp_info_castle.helpers({
 	},
 
 	hasSoldierType: function() {
-		var village = Template.parentData(1)
+		var village = Template.parentData(1);
 		if (village) {
-			return village[this] > 0
+			return village[this] > 0;
 		}
 	},
 
 	numSoldierType: function() {
-		var village = Template.parentData(1)
+		var village = Template.parentData(1);
 		if (village) {
-			return village[this]
+			return village[this];
 		}
 	},
 
 	showUnverifiedEmailAlert: function() {
 		if (Template.currentData()) {
-			var user = RightPanelUser.findOne(Template.currentData().user_id)
+			var user = RightPanelUser.findOne(Template.currentData().user_id);
 			if (user) {
-				return !user.emails[0].verified
+				return !user.emails[0].verified;
 			}
 		}
 	},
 
 	unitRelationType: function() {
 		if (Template.instance()) {
-			var type = Template.instance().relationship.get()
+			var type = Template.instance().relationship.get();
 			if (type && type != 'mine') {
-				return getNiceRelationType(type)
+				return getNiceRelationType(type);
 			}
 		}
 	},
 
 	defensePower: function() {
 		if (Template.instance()) {
-			var power = Template.instance().power.get()
+			var power = Template.instance().power.get();
 			if (power) {
-				return power.defense
+				return power.defense;
 			}
 		}
 	},
 
 	castleInfoLoaded: function() {
-		return Session.get('rightPanelInfoLoaded')
+		return Session.get('rightPanelInfoLoaded');
 	},
 
 	battle: function() {
 		if (this) {
-			return Battles.findOne({x:this.x, y:this.y, isOver:false})
+			return Battles.findOne({x:this.x, y:this.y, isOver:false});
 		}
 	},
 
 	image_radio_is_checked: function() {
 		if (Template.parentData(1).image == this.toString()) {
-			return 'checked'
+			return 'checked';
 		}
 	},
 
 	more_than_one_owned_image: function() {
-		if (Template.instance().userData) {
-			return Template.instance().userData.get().purchases.castles.length > 1
+		var prefs = Prefs.findOne({}, {fields: {purchases:1}});
+		if (prefs && prefs.purchases && prefs.purchases.castles) {
+			return prefs.purchases.castles.length > 1;
 		}
 	},
 
 	owned_images: function() {
-		if (Template.instance().userData) {
-			return Template.instance().userData.get().purchases.castles
+		var prefs = Prefs.findOne({}, {fields: {purchases:1}});
+		if (prefs && prefs.purchases && prefs.purchases.castles) {
+			return prefs.purchases.castles;
 		}
 	},
 
 	image_name: function(id) {
-		return _store.castles[id].name
+		return _store.castles[id].name;
 	},
 
 	is_owner: function() {
@@ -190,7 +192,7 @@ Template.rp_info_castle.created = function() {
 
 	self.userData = new ReactiveVar(null)
 	this.autorun(function() {
-		var fields = {'purchases.castles':1, vassals: 1, allies_below: 1, lord: 1}
+		var fields = {vassals: 1, allies_below: 1, lord: 1}
 		var user = Meteor.users.findOne(Meteor.userId(), {fields: fields})
 		if (user) {
 			self.userData.set(user)

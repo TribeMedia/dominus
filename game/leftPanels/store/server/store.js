@@ -4,7 +4,8 @@ Meteor.methods({
 		check(image_id, String);
 		check(unit_id, String);
 
-		var user_id = Meteor.userId();
+		var fields = {emails:1};
+		var user = Meteor.users.findOne(Meteor.userId(), {fields: fields});
 
 		// is this image_type real
 		if (_store[image_type]) {
@@ -15,20 +16,28 @@ Meteor.methods({
 			}
 
 			// if user owns this image
-			var user = Meteor.users.findOne(user_id, {fields: {purchases:1}});
-			if (user && user.purchases && user.purchases[image_type]) {
+			landingConnection.call('doesUserOwnPurchase',
+				process.env.DOMINUS_KEY,
+				user.emails[0].address,
+				image_type,
+				image_id,
+				function(error, result) {
+					if (error) {
+						console.error(error);
+					} else {
+						if (result) {
+							// user owns image
 
-				if (_.indexOf(user.purchases[image_type], image_id) != -1) {
-
-					// set image
-					switch(image_type) {
-						case 'castles':
-							Castles.update({user_id:user_id, _id:unit_id}, {$set: {image:image_id}});
-							return true;
+							// set image
+							switch(image_type) {
+								case 'castles':
+									Castles.update({user_id:user._id, _id:unit_id}, {$set: {image:image_id}});
+									return true;
+								}
+						}
 					}
 				}
-			}
-
+			);
 		}
 
 		return false;
@@ -43,33 +52,37 @@ Meteor.methods({
 		var fut = new Future();
 		var stripe = StripeAPI(Meteor.settings.stripe_secret_key);
 
-		var addToSet = {};
-		addToSet['purchases.'+type] = id;
+		var fields = {emails:1, username:1};
+		var user = Meteor.users.findOne(Meteor.userId(), {fields:fields});
 
 		var charge = stripe.charges.create({
 			amount: amount_in_cents,
 			currency: "usd",
 			card: token.id,
-			description: get_user_property("emails")[0].address
+			description: user.emails[0].address
 		}, Meteor.bindEnvironment(function(err, charge) {
-			//if (err && err.type === 'StripeCardError') {
 			if (err) {
 				fut['return'](false);
 			} else {
-				Meteor.users.update(Meteor.userId(), {$addToSet: addToSet});
+				landingConnection.call('storePurchase',
+					process.env.DOMINUS_KEY,
+					user.emails[0].address,
+					type,
+					id
+				);
 
-				var id = Charges.insert({
+				var chargeId = Charges.insert({
 					created_at: new Date(),
 					user_id: Meteor.userId(),
 					amount: amount_in_cents,
 					type: 'store_purchase',
-					user_email: get_user_property("emails")[0].address,
-					user_username: get_user_property("username"),
+					user_email: user.emails[0].address,
+					user_username: user.username,
 					livemode: charge.livemode,
 					stripe_charge_id: charge.id
 				});
 
-				fut['return'](id);
+				fut['return'](chargeId);
 			}
 		}));
 		return fut.wait();
