@@ -1,6 +1,6 @@
 // both client and server
 s = {};
-s.version = '0.0.15';
+s.version = '0.0.16';
 s.market = {};
 s.resource = {};
 s.army = {};
