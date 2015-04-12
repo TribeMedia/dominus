@@ -7,11 +7,27 @@
 // team - everyone under your king not including self
 
 
+// job queue needs to be stopped while running this
+// so that another job doesn't change someone's allies while it's running
 Cue.addJob('updateAllKingsAllies', {retryOnError:false, maxMs:1000*60*10}, function(task, done) {
-	Meteor.users.find({is_king:true}).forEach(function(user) {
-		var rf = new relation_finder(user._id);
-		rf.start();
-	});
+	// stop job queue
+	Cue.stop();
+	var fut = new Future();
+
+	// wait a bit for jobs to finish
+	Meteor.setTimeout(function() {
+
+		// update allies
+		Meteor.users.find({is_king:true}).forEach(function(user) {
+			var rf = new relation_finder(user._id);
+			rf.start();
+		});
+
+		fut['return']();
+	}, 1000*60);
+
+	fut.wait();
+	Cue.start();
 	done();
 });
 

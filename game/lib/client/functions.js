@@ -1,11 +1,11 @@
 setHexScale = function(scale) {
-	Session.set('hexScale', scale)
-	_saveHexScale()
-}
+	Session.set('hexScale', scale);
+	_saveHexScale();
+};
 
 _saveHexScale = _.debounce(function() {
-	Meteor.call('set_hex_scale', Session.get('hexScale'))
-}, 500)
+	Meteor.call('set_hex_scale', Session.get('hexScale'));
+}, 2000);
 
 ////////////////////////////////////////////////////////////
 // hex functions

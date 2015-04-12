@@ -1,4 +1,11 @@
 Template.rp_info_castle.helpers({
+	isPro: function() {
+		var profile = Profiles.findOne();
+		if (profile && profile.pro) {
+			return true;
+		}
+	},
+
 	hasSoldierType: function() {
 		var village = Template.parentData(1)
 		if (village) {
@@ -96,33 +103,33 @@ Template.rp_info_castle.helpers({
 
 	is_vassal: function() {
 		if (Template.instance().userData && Template.currentData()) {
-			var type = Template.instance().relationship.get()
-			return type == 'vassal' || type == 'direct_vassal'
+			var type = Template.instance().relationship.get();
+			return type == 'vassal' || type == 'direct_vassal';
 		}
 	},
 
 	user: function() {
 		if (Template.currentData()) {
-			return RightPanelUser.findOne(Template.currentData().user_id)
+			return RightPanelUser.findOne(Template.currentData().user_id);
 		}
 	},
 
 	daysSinceUserActive: function() {
-		var days = Template.instance().daysSinceUserActive.get()
+		var days = Template.instance().daysSinceUserActive.get();
 
 		if (days === null) {
-			return null
+			return null;
 		}
 
 		if (days === 0) {
-			return 'today'
+			return 'today';
 		} else if (days === 1) {
-			return 'yesterday'
+			return 'yesterday';
 		} else {
-			return days+' days ago'
+			return days+' days ago';
 		}
 	}
-})
+});
 
 
 

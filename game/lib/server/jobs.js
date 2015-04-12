@@ -173,6 +173,8 @@ var midnightJob = function() {
 		Cue.addTask('dailystats_num_allies', {isAsync:false, unique:true}, {user_id:user._id});
 	});
 	Cue.addTask('updateNetForEveryone', {isAsync:false, unique:true}, {});
+
+	Cue.addTask('updateAllKingsAllies', {isAsync:false, unit:true}, {});
 };
 
 
