@@ -5,7 +5,7 @@ s.market = {};
 s.resource = {};
 s.army = {};
 s.village = {};
-s.castle = {};j
+s.castle = {};
 s.rankings = {};
 
 // not used anymore
