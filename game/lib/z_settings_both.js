@@ -10,7 +10,7 @@ if (Meteor.settings.public.GAME_ID == 'dev') {
 
     s.army.stats = {
         footmen: {
-            offense: 15,
+            offense: 10,
             defense: 10,
             speed: 15
         },
@@ -25,7 +25,7 @@ if (Meteor.settings.public.GAME_ID == 'dev') {
             speed: 11
         },
         cavalry: {
-            offense: 18,
+            offense: 13,
             defense: 5,
             speed: 33
         },
@@ -33,7 +33,7 @@ if (Meteor.settings.public.GAME_ID == 'dev') {
             offense: 1,
             defense: 1,
             speed: 7,
-            bonus_against_buildings: 80
+            bonus_against_buildings: 60
         }
     };
 }
