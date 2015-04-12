@@ -24,7 +24,7 @@ var pullNewCode = function() {
     self.tries = 0;
     self.maxTries = 120;    // 60 minutes
 
-    if (process.env.DOMINUS_WORKER) {
+    if (process.env.DOMINUS_WORKER == 'true') {
 
         // wait for queue to empty
         Meteor.call('cueStop');
