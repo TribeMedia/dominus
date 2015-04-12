@@ -114,6 +114,16 @@
 				</a>
 			</li>
 
+			<li class="{{pro_active}}">
+				<a href="#" id="show_pro_panel_button" data-toggle="tooltip" data-placement="bottom" title="Pro">
+					{{#if smallScreen}}
+						<i class="fa fa-level-up fa-lg"></i>
+					{{else}}
+						Pro
+					{{/if}}
+				</a>
+			</li>
+
 			{{#if currentUser.admin}}
 				<li class="{{admin_active}}"><a href="#" id="show_admin_panel_button">A</a></li>
 			{{/if}}

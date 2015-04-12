@@ -1,0 +1,49 @@
+<template name="proPanel">
+    <div id="proPanel">
+        <div class="panel_title"><i class="fa fa-level-up fa-lg"></i> &nbsp;Pro</div>
+
+        {{#if connectedToLanding}}
+
+        <div class="panelDarkBg pad_group">
+            <div style="font-size:160%;text-align:center;">Upgrade your game.</div>
+            <br>
+
+            Want to get rid of those annoying ads?  Puchase a pro account.<br>
+            <br>
+
+            At the moment pro account's only benefit is to get rid of the ads.  More benefits are coming soon.<br>
+            <br>
+
+            $2 - Upgrade your account for this game.<br>
+            <br>
+
+            $12 - Upgrade your account in all games forever.<br>
+            <br>
+
+            <div class="alert alert-danger" id="proError" style="display:none;"></div>
+            <div class="alert alert-success" id="proSuccess" style="display:none;"></div>
+
+            <button class="btn btn-primary btn-block proButton" data-type="thisGame" disabled="{{hasPurchasedThisGame}}">This Game &nbsp; $2</button>
+
+            <button class="btn btn-primary btn-block proButton" data-type="allGames" disabled="{{hasPurchasedAllGames}}">All Games &nbsp; $12</button>
+            <br>
+
+            If you upgrade for all games make sure you use the same email in every game you play.<br>
+            <br>
+
+        </div>
+
+        {{else}}
+
+            <div class="panelDarkBg pad_group">
+                <div style="font-size:160%;text-align:center;">Lost Connection to Server</div>
+                <br>
+
+                <div style="text-align:center;">Try again in a few minutes.</div>
+                <br>
+            </div>
+
+        {{/if}}
+
+    </div>
+</template>

@@ -11,6 +11,7 @@ if (Meteor.isServer) {
 
 Meteor.startup(function() {
 	Profiles = new Mongo.Collection('profiles', {connection:landingConnection});
+	Prefs = new Mongo.Collection('prefs', {connection:landingConnection});
 });
 
 // // //log every find

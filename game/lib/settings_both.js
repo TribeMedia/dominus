@@ -40,6 +40,19 @@ if (Meteor.isServer && process.env.NODE_ENV == 'development') {
 s.hex_size = 60;
 s.hex_squish = 0.7;
 
+s.pro = {
+	thisGame: {
+		amountInCents: 200,
+		priceString: '2.00',
+		words: 'this game'
+	},
+	allGames: {
+		amountInCents: 1200,
+		priceString: '12.00',
+		words: 'all games'
+	}
+};
+
 // winner loses x percent of s.battle_dead_per_round_lose or x percent of soldiers in enemy armies
 // double so that when attacking a castle you lost about the same amount as the castle
 s.battle_power_lost_per_round = 500;

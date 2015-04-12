@@ -26,19 +26,20 @@ Template.game.helpers({
 		return {}
 	},
 
-	show_summary_panel: function() { return Session.get('show_summary_panel') },
-	show_admin_panel: function() { return Session.get('show_admin_panel') },
-	show_market_panel: function() { return Session.get('show_market_panel') },
-	show_settings_panel: function() { return Session.get('show_settings_panel') },
-	show_chatrooms_panel: function() { return Session.get('show_chatrooms_panel') },
+	show_summary_panel: function() { return Session.get('show_summary_panel'); },
+	show_admin_panel: function() { return Session.get('show_admin_panel'); },
+	show_market_panel: function() { return Session.get('show_market_panel'); },
+	show_settings_panel: function() { return Session.get('show_settings_panel'); },
+	show_chatrooms_panel: function() { return Session.get('show_chatrooms_panel'); },
 	showForumsPanel: function() { return Session.get('showForumsPanel'); },
-	show_rankings_panel: function() { return Session.get('show_rankings_panel') },
-	show_alerts_panel: function() { return Session.get('show_alerts_panel') },
-	show_help_panel: function() { return Session.get('show_help_panel') },
-	show_stats_panel: function() { return Session.get('show_stats_panel') },
-	show_store_panel: function() { return Session.get('show_store_panel') },
-	show_tree_panel: function() { return Session.get('show_tree_panel') },
-})
+	show_rankings_panel: function() { return Session.get('show_rankings_panel'); },
+	show_alerts_panel: function() { return Session.get('show_alerts_panel'); },
+	show_help_panel: function() { return Session.get('show_help_panel'); },
+	show_stats_panel: function() { return Session.get('show_stats_panel'); },
+	show_store_panel: function() { return Session.get('show_store_panel'); },
+	show_tree_panel: function() { return Session.get('show_tree_panel'); },
+	show_pro_panel: function() { return Session.get('show_pro_panel'); },
+});
 
 
 Template.game.created = function() {
@@ -46,10 +47,11 @@ Template.game.created = function() {
 
 	self.autorun(function() {
 		if (landingConnection.status().connected) {
-			// user profile
+			// user profile and prefs
 			var user = Meteor.users.findOne(Meteor.userId(), {fields:{emails:1}});
 			if (user) {
 				landingConnection.subscribe('profile', user.emails[0].address);
+				landingConnection.subscribe('prefs', user.emails[0].address);
 			}
 
 			// for unread forum posts

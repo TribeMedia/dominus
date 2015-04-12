@@ -58,6 +58,10 @@ Template.menu.helpers({
 		if (Session.get('show_tree_panel')) { return 'active'; } else { return ''; }
 	},
 
+	pro_active: function() {
+		if (Session.get('show_pro_panel')) { return 'active'; } else { return ''; }
+	},
+
 	isNewForumPost: function() {
 		if (Session.get('forumTemplate') == 'forumList') {
 			return false;
@@ -209,6 +213,14 @@ Template.menu.events({
 			Session.set('show_tree_panel', true)
 		}
 	},
+
+	'click #show_pro_panel_button': function(event, template) {
+		if (Session.get('show_pro_panel')) {
+			Session.set('show_pro_panel', false)
+		} else {
+			Session.set('show_pro_panel', true)
+		}
+	},
 })
 
 
@@ -226,6 +238,7 @@ Template.menu.rendered = function() {
 	Session.setDefault('show_stats_panel', false)
 	Session.setDefault('show_store_panel', false)
 	Session.setDefault('show_tree_panel', false)
+	Session.setDefault('show_pro_panel', false)
 	Session.setDefault('show_coords', false)
 
 	this.autorun(function() {
