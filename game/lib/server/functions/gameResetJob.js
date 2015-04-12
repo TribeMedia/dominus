@@ -77,27 +77,26 @@ var resetGame = function() {
     }
 
     Cue.resetStats();
+    Alerts.remove({});
+    Armies.remove({});
+    Battles.remove({});
+    Castles.remove({});
+    Charges.remove({});
     Meteor.users.remove({});
     Dailystats.remove({});
-    Gamestats.remove({});
-    Battles.remove({});
     Fights.remove({});
-    Hexes.remove({});
-    Castles.remove({});
-    Armies.remove({});
-    Villages.remove({});
-    Moves.remove({});
-    Hexbakes.remove({});
-    Settings.remove({});
-    Charges.remove({});
-    Alerts.remove({});
+    Gamestats.remove({});
     GlobalAlerts.remove({});
-    Rooms.remove({});
-    Roomchats.remove({});
-    Recentchats.remove({});
-    Latestmessages.remove({});
-    Markethistory.remove({});
+    Hexbakes.remove({});
+    Hexes.remove({});
     Market.remove({});
+    Markethistory.remove({});
+    Moves.remove({});
+    Recentchats.remove({});
+    Roomchats.remove({});
+    Rooms.remove({});
+    Settings.remove({});
+    Villages.remove({});
 
     Settings.insert({name:'gameStartDate', value:startDate.toDate()});
     Settings.insert({name:'gameName', value:gameName});
