@@ -1,8 +1,14 @@
 Cue.addJob('check_for_dominus', {retryOnError:false, maxMs:1000*60*2}, function(task, done) {
+	checkForDominus();
+	done()
+})
+
+
+
+checkForDominus = function() {
 	var num_users = Meteor.users.find({castle_id: {$exists: true}}).count()
 
 	if (num_users <= 1) {
-		done();
 		return;
 	}
 
@@ -36,9 +42,7 @@ Cue.addJob('check_for_dominus', {retryOnError:false, maxMs:1000*60*2}, function(
 			alert_noLongerDominus(dominus._id)
 		}
 	}
-
-	done()
-})
+}
 
 
 Cue.addJob('removeDominus', {retryOnError:false, maxMs:1000*60*2}, function(task, done) {

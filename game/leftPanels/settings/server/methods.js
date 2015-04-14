@@ -182,8 +182,11 @@ deleteAccount = function(user_id) {
 
 	Meteor.users.remove({_id:user._id});
 
+	// this can't be a job
+	// might pick the wrong dominus if multiple people are deleted
+	checkForDominus();
+
 	Cue.addTask('setupEveryoneChatroom', {isAsync:false, unique:true}, {});
-	Cue.addTask('check_for_dominus', {isAsync:false, unique:true}, {});
 
 	// let home base know that a player was deleted
 	var numPlayers = Meteor.users.find().count();
