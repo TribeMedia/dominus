@@ -231,9 +231,12 @@ Template.rp_info_castle.created = function() {
 	self.daysSinceUserActive = new ReactiveVar(null)
 	self.autorun(function() {
 		if (Template.currentData() && Template.currentData().user_id) {
-			Meteor.call('daysSinceUserActive', Template.currentData().user_id, function(error, result) {
-				self.daysSinceUserActive.set(result)
-			})
+			var profile = Profiles.findOne();
+			if (profile && profile.pro) {
+				Meteor.call('daysSinceUserActive', Template.currentData().user_id, function(error, result) {
+					self.daysSinceUserActive.set(result)
+				})
+			}
 		}
 	})
 }
