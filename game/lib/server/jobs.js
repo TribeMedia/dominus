@@ -144,6 +144,7 @@ Meteor.startup(function() {
 		Meteor.setInterval(function() {
 			Cue.addTask('gamestats_job', {isAsync:false, unique:true}, {});
 			Cue.addTask('updateIncomeRank', {isAsync:false, unique:true}, {});
+			Cue.addTask('updateVassalRank', {isAsync:false, unique:true}, {});
 			Cue.addTask('updateIncomeStats', {isAsync:false, unique:true}, {});
 			Cue.addTask('generateTree', {isAsync:false, unique:true}, {});
 		}, 1000 * 60 * 10);
@@ -159,6 +160,7 @@ Meteor.startup(function() {
 		// check to see if game is over and send alert
 		Meteor.setInterval(function() {
 			Cue.addTask('checkForGameOver', {isAsync:false, unique:true}, {});
+			Cue.addTask('checkForGameReset', {isAsync:false, unique:true}, {});
 		}, 1000 * 60);
 	}
 });
@@ -171,6 +173,8 @@ var midnightJob = function() {
 		Cue.addTask('dailystats_num_allies', {isAsync:false, unique:true}, {user_id:user._id});
 	});
 	Cue.addTask('updateNetForEveryone', {isAsync:false, unique:true}, {});
+
+	Cue.addTask('updateAllKingsAllies', {isAsync:false, unit:true}, {});
 };
 
 

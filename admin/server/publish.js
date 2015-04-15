@@ -8,10 +8,6 @@ var admin_publish = function (name, handler) {
 	});
 };
 
-admin_publish('admin_forums', function() {
-	return Forums.find();
-});
-
 admin_publish('admin_charges', function() {
 	return Charges.find();
 });
@@ -40,3 +36,7 @@ Meteor.publish('adminRoomchats', function(chatroom_id) {
 		this.ready();
 	}
 });
+
+admin_publish('adminSettings', function() {
+	return Settings.find();
+})

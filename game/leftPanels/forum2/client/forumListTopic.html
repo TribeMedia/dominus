@@ -1,0 +1,22 @@
+<template name="forumListTopic">
+    <tr>
+        <td class="topRow" colspan="4">
+            {{#if isNewTopic}}
+                <span class="badge">!</span>
+            {{/if}}
+            <a href="" class="forumListTopicLink">
+                {{title}}
+            </a>
+        </td>
+    </tr>
+    <tr>
+        <td class="bottomRow">{{tagName}}</td>
+        <td class="bottomRow" style="text-align:center;">{{round numPosts}}</td>
+        <td class="bottomRow" style="text-align:center;">{{round numViews}}</td>
+        <td class="bottomRow">
+            {{date_twitter updatedAt}}
+            by
+            {{lastPostUser.username}}
+        </td>
+    </tr>
+</template>

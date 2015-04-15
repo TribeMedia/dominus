@@ -1,21 +1,35 @@
 // both client and server
-s = {}
-s.market = {}
-s.resource = {}
-s.army = {}
-s.village = {}
-s.castle = {}
-s.rankings = {}
+s = {};
+s.version = '0.0.18';
+s.market = {};
+s.resource = {};
+s.army = {};
+s.village = {};
+s.castle = {};
+s.rankings = {};
 
-s.rankings.perPage = 10
 
-s.serverMaxPlayers = 400
+// how long after the game ends do we show the game over popup
+// after this time expires the game closes login and resets
+s.gameOverPhaseTime = 1000 * 60 * 60 * 24; 	// 24 hours
+
+// how long after the game is over and resets does it wait before starting a new game
+// this gives me time to update code and send out a newsletter
+// this also lets people know when a new game will start on the landing page
+s.gameClosedPhaseTime = 1000 * 60 * 60 * 48; 	// 48 hours
+
+// close registration after this number of players create accounts
+s.serverMaxPlayers = 200;
+
+// number of rankings per page in the rankings panel
+s.rankings.perPage = 10;
+
 
 if (Meteor.isServer && process.env.NODE_ENV == 'development') {
 	// cheats
-	s.resource.interval = 1000 * 30
-	s.battle_interval = 1000 * 30
-	s.village.max_can_have = 6
+	s.resource.interval = 1000 * 30;
+	s.battle_interval = 1000 * 30;
+	s.village.max_can_have = 6;
 } else {
 	s.resource.interval = 1000 * 60 * 10;
 	s.battle_interval = 1000 * 60 * 4;
@@ -24,6 +38,19 @@ if (Meteor.isServer && process.env.NODE_ENV == 'development') {
 
 s.hex_size = 60;
 s.hex_squish = 0.7;
+
+s.pro = {
+	thisGame: {
+		amountInCents: 200,
+		priceString: '2.00',
+		words: 'this game'
+	},
+	allGames: {
+		amountInCents: 1200,
+		priceString: '12.00',
+		words: 'all games'
+	}
+};
 
 // winner loses x percent of s.battle_dead_per_round_lose or x percent of soldiers in enemy armies
 // double so that when attacking a castle you lost about the same amount as the castle
@@ -38,13 +65,16 @@ s.inactives = {
 	deleteCutoff: {
 		unverifiedEmail: 1000 * 60 * 60 * 24 * 2,	// 2 days
 		noVillagesOrVassals: 1000 * 60 * 60 * 24 * 2, 	// 2 days
-		everyoneElse: 1000 * 60 * 60 * 24 * 10 	// 1 week
+		everyoneElse: 1000 * 60 * 60 * 24 * 10 	// 10 days
 	},
 	reminderCutoff: {
 		unverifiedEmail: 1000 * 60 * 60 * 24 * 1,	// 1 day
 		noVillagesOrVassals: 1000 * 60 * 60 * 24 * 1, 	// 1 day
-		everyoneElse: 1000 * 60 * 60 * 24 * 9 	// 6 days
-	}
+		everyoneElse: 1000 * 60 * 60 * 24 * 9 	// 9 days
+	},
+	deleteUnverifiedEmails: true,
+	deleteNoVillagesOrVassals: false,
+	deleteEveryoneElse: true
 };
 
 //s.vassal_tax = 0.25		// percentage of income that goes to lord
@@ -52,26 +82,16 @@ s.inactives = {
 s.market.sell_tax = 0.2;
 s.market.increment = 0.000004;	// how much it goes up or down when someone buys or sells
 
-s.resource.gained_at_hex = 3
+s.resource.gained_at_hex = 3;
 //s.resource.gold_gained_at_castle = 20	// non longer used
-s.resource.gold_gained_at_village = 0
-s.resource.num_rings_village = 1
-s.resource.large_resource_multiplier = 3 	// large resource hexes give you x times as much
+s.resource.gold_gained_at_village = 0;
+s.resource.num_rings_village = 1;
+s.resource.large_resource_multiplier = 3; 	// large resource hexes give you x times as much
 
-s.resource.types = ['grain', 'lumber', 'ore', 'wool', 'clay', 'glass']
-s.resource.types_plus_gold = ['gold'].concat(s.resource.types)
+s.resource.types = ['grain', 'lumber', 'ore', 'wool', 'clay', 'glass'];
+s.resource.types_plus_gold = ['gold'].concat(s.resource.types);
 
-s.army.types = ['footmen', 'archers', 'pikemen', 'cavalry', 'catapults']
-
-// s.castle.income = {
-// 	gold: s.resource.gold_gained_at_castle,
-// 	grain: 30,
-// 	lumber: 20,
-// 	ore: 10,
-// 	wool: 8,
-// 	clay: 6,
-// 	glass: 2
-// }
+s.army.types = ['footmen', 'archers', 'pikemen', 'cavalry', 'catapults'];
 
 s.castle.income = {
 	gold: 0,	// not used
@@ -81,7 +101,7 @@ s.castle.income = {
 	wool: 20,
 	clay: 20,
 	glass: 20
-}
+};
 
 s.army.cost = {
 	footmen: {
@@ -124,17 +144,17 @@ s.army.cost = {
 		clay:0,
 		glass:100
 	}
-}
+};
 
 s.army.stats = {
 	footmen: {
-		offense: 10,
-		defense: 10,
+		offense: 12,
+		defense: 12,
 		speed: 10
 	},
 	archers: {
 		offense: 5,
-		defense: 15,
+		defense: 16,
 		speed: 14
 	},
 	pikemen: {
@@ -153,13 +173,13 @@ s.army.stats = {
 		speed: 4,
 		bonus_against_buildings: 60
 	}
-}
+};
 
-s.army.pastMovesToShow = 3
+s.army.pastMovesToShow = 3;
 // s.army.pastMovesToShow times as long as catapults
-s.army.pastMovesMsLimit = 60 / s.army.stats.catapults.speed * s.army.pastMovesToShow * 1000 * 60
+s.army.pastMovesMsLimit = 60 / s.army.stats.catapults.speed * s.army.pastMovesToShow * 1000 * 60;
 
-s.village.maxLevel = 3
+s.village.maxLevel = 3;
 
 s.village.cost = {
 	level1: {
@@ -189,12 +209,13 @@ s.village.cost = {
 		glass: 600,
 		timeToBuild: 1000 * 60 * 60 * 12 // 24 hours
 	},
-}
+};
 
+// cheats for local
 if (Meteor.isServer && process.env.NODE_ENV == 'development') {
-	s.village.cost.level1.timeToBuild = 1000
-	s.village.cost.level2.timeToBuild = 1000
-	s.village.cost.level3.timeToBuild = 1000
+	s.village.cost.level1.timeToBuild = 1000;
+	s.village.cost.level2.timeToBuild = 1000;
+	s.village.cost.level3.timeToBuild = 1000;
 }
 
 
@@ -203,15 +224,15 @@ s.village.productionBonus = {
 	level1: 1,
 	level2: 1.5,
 	level3: 2
-}
+};
 
 
-s.village.defense_bonus = 1.75
-s.castle.defense_bonus = 2
-s.village.ally_defense_bonus = 1.5
-s.castle.ally_defense_bonus = 1.5
+s.village.defense_bonus = 1.75;
+s.castle.defense_bonus = 2;
+s.village.ally_defense_bonus = 1.5;
+s.castle.ally_defense_bonus = 1.5;
 
 
-s.income = {}
-s.income.percentToLords = 0.06
-s.income.maxToLords = 0.3
+s.income = {};
+s.income.percentToLords = 0.06;
+s.income.maxToLords = 0.3;

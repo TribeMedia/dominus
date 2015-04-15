@@ -1,0 +1,36 @@
+<template name="forumTopic">
+
+    <div class="panelDarkBg pad_group">
+        <h3>{{topic.title}}</h3>
+    </div>
+
+    <div class="pad_group panelFadeOutBg">
+        <div style="float:left;">
+            Category: {{tag.name}}<br>
+            Game: {{topic.gameName}} {{topic.gameNumber}}
+        </div>
+
+        <div style="float:right;">
+            <button class="btn btn-primary gotoForumListButton">Back To Topic List</button>
+        </div>
+
+        <div style="clear:both;"></div>
+    </div>
+
+    <br>
+
+    {{#each posts}}
+        {{> forumPost}}
+    {{/each}}
+
+    <br>
+
+    {{> forumNewPost topic}}
+
+    <br>
+
+    <div class="pad_group">
+        <button class="btn btn-primary btn-block gotoForumListButton">Back To Topic List</button>
+    </div>
+
+</template>

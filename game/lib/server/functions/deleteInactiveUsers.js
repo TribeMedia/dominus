@@ -44,41 +44,49 @@ Cue.addJob('deleteInactiveUsers_new', {retryOnError:false, maxMs:1000*60*20}, fu
         if (user.emails[0].verified) {
             var finished = false;
 
-            // no vassals?
-            if (!user.num_vassals) {
+            if (s.inactives.deleteNoVillagesOrVassals) {
+                // no vassals?
+                if (!user.num_vassals) {
 
-                // no villages?
-                if (!Villages.find({user_id:user._id}).count()) {
+                    // no villages?
+                    if (!Villages.find({user_id:user._id}).count()) {
 
-                    // double check vassals
-                    if (!Meteor.users.find({lord:user._id}).count()) {
+                        // double check vassals
+                        if (!Meteor.users.find({lord:user._id}).count()) {
 
-                        if (lastLogin.isBefore(cutoff_noVillagesOrVassals)) {
-                            delete_noVillagesOrVassals(user);
-                            finished = true;
-                        } else if (lastLogin.isBefore(reminderCutoff_noVillagesOrVassals)) {
-                            reminder_noVillagesOrVassals(user);
-                            finished = true;
+                            if (lastLogin.isBefore(cutoff_noVillagesOrVassals)) {
+                                delete_noVillagesOrVassals(user);
+                                finished = true;
+                            } else if (lastLogin.isBefore(reminderCutoff_noVillagesOrVassals)) {
+                                reminder_noVillagesOrVassals(user);
+                                finished = true;
+                            }
                         }
                     }
                 }
             }
 
-            // check if longer than cutoff_everyonElse
-            if (!finished) {
-                if (lastLogin.isBefore(cutoff_everyonElse)) {
-                    delete_everyoneElse(user);
-                } else if (lastLogin.isBefore(reminderCutoff_everyonElse)) {
-                    reminder_everyoneElse(user);
+            if (s.inactives.deleteEveryoneElse) {
+                // check if longer than cutoff_everyonElse
+                if (!finished) {
+                    if (lastLogin.isBefore(cutoff_everyonElse)) {
+                        delete_everyoneElse(user);
+                    } else if (lastLogin.isBefore(reminderCutoff_everyonElse)) {
+                        reminder_everyoneElse(user);
+                    }
                 }
             }
         } else {
 
             // email not verified
-            if (lastLogin.isBefore(cutoff_unverified)) {
-                delete_UnverifiedEmail(user);
-            } else if (lastLogin.isBefore(reminderCutoff_unverified)) {
-                reminder_UnverifiedEmail(user);
+            if (s.inactives.deleteUnverifiedEmails) {
+
+                if (lastLogin.isBefore(cutoff_unverified)) {
+                    delete_UnverifiedEmail(user);
+                } else if (lastLogin.isBefore(reminderCutoff_unverified)) {
+                    reminder_UnverifiedEmail(user);
+                }
+
             }
         }
     });

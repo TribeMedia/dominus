@@ -28,7 +28,7 @@ Meteor.methods({
 	change_username: function(username) {
 		check(username, String)
 
-		var user = Meteor.users.findOne(Meteor.userId(), {fields: {is_king:1, username:1}})
+		var user = Meteor.users.findOne(Meteor.userId(), {fields: {is_king:1, username:1, emails:1}})
 		if (user) {
 			var previousUsername = user.username
 
@@ -62,13 +62,16 @@ Meteor.methods({
 			Castles.update({user_id: Meteor.userId()}, {$set: {username: username}})
 			Villages.update({user_id: Meteor.userId()}, {$set: {username: username}}, {multi: true})
 			Armies.update({user_id: Meteor.userId()}, {$set: {username: username}}, {multi: true})
-			Threads.update({user_id: Meteor.userId()}, {$set: {username: username}}, {multi: true})
-			Threads.update({last_post_username: get_user_property("username")}, {$set: {last_post_username: username}}, {multi: true})
-			Messages.update({user_id: Meteor.userId()}, {$set: {username: username}}, {multi: true})
 			Charges.update({user_id: Meteor.userId()}, {$set: {user_username: username}}, {multi: true})
 			Meteor.users.update(Meteor.userId(), {$set: {username: username}})
 
 			gAlert_nameChange(Meteor.userId(), previousUsername, username)
+
+			// update profile
+			var options = {
+				newName: username,
+			};
+			callLandingMethod('profile_changedName', user.emails[0].address, options);
 
 			return true
 		} else {
@@ -103,56 +106,50 @@ Cue.addJob('deleteAccount', {retryOnError:false, maxMs:1000*60*5}, function(task
 
 
 deleteAccount = function(user_id) {
-	var user = Meteor.users.findOne(user_id)
+	var user = Meteor.users.findOne(user_id);
 
 	if (!user) {
-		return false
+		return false;
 	}
 
-
-
-	var appendToName = '(deleted)'
+	var appendToName = '(deleted)';
 
 	Villages.find({user_id: user._id}).forEach(function(village) {
-		destroyVillage(village._id)
-	})
+		destroyVillage(village._id);
+	});
 
-	Armies.remove({user_id: user._id})
-	Moves.remove({user_id: user._id})
-	Threads.update({user_id: user._id}, {$set: {username: user.username+appendToName}}, {multi: true})
-	Threads.update({last_post_username: user.username}, {$set: {last_post_username: user.username+appendToName}}, {multi: true})
-	Messages.update({user_id: user._id}, {$set: {username: user.username+appendToName}}, {multi: true})
-	Charges.update({user_id: user._id}, {$set: {user_username: user.username+appendToName}}, {multi: true})
+	Armies.remove({user_id: user._id});
+	Moves.remove({user_id: user._id});
 
 
 	// fix chat
-	Roomchats.remove({user_id:user._id})
+	Roomchats.remove({user_id:user._id});
 	Rooms.find({members:user._id}).forEach(function(room) {
 		// remove from admins and members
-		Rooms.update(room._id, {$pull: {admins:user._id, members:user._id}})
+		Rooms.update(room._id, {$pull: {admins:user._id, members:user._id}});
 
 		// is user owner?
 		// give owner to someone else
 		if (room.owner == user._id) {
-			removeOwnerFromRoom(room._id)
+			removeOwnerFromRoom(room._id);
 		}
-	})
+	});
 
 
 	// fix tree
 	if (user.lord) {
-		var lord = Meteor.users.findOne(user.lord)
+		var lord = Meteor.users.findOne(user.lord);
 		if (lord) {
 			// give vassals to lord
 			_.each(user.vassals, function(vassal_id) {
-				var vassal = Meteor.users.findOne(vassal_id)
+				var vassal = Meteor.users.findOne(vassal_id);
 				if (vassal) {
-					set_lord_and_vassal(lord._id, vassal._id)
+					set_lord_and_vassal(lord._id, vassal._id);
 				}
-			})
+			});
 
 			// remove from lord
-			remove_lord_and_vassal(lord._id, user._id)
+			remove_lord_and_vassal(lord._id, user._id);
 
 			// update lord's tree
 			// var rf = new relation_finder(lord._id)
@@ -161,13 +158,13 @@ deleteAccount = function(user_id) {
 	} else {
 		// make vassals kings
 		_.each(user.vassals, function(vassal_id) {
-			var vassal = Meteor.users.findOne(vassal_id)
+			var vassal = Meteor.users.findOne(vassal_id);
 			if (vassal) {
-				remove_lord_and_vassal(user._id, vassal._id)
+				remove_lord_and_vassal(user._id, vassal._id);
 				// var rf = new relation_finder(vassal._id)
 				// rf.start()
 			}
-		})
+		});
 	}
 
 	// remove from everyone's allies
@@ -176,11 +173,22 @@ deleteAccount = function(user_id) {
 	// })
 
 
-	Castles.remove({user_id: user._id})
-	Hexes.update({x:user.x, y:user.y}, {$set: {has_building:false, nearby_buildings:false}})
+	Castles.remove({user_id: user._id});
+	Hexes.update({x:user.x, y:user.y}, {$set: {has_building:false, nearby_buildings:false}});
 
-	Meteor.users.remove({_id:user._id})
+	// update profile
+	var options = {};
+	callLandingMethod('profile_accountDeleted', user.emails[0].address, options);
 
-	Cue.addTask('setupEveryoneChatroom', {isAsync:false, unique:true}, {})
-	Cue.addTask('check_for_dominus', {isAsync:false, unique:true}, {})
-}
+	Meteor.users.remove({_id:user._id});
+
+	// this can't be a job
+	// might pick the wrong dominus if multiple people are deleted
+	checkForDominus();
+
+	Cue.addTask('setupEveryoneChatroom', {isAsync:false, unique:true}, {});
+
+	// let home base know that a player was deleted
+	var numPlayers = Meteor.users.find().count();
+	landingConnection.call('playerDeleted', process.env.GAME_ID, process.env.DOMINUS_KEY, numPlayers);
+};

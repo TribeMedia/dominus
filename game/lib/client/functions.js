@@ -1,11 +1,11 @@
 setHexScale = function(scale) {
-	Session.set('hexScale', scale)
-	_saveHexScale()
-}
+	Session.set('hexScale', scale);
+	_saveHexScale();
+};
 
 _saveHexScale = _.debounce(function() {
-	Meteor.call('set_hex_scale', Session.get('hexScale'))
-}, 500)
+	Meteor.call('set_hex_scale', Session.get('hexScale'));
+}, 2000);
 
 ////////////////////////////////////////////////////////////
 // hex functions
@@ -62,29 +62,24 @@ center_on_hex = function(x, y) {
 
 
 highlight_hex_path = function(from_x, from_y, to_x, to_y) {
-	check(from_x, validNumber)
-	check(from_y, validNumber)
-	check(to_x, validNumber)
-	check(to_y, validNumber)
-
-	var hexes = Hx.getHexesAlongLine(from_x, from_y, to_x, to_y, s.hex_size, s.hex_squish)
+	var hexes = Hx.getHexesAlongLine(from_x, from_y, to_x, to_y, s.hex_size, s.hex_squish);
 
 	_.each(hexes, function(hex) {
 
-		highlight_hex_coords(hex.x, hex.y)
+		highlight_hex_coords(hex.x, hex.y);
 
-		var castle = Castles.findOne({x: hex.x, y: hex.y}, {fields: {_id: 1}})
+		var castle = Castles.findOne({x: hex.x, y: hex.y}, {fields: {_id: 1}});
 		if (castle) {
-			draw_castle_highlight(hex.x, hex.y)
+			draw_castle_highlight(hex.x, hex.y);
 		}
 
-		var village = Villages.findOne({x: hex.x, y: hex.y}, {fields: {_id: 1}})
+		var village = Villages.findOne({x: hex.x, y: hex.y}, {fields: {_id: 1}});
 		if (village) {
-			draw_village_highlight(hex.x, hex.y)
+			draw_village_highlight(hex.x, hex.y);
 		}
 
-	})
-}
+	});
+};
 
 
 

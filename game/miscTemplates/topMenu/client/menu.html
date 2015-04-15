@@ -53,14 +53,14 @@
 				</a>
 			</li>
 
-			<li class="{{forum_active}}">
-				<a href="#" id="show_forum_panel_button" data-toggle="tooltip" data-placement="bottom" title="Forums">
+			<li class="{{forumsActive}}">
+				<a href="#" id="showForumsButton" data-toggle="tooltip" data-placement="bottom" title="Forums">
 					{{#if smallScreen}}
 						<i class="fa fa-pencil fa-lg"></i>
 					{{else}}
 						Forums
 					{{/if}}
-					<span class="badge">{{#if is_new_forum_post}}!{{/if}}</span>
+					{{#if isNewForumPost}}<span class="badge">!</span>{{/if}}
 				</a>
 			</li>
 
@@ -110,6 +110,16 @@
 						<i class="fa fa-photo fa-lg"></i>
 					{{else}}
 						Store
+					{{/if}}
+				</a>
+			</li>
+
+			<li class="{{pro_active}}">
+				<a href="#" id="show_pro_panel_button" data-toggle="tooltip" data-placement="bottom" title="Pro">
+					{{#if smallScreen}}
+						<i class="fa fa-level-up fa-lg"></i>
+					{{else}}
+						Pro
 					{{/if}}
 				</a>
 			</li>

@@ -12,24 +12,17 @@ create_castle = function(user_id) {
 		return false
 	}
 
-	var user = Meteor.users.findOne(user_id, {fields: {username: 1}})
+	var user = Meteor.users.findOne(user_id, {fields: {username: 1, emails:1}})
 	if (!user) {
 		console.error('create_castle called but no user found for this id')
 		return false
 	}
 
 	// if there are no hexes then this is a new game
-	// create a new map and reset market
-	// set game end date to null
+	// this is now done after game is reset
+	// this might still happen if admin creates an account on a new game on a new server
 	if (Hexes.find().count() == 0) {
-		console.log('--- creating new game ---')
-		generate_hexes(12)
-		reset_market()
-		Settings.upsert({name: 'gameEndDate'}, {$set: {name: 'gameEndDate', value: null}})
-		Settings.upsert({name: 'lastDominusUserId'}, {$set: {name: 'lastDominusUserId', value: null}})
-		Settings.upsert({name: 'taxesCollected'}, {$set: {name:'taxesCollected', value:0}})
-		Settings.upsert({name: 'hasGameOverAlertBeenSent'}, {$set: {name: 'hasGameOverAlertBeenSent', value:false}})
-		Settings.upsert({name: 'isGameOver'}, {$set: {name: 'isGameOver', value:false}})
+		setupNewGame();
 	}
 
 	var found = false
@@ -88,25 +81,34 @@ create_castle = function(user_id) {
 
 						Meteor.users.update(user._id, {$set: {x: hex.x, y: hex.y, castle_id: id}})
 
+						// update profile with castle info
+						var options = {
+							castleId: id,
+							x: hex.x,
+							y: hex.y
+						};
+						callLandingMethod('profile_castleCreated', user.emails[0].address, options);
+
 						// mark hex as having building
 						Hexes.update({x: hex.x, y: hex.y}, {$set: {has_building: true}})
 
 						built_castle = true		// forEach is async?
 
 						if (has_added_rings) {
-							// add some rings of border hexes so that new people aren't on the edge
-							add_ring(true)
-							add_ring(true)
-							add_ring(true)
-							add_ring(true)
-							add_ring(true)
 
-							var numHexes = Hexes.find().count()
-							var numRings = Hexes.findOne({}, {sort:{x:-1}, limit:1}).x
-							gAlert_mapExpanded(numHexes, numRings)
-
-							// rebake map
 							Meteor.defer(function() {
+								// add some rings of border hexes so that new people aren't on the edge
+								add_ring(true)
+								add_ring(true)
+								add_ring(true)
+								add_ring(true)
+								add_ring(true)
+
+								var numHexes = Hexes.find().count()
+								var numRings = Hexes.findOne({}, {sort:{x:-1}, limit:1}).x
+								gAlert_mapExpanded(numHexes, numRings)
+
+								// rebake map
 								var mapbaker = new Mapbaker();
 								mapbaker.bakeHexes();
 							});

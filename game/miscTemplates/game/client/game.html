@@ -36,8 +36,8 @@
 		</div>
 
 		<div class="left_panel_content">
-			{{#if show_forum_panel}}
-				{{> forum_panel}}
+			{{#if showForumsPanel}}
+				{{> forum}}
 			{{/if}}
 		</div>
 
@@ -72,6 +72,12 @@
 		</div>
 
 		<div class="left_panel_content">
+			{{#if show_pro_panel}}
+				{{> proPanel}}
+			{{/if}}
+		</div>
+
+		<div class="left_panel_content">
 			{{#if show_admin_panel}}
 				{{> admin_panel}}
 			{{/if}}
@@ -85,6 +91,8 @@
 	</div>
 
 	<div id="right_panels">
+		{{> rightEdPanel}}
+
 		<div id="right_panel">
 			{{> Template.dynamic template=rp_template data=rp_template_data}}
 		</div>

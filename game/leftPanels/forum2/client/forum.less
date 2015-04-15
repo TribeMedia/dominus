@@ -1,0 +1,73 @@
+@import (reference) url("/lib/client/custom.bootstrap.import.less");
+
+#forumsPanel {
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: @panel_bg;
+    padding: @panel_padding;
+    height: 100%;
+    pointer-events: auto;
+    margin-left: 10px;
+    width: 400px;
+}
+
+#forumNewTopic {
+    background-color: @panel_bg;
+    padding: 15px 15px 15px 15px;
+}
+
+.panelDarkBg {
+    background-color: @panel_bg;
+}
+
+.panelFadeOutBg {
+    background-color:fadeOut(@panel_bg, 15%);
+}
+
+#forumTopicTable {
+    thead {
+        tr {
+            background-color:@panel_bg;
+        }
+
+        td {
+            color:#bbb;
+        }
+    }
+
+    tbody {
+        td.topRow {
+            font-size:125%;
+            padding-top:8px;
+            padding-bottom:2px;
+        }
+
+        td.bottomRow {
+            padding-top:0px;
+            padding-bottom:8px;
+            font-size:95%;
+            color:#ccc;
+        }
+
+        tr:nth-child(4n), tr:nth-child(4n-1) {
+            background-color:fadeOut(@panel_bg, 10%);
+        }
+
+        tr:nth-child(4n-2), tr:nth-child(4n-3) {
+            background-color:fadeIn(lighten(@panel_bg, 13%), 10%);
+        }
+    }
+}
+
+
+.forumPostTop {
+    background-color:fadeOut(@panel_bg, 15%);
+    padding:5px 10px 5px 10px;
+    color:#bbb;
+}
+
+.forumPostBottom {
+    background-color: @panel_bg;
+    padding:15px 10px 15px 10px;
+    margin-bottom:5px;
+}

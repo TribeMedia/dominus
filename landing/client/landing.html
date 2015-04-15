@@ -7,23 +7,37 @@
 			A free open source multiplayer strategy game.
 		</div>
 
-		<div id="landingBanner">
-			<div class="landingPad">
-				<img src="/landing/landingScreenshot.jpg" id="gameScreenshot" alt="Dominus Screenshot" width=440 height=297>
+		{{#if Template.subscriptionsReady}}
 
-				<div style="margin-top:20px;">
-					Grow in power by conquering castles.  Gain vassals until you can overthrow your lord and climb the tree to become the Dominus.
-				</div>
+			<div id="landingBanner">
+				<div class="landingPad" style="">
+					<div style="font-size:175%;text-align:center;">
+						{{gameName}}
+					</div>
 
-				<div style="text-align:left;margin-top:20px;">
-					{{startText}}
+					<div style="margin-top:10px;font-size:120%">
+						{{gameDescription}}
+					</div>
+
+					<div style="margin-top:20px;color:#444;font-size:85%;">
+						{{#if gameHasStarted}}
+							This game started {{date_from_now gameStartDate}} {{date_calendar gameStartDate}}. <a href="{{dominusBase}}">Click here</a> to return to the list of games.
+						{{/if}}
+					</div>
 				</div>
 			</div>
-		</div>
 
-		<div class="landingPad" id="passwordLoginContainer">
-			{{> UI.dynamic template=form}}
-		</div>
+			<div class="landingPad" id="passwordLoginContainer">
+				{{#if gameHasStarted}}
+					{{> UI.dynamic template=form}}
+				{{else}}
+					{{> landingStartSoon}}
+				{{/if}}
+			</div>
+
+		{{else}}
+			{{> loading}}
+		{{/if}}
 
 		<div id="landingFooter">
 			<div class="landingPad" style="text-align:center;">
@@ -72,76 +86,4 @@
 		</div>
 
 	</div>
-</template>
-
-
-<template name="landingCreateAccount">
-	{{#if serverAtMaxPlayers}}
-
-		<h3>Dominus is full.</h3>
-		<br>
-
-		If you would like to be notified when the next game starts add your email to the mailing list.
-
-		<br><br>
-
-		{{> MailChimpListSubscribe}}
-
-		<br>
-		<div class="loginLink"><a href="" id="landingSigninLink">Sign In</a></div>
-
-	{{else}}
-
-		{{> aSocialError}}
-		{{> aGoogleButton}}
-		{{> aFacebookButton}}
-
-		<br>
-		<div class="divider">
-			<hr class="left">or<hr class="right"><div class="after"></div>
-		</div>
-		<br>
-
-		<div class="loginTitle">Create an an account.</div>
-		<br>
-
-		<div class="formContainer">
-			{{> aCreateAccount}}
-		</div>
-		<br>
-		<div class="loginLink"><a href="" id="landingSigninLink">Sign In</a></div>
-
-	{{/if}}
-</template>
-
-
-<template name="landingSignin">
-	{{> aSocialError}}
-	{{> aGoogleButton}}
-	{{> aFacebookButton}}
-
-	<br>
-	<div class="divider">
-		<hr class="left">or<hr class="right"><div class="after"></div>
-	</div>
-	<br>
-
-	<div class="loginTitle">Sign In</div>
-	<br>
-	<div class="formContainer">
-		{{> aSignin}}
-	</div>
-	<br>
-	<div class="loginLink"><a href="" id="landingCreateAccountLink">Create Account</a></div>
-	<div class="loginLink"><a href="" id="landingForgotPasswordLink">Forgot Password</a></div>
-</template>
-
-
-<template name="landingForgotPassword">
-	<div class="loginTitle">Reset Password</div>
-	<br>
-	{{> aForgotPassword}}
-	<br>
-	<div class="loginLink"><a href="" id="landingCreateAccountLink">Create Account</a></div>
-	<div class="loginLink"><a href="" id="landingSigninLink">Sign In</a></div>
 </template>

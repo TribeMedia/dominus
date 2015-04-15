@@ -84,7 +84,7 @@ function assign_properties_to_hex() {
 		hex.tileImage = '01'
 	} else {
 		var rand = Math.floor(Math.random() * s.resource.numTileImages[hex.type]) + 1
-		rand = _.lpad(rand, 2, '0')
+		rand = zeroFill(rand, 2);
 		hex.tileImage = rand
 	}
 
@@ -142,4 +142,19 @@ resourcesFromSurroundingHexes = function(x,y,numRings) {
 	})
 
 	return income
+}
+
+
+
+// same thing as _.lpad()
+// for some reason lpad doesn't work when reseting game
+// maybe _. gets overwritten?
+var zeroFill = function( number, width )
+{
+	width -= number.toString().length;
+	if ( width > 0 )
+	{
+		return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+	}
+	return number + ""; // always return a string
 }

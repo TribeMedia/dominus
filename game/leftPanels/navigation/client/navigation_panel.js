@@ -135,7 +135,7 @@ Template.navigation_panel.rendered = function() {
 
 
 function canMoveMap() {
-	if (Session.get('show_chatrooms_panel') || Session.get('show_forum_panel') || Session.get('show_market_panel') || Session.get('show_settings_panel')) {
+	if (Session.get('show_chatrooms_panel') || Session.get('showForumsPanel') || Session.get('show_market_panel') || Session.get('show_settings_panel')) {
 		return false
 	}
 

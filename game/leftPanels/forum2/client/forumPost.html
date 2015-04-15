@@ -1,0 +1,22 @@
+<template name="forumPost">
+    <div class="forumPostTop">
+        <div style="float:left;">
+            {{#if isPostFromThisGame}}
+                {{username}} &nbsp;
+                {{> center_on_button x=castleX y=castleY selected_type='castle' selected_id=castleId}}
+            {{else}}
+                {{username}} from {{gameName}} {{gameNumber}}
+            {{/if}}
+        </div>
+
+        <div style="float:right;">
+            {{date_calendar createdAt}}
+        </div>
+
+        <div style="clear:both;"></div>
+    </div>
+
+    <div class="forumPostBottom">
+        {{{autolink text false}}}
+    </div>
+</template>

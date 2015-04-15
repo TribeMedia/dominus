@@ -1,0 +1,53 @@
+<template name="proPanel">
+    <div id="proPanel">
+        <div class="panel_title"><i class="fa fa-level-up fa-lg"></i> &nbsp;Pro</div>
+
+        {{#if connectedToLanding}}
+
+        <div class="panelDarkBg pad_group">
+            <div style="font-size:160%;text-align:center;">Upgrade your game.</div>
+            <br>
+
+            Upgrading removes ads and adds features that make the game easier to play but do not change gameplay.<br>
+            <br>
+
+            <ul>
+                <li>Remove ads.</li>
+                <li>See who is active.  Castles show how many days ago someone was active.</li>
+                <li>Worth of empty hexes.  Clicking on an empty hex will tell you how much a village there would prduce in gold.</li>
+            </ul>
+            <br>
+
+            $2 - Upgrade your account for this game.<br>
+            <br>
+
+            $12 - Upgrade your account in all games forever.<br>
+            <br>
+
+            <div class="alert alert-danger" id="proError" style="display:none;"></div>
+            <div class="alert alert-success" id="proSuccess" style="display:none;"></div>
+
+            <button class="btn btn-primary btn-block proButton" data-type="thisGame" disabled="{{hasPurchasedThisGame}}">Upgrade This Game &nbsp; $2</button>
+
+            <button class="btn btn-primary btn-block proButton" data-type="allGames" disabled="{{hasPurchasedAllGames}}">Upgrade All Games &nbsp; $12</button>
+            <br>
+
+            If you upgrade for all games make sure you use the same email in every game you play.<br>
+            <br>
+
+        </div>
+
+        {{else}}
+
+            <div class="panelDarkBg pad_group">
+                <div style="font-size:160%;text-align:center;">Lost Connection to Server</div>
+                <br>
+
+                <div style="text-align:center;">Try again in a few minutes.</div>
+                <br>
+            </div>
+
+        {{/if}}
+
+    </div>
+</template>

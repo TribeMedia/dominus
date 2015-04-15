@@ -1,4 +1,11 @@
 Template.rp_info_hex.helpers({
+	isPro: function() {
+		var profile = Profiles.findOne();
+		if (profile && profile.pro) {
+			return true;
+		}
+	},
+
 	battleInfoLoaded: function() {
 		return Template.instance().battleInfoLoaded.get()
 	},
@@ -57,33 +64,36 @@ Template.rp_info_hex.helpers({
 
 Template.rp_info_hex.events({
 	'click #select_army_button': function(event, template) {
-		var id = event.currentTarget.getAttribute('data-id')
-		Session.set('selected_id', id)
-		Session.set('selected_type', 'army')
+		var id = event.currentTarget.getAttribute('data-id');
+		Session.set('selected_id', id);
+		Session.set('selected_type', 'army');
 	},
-})
+});
 
 
 
 Template.rp_info_hex.created = function() {
-	var self = this
+	var self = this;
 
-	self.worthOfHex = new ReactiveVar(0)
+	self.worthOfHex = new ReactiveVar(0);
 	self.autorun(function() {
-		var coords = Session.get('selected_coords')
-		if (coords) {
-			Meteor.call('getWorthOfHex', coords.x, coords.y, function(error, worth) {
-				self.worthOfHex.set(worth + s.resource.gold_gained_at_village)
-			})
+		var profile = Profiles.findOne();
+		if (profile && profile.pro) {
+			var coords = Session.get('selected_coords');
+			if (coords) {
+				Meteor.call('getWorthOfHex', coords.x, coords.y, function(error, worth) {
+					self.worthOfHex.set(worth + s.resource.gold_gained_at_village);
+				});
+			}
 		}
-	})
+	});
 
 	self.autorun(function() {
-		var coords = Session.get('selected_coords')
+		var coords = Session.get('selected_coords');
 		if (coords) {
-			Meteor.subscribe('gamePiecesAtHex', coords.x, coords.y)
+			Meteor.subscribe('gamePiecesAtHex', coords.x, coords.y);
 		}
-	})
+	});
 
 	// If a hex is selected and there is a Castle or Village, select it instead.
 	self.autorun(function() {

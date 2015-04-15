@@ -1,7 +1,7 @@
 Cue.addJob('spendTaxes', {retryOnError:false, maxMs:1000*60}, function(task, done) {
-	spendTaxes()
-	done()
-})
+	spendTaxes();
+	done();
+});
 
 spendTaxes = function() {
 	// buy resources in the market with the collected taxes
@@ -26,12 +26,30 @@ spendTaxes = function() {
 
 
 Cue.addJob('gatherResources', {retryOnError:false, maxMs:1000*60*8}, function(task, done) {
-	gatherResources()
-	done()
-})
+	gatherResources();
+	done();
+});
 
 gatherResources = function() {
-	clear_cached_user_update()
+	// don't gather resources before game has started
+	// admin might have an account before game has started
+	var setting = Settings.findOne({name:'gameStartDate'});
+	if (!setting || setting.valule === null) {
+		return false;
+	}
+
+	var startDate = moment(new Date(setting.value));
+	if (!startDate.isValid()) {
+		return false;
+	}
+
+	if (moment().isBefore(startDate)) {
+		return false;
+	}
+
+
+	// db updates are cached because they might happen more than once per user
+	clear_cached_user_update();
 
 	// only receive income if email is verified
 	Meteor.users.find({}, {fields:{emails:1}}).forEach(function(user) {
