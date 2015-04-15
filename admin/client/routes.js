@@ -37,11 +37,6 @@ Router.map(function() {
 		path: '/admin/jobstats',
 	});
 
-	this.route('adminMailchimpList', {
-		path: '/admin/admin_mailchimp_list',
-		waitOn: function() { return Meteor.subscribe('admin_mailchimp_list'); }
-	});
-
 	this.route('adminUsersOnline', {
 		path: '/admin/admin_users_online',
 		waitOn: function() { return Meteor.subscribe('admin_users_online'); }

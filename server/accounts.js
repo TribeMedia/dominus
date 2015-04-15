@@ -81,29 +81,9 @@ Cue.addJob('subscribeToNewsletter', {retryOnError:true, maxMs:1000*60*5}, functi
 	done();
 });
 
-// subscribe to mailchimp
+// subscribe to mailing list
 subscribeToNewsletter = function(email, name) {
 	if (Meteor.isServer && process.env.NODE_ENV != 'development') {
-		var mailingLists = new MailChimpLists();
-
-		var params = {
-			email:{"email": email},
-			id: Meteor.settings.private.MailChimp.listId,
-			merge_vars: {
-				fname: name,
-				username: name
-			},
-			double_optin: false,
-			update_existing: true,
-			send_welcome: false
-		};
-
-		mailingLists.subscribe(params, function(error, data) {
-			if (error) {
-				console.log(error);
-			}
-		});
-
 		// add to home base mailing list
 		landingConnection.call('addPlayerToMailinglist', process.env.DOMINUS_KEY, email, name);
 	}

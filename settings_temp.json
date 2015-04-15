@@ -18,12 +18,6 @@
 		"stripe_publishable_key":"pk_test",
 		"s3path":"https://s3-us-west-2.amazonaws.com/bucket"
 	},
-	"private": {
-		"MailChimp": {
-			"apiKey":"xxx",
-			"listId":"xxx"
-		}
-	},
 	"mandrill": {
 		"username":"xxx",
 		"apikey":"xxx"

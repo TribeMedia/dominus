@@ -16,10 +16,6 @@ admin_publish('admin_gamestats', function() {
 	return Gamestats.find();
 });
 
-admin_publish('admin_mailchimp_list', function() {
-	return Meteor.users.find({}, {fields: {username:1, emails:1}});
-});
-
 Meteor.publish('admin_users_online', function() {
 	return Meteor.users.find({"status.online":true}, {fields: {username:1, status:1}});
 });
