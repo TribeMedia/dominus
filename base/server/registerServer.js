@@ -23,7 +23,7 @@ var registerServer = function() {
             var ip = result.content;
 
             if (landingConnection.status().connected) {
-                console.log('--- registering server with '+process.env.DOMINUS_BASE);
+                // console.log('--- registering server with '+process.env.DOMINUS_BASE);
 
                 landingConnection.call(
                     'registerServer',

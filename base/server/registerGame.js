@@ -12,7 +12,7 @@ Meteor.startup(function() {
 
 registerGame = function() {
     if (landingConnection.status().connected) {
-        console.log('--- registering game with '+process.env.DOMINUS_BASE);
+        //console.log('--- registering game with '+process.env.DOMINUS_BASE);
 
         var hasEnded = false;
         var setting = Settings.findOne({name: 'isGameOver'});
