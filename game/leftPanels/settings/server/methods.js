@@ -26,25 +26,25 @@ Meteor.methods({
 
 
 	change_username: function(username) {
-		check(username, String)
+		check(username, String);
 
-		var user = Meteor.users.findOne(Meteor.userId(), {fields: {is_king:1, username:1, emails:1}})
+		var user = Meteor.users.findOne(Meteor.userId(), {fields: {is_king:1, username:1, emails:1}});
 		if (user) {
-			var previousUsername = user.username
+			var previousUsername = user.username;
 
-			username = _.clean(username)
-			username = username.replace(/\W/g, '')
+			username = _.clean(username);
+			username = username.replace(/\W/g, '');
 
 			if (username.length < 3) {
-				throw new Meteor.Error('New username must be at least 3 characters long.')
+				throw new Meteor.Error('New username must be at least 3 characters long.');
 			}
 
 			if (username.length > 25) {
-				throw new Meteor.Error('New username is too long.')
+				throw new Meteor.Error('New username is too long.');
 			}
 
 			if (Meteor.users.find({username: username}).count() > 0) {
-				throw new Meteor.Error('A user exists with this username, try another.')
+				throw new Meteor.Error('A user exists with this username, try another.');
 			}
 
 			// if (username == 'danimal' || username == 'danlmal' || username == 'Danlmal' || username.indexOf('danimal') > -1 || username.indexOf('Danimal') > -1) {
@@ -53,19 +53,19 @@ Meteor.methods({
 
 			// name of king's chatroom
 			if (user.is_king) {
-				var room = Rooms.findOne({type:'king', owner:user._id})
+				var room = Rooms.findOne({type:'king', owner:user._id});
 				if (room) {
-					Rooms.update(room._id, {$set: {name:'King '+username+' and Vassals'}})
+					Rooms.update(room._id, {$set: {name:'King '+username+' and Vassals'}});
 				}
 			}
 
-			Castles.update({user_id: Meteor.userId()}, {$set: {username: username}})
-			Villages.update({user_id: Meteor.userId()}, {$set: {username: username}}, {multi: true})
-			Armies.update({user_id: Meteor.userId()}, {$set: {username: username}}, {multi: true})
-			Charges.update({user_id: Meteor.userId()}, {$set: {user_username: username}}, {multi: true})
-			Meteor.users.update(Meteor.userId(), {$set: {username: username}})
+			Castles.update({user_id: Meteor.userId()}, {$set: {username: username}});
+			Villages.update({user_id: Meteor.userId()}, {$set: {username: username}}, {multi: true});
+			Armies.update({user_id: Meteor.userId()}, {$set: {username: username}}, {multi: true});
+			Charges.update({user_id: Meteor.userId()}, {$set: {user_username: username}}, {multi: true});
+			Meteor.users.update(Meteor.userId(), {$set: {username: username}});
 
-			gAlert_nameChange(Meteor.userId(), previousUsername, username)
+			gAlert_nameChange(Meteor.userId(), previousUsername, username);
 
 			// update profile
 			var options = {
@@ -73,36 +73,36 @@ Meteor.methods({
 			};
 			callLandingMethod('profile_changedName', user.emails[0].address, options);
 
-			return true
+			return true;
 		} else {
-			throw new Meteor.Error("Can't find user.  This shouldn't happen, please report it.")
+			throw new Meteor.Error("Can't find user.  This shouldn't happen, please report it.");
 		}
 	},
 
 
 	show_coords: function () {
-		Meteor.users.update(Meteor.userId(), {$set: {sp_show_coords: true}})
+		Meteor.users.update(Meteor.userId(), {$set: {sp_show_coords: true}});
 	},
 
 	hide_coords: function() {
-		Meteor.users.update(Meteor.userId(), {$set: {sp_show_coords: false}})
+		Meteor.users.update(Meteor.userId(), {$set: {sp_show_coords: false}});
 	},
 
 	show_minimap: function () {
-		Meteor.users.update(Meteor.userId(), {$set: {sp_show_minimap: true}})
+		Meteor.users.update(Meteor.userId(), {$set: {sp_show_minimap: true}});
 	},
 
 	hide_minimap: function() {
-		Meteor.users.update(Meteor.userId(), {$set: {sp_show_minimap: false}})
+		Meteor.users.update(Meteor.userId(), {$set: {sp_show_minimap: false}});
 	}
-})
+});
 
 
 
 Cue.addJob('deleteAccount', {retryOnError:false, maxMs:1000*60*5}, function(task, done) {
-	deleteAccount(task.data.user_id)
-	done()
-})
+	deleteAccount(task.data.user_id);
+	done();
+});
 
 
 deleteAccount = function(user_id) {
