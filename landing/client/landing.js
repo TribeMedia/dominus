@@ -64,11 +64,13 @@ Template.landing.onCreated(function() {
 	this.subscribe('dominusBase');
 
 	this.autorun(function() {
+
 		if (Template.instance().subscriptionsReady()) {
+
 			// has game started
-			var s = Settings.findOne({name:'gameStartDate'});
-			if (s) {
-				var startDate = moment(new Date(s.value));
+			var set = Settings.findOne({name:'gameStartDate'});
+			if (set) {
+				var startDate = moment(new Date(set.value));
 				if (moment().isAfter(startDate)) {
 					Session.set('gameHasStarted', true);
 				} else {
@@ -77,9 +79,10 @@ Template.landing.onCreated(function() {
 			}
 
 			// is game full
-			s = Settings.findOne({name:'playerCount'});
-			if (s) {
-				var numPlayers = s.value;
+			set = Settings.findOne({name:'playerCount'});
+
+			if (set) {
+				var numPlayers = set.value;
 				if (numPlayers >= s.serverMaxPlayers) {
 					Session.set('gameIsFull', true);
 				} else {
@@ -122,7 +125,10 @@ var setViewport = function() {
 // animation
 
 var loginFormRendered = function() {
-	this.find('.formContainer').parentNode._uihooks = landingLoginFormAnimation;
+	var formContainer = this.find('.formContainer');
+	if (formContainer) {
+		formContainer.parentNode._uihooks = landingLoginFormAnimation;
+	}
 };
 
 Template.landingSignin.rendered = loginFormRendered;

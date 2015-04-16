@@ -12,6 +12,12 @@ Accounts.validateNewUser(function(user) {
 		return true;
 	}
 
+	// max players
+	var numPlayers = Meteor.users.find().count();
+	if (numPlayers >= s.serverMaxPlayers) {
+		throw new Meteor.Error(403, 'Game full.');
+	}
+
 	// only let admin create account if before start date
 	var setting = Settings.findOne({name:'gameStartDate'});
 	if (setting && setting.value !== null) {
