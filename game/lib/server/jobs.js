@@ -162,6 +162,10 @@ Meteor.startup(function() {
 			Cue.addTask('checkForGameOver', {isAsync:false, unique:true}, {});
 			Cue.addTask('checkForGameReset', {isAsync:false, unique:true}, {});
 		}, 1000 * 60);
+	} else {
+
+		// not worker
+		console.log('--- dominus started ---');
 	}
 });
 
