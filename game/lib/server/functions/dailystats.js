@@ -333,7 +333,7 @@ updateIncomeRank = function() {
 		var options = {
 			rankByIncome: rank,
 		};
-		callLandingMethod('profile_setRankByIncome', user.emails[0].address, options);
+		//callLandingMethod('profile_setRankByIncome', user.emails[0].address, options);
 
 		if (prevIncome) {
 			if (prevIncome != user.income) {
@@ -373,7 +373,7 @@ updateVassalRank = function() {
 		var options = {
 			rankByVassals: rank,
 		};
-		callLandingMethod('profile_setRankByVassals', user.emails[0].address, options);
+		//callLandingMethod('profile_setRankByVassals', user.emails[0].address, options);
 
 		if (prevNumVassals) {
 			if (prevNumVassals != user.num_allies_below) {
