@@ -13,9 +13,9 @@ Template.forum.onCreated(function() {
         if (landingConnection.status().connected) {
             landingConnection.subscribe('forumtags');
 
-            var profile = Profiles.findOne({}, {fields:{_id:1}});
-            if (profile) {
-                landingConnection.subscribe('forumReadsByProfile', profile._id);
+            var prefs = Prefs.findOne({}, {fields:{_id:1}});
+            if (prefs) {
+                landingConnection.subscribe('forumReadsByPrefs', prefs._id);
             }
         }
     });

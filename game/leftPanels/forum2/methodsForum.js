@@ -129,6 +129,8 @@ Meteor.methods({
     },
 
 
+    // have no access to profile on server
+    // so use email
     forumTopicReadByUser: function(topicId) {
         if (!this.isSimulation) {
             var user = Meteor.users.findOne(Meteor.userId(), {fields:{emails:1}});
