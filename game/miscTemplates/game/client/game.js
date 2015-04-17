@@ -48,10 +48,13 @@ Template.game.created = function() {
 	self.autorun(function() {
 		if (landingConnection.status().connected) {
 			// user profile and prefs
-			var user = Meteor.users.findOne(Meteor.userId(), {fields:{emails:1}});
-			if (user) {
-				landingConnection.subscribe('profile', user.emails[0].address);
-				landingConnection.subscribe('prefs', user.emails[0].address);
+			var gameInfo = Session.get('gameInfo');
+			if (gameInfo) {
+				var user = Meteor.users.findOne(Meteor.userId(), {fields:{emails:1}});
+				if (user) {
+					landingConnection.subscribe('profile', user.emails[0].address, gameInfo.gameId, gameInfo.gameNumber);
+					landingConnection.subscribe('prefs', user.emails[0].address);
+				}
 			}
 
 			// for unread forum posts
