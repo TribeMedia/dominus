@@ -19,7 +19,7 @@ s.gameOverPhaseTime = 1000 * 60 * 60 * 24; 	// 24 hours
 s.gameClosedPhaseTime = 1000 * 60 * 60 * 48; 	// 48 hours
 
 // close registration after this number of players create accounts
-s.serverMaxPlayers = 400;
+s.serverMaxPlayers = 200;
 
 // number of rankings per page in the rankings panel
 s.rankings.perPage = 10;
