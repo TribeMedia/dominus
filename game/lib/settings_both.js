@@ -58,7 +58,7 @@ s.battle_power_lost_per_round = 500;
 s.battle_power_lost_winner_ratio = 0.5;
 
 // length of time added to game end clock when there is a new dominus
-s.time_til_game_end_when_new_dominus = 1000 * 60 * 60 * 24 * 7; 	// 7 days
+s.time_til_game_end_when_new_dominus = 1000 * 60 * 60 * 24 * 2; 	// 7 days
 
 // removal of inactives
 s.inactives = {
@@ -83,7 +83,6 @@ s.market.sell_tax = 0.2;
 s.market.increment = 0.000004;	// how much it goes up or down when someone buys or sells
 
 s.resource.gained_at_hex = 3;
-//s.resource.gold_gained_at_castle = 20	// non longer used
 s.resource.gold_gained_at_village = 0;
 s.resource.num_rings_village = 1;
 s.resource.large_resource_multiplier = 3; 	// large resource hexes give you x times as much
