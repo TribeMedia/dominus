@@ -34,19 +34,6 @@ Template.settings_panel.events({
 		$(alert).hide()
 		var username = $(input).val()
 
-		username = _.clean(username)
-		username = username.replace(/\W/g, '')
-
-		if (username.length < 3) {
-			error = true
-			msg = 'Username must be at least 3 characters long.'
-		}
-
-		if (username.length > 25) {
-			error = true
-			msg = 'New username is too long.'
-		}
-
 		if (error) {
 			$(alert).show()
 			$(alert).html(msg)
