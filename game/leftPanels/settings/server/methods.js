@@ -33,7 +33,7 @@ Meteor.methods({
 			var previousUsername = user.username;
 
 			username = _.clean(username);
-			username = username.replace(/\W/g, '');
+			username = username.replace(/[^0-9a-zA-Z_\s]/g, '');
 
 			if (username.length < 3) {
 				throw new Meteor.Error('New username must be at least 3 characters long.');

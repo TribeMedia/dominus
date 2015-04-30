@@ -80,8 +80,8 @@ Template.game.created = function() {
 
 	// subscribe to what's onscreen
 	// uses meteor package meteorhacks:subs-manager
-	var subman = new SubsManager({cacheLimit:10, expireIn:5})
-	var submanHexbakes = new SubsManager({cacheLimit:10, expireIn:5})
+	var subman = new SubsManager({cacheLimit:10, expireIn:9999})
+	var submanHexbakes = new SubsManager({cacheLimit:10, expireIn:9999})
 
 
 	// when user changes show coords setting clear subscription
