@@ -153,7 +153,7 @@ Template.game.rendered = function() {
 			}
 
 		} else {
-			var pageWidth = 850
+			var pageWidth = 1000
 
 			var zoom = screen.width / pageWidth
 			if (zoom < 1) {
