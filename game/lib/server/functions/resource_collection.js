@@ -34,7 +34,7 @@ gatherResources = function() {
 	// don't gather resources before game has started
 	// admin might have an account before game has started
 	var setting = Settings.findOne({name:'gameStartDate'});
-	if (!setting || setting.valule === null) {
+	if (!setting || setting.value === null) {
 		return false;
 	}
 
