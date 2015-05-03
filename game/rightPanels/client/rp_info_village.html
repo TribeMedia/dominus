@@ -1,5 +1,7 @@
 <template name="rp_info_village">
 	<div class="rp_content" id="rp_info_village">
+		{{> rp_closeButton}}
+
 		{{#if infoLoaded}}
 			<div class="panel panel-default" style="margin-top:0;">
 				<div class="panel-body" style="text-align:LEFT;">
@@ -26,14 +28,6 @@
 							Level {{level}} Village
 						</div>
 					{{/if}}
-
-					<div style="float:left;">
-						{{> hex_location}}
-					</div>
-					<div style="float:right;">
-						{{> center_on_button x=x y=y selected_id=_id selected_type='village'}}
-					</div>
-					<div style="clear:both;"></div>
 				</div>
 			</div>
 
