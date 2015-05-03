@@ -107,7 +107,7 @@ Template.rp_hire_army.events({
 
 		if (no_units_are_selected()){
 			$(alert).show(100)
-			$(alert).html('Use the sliders to set how many soldiers to hire.')
+			$(alert).html('Set how many soldiers to hire.')
 		} else {
 			button.attr('disabled', true)
 			button.html('Please Wait')
