@@ -117,13 +117,13 @@ Mapbaker.bakeHexes = function() {
             imageObjectWithCoords.filename = filenameWithCoords;
             imageObjectWithCoords.hasCoords = true;
 
-            Cue.addTask('createSvgImage', {isAsync:false, unique:true}, {
+            Cue.addTask('createSvgImage', {isAsync:true, unique:true}, {
                 filename: filename,
                 svgString: svg,
                 imageObject: imageObject
             });
 
-            Cue.addTask('createSvgImage', {isAsync:false, unique:true}, {
+            Cue.addTask('createSvgImage', {isAsync:true, unique:true}, {
                 filename: filenameWithCoords,
                 svgString: svgWithCoords,
                 imageObject: imageObject
@@ -209,7 +209,7 @@ Mapbaker.imageExists = function(image_url){
 
 
 
-Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5}, function(task, done) {
+Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:8}, function(task, done) {
     var result = Mapbaker.createSvgImage(Mapbaker.meteorPath+task.data.filename+'.svg', task.data.svgString);
 
     if (result) {
@@ -251,7 +251,7 @@ Mapbaker.createSvgImage = function(filepath, svgString) {
 
 
 
-Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5}, function(task, done) {
+Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:5}, function(task, done) {
     var result = Mapbaker.createJpgImage(task.data.inFile, task.data.outFile, task.data.outFileType, task.data.quality);
 
     if (result) {
