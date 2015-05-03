@@ -213,7 +213,7 @@ Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5}, function(task
     var result = Mapbaker.createSvgImage(Mapbaker.meteorPath+task.data.filename+'.svg', task.data.svgString);
 
     if (result) {
-        Cue.addTask('createJpgImage', {isAsync:false, unique:true}, {
+        Cue.addTask('createJpgImage', {isAsync:true, unique:true}, {
             inFile: Mapbaker.meteorPath+task.data.filename+'.svg',
             outFile: Mapbaker.meteorPath+task.data.filename+'.jpg',
             outFileType: 'jpg',
@@ -231,6 +231,7 @@ Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5}, function(task
 Mapbaker.createSvgImage = function(filepath, svgString) {
     var self = this;
     var fut = new Future();
+
     self.fs.writeFile(filepath, svgString, Meteor.bindEnvironment(function(error) {
         if (error) {
             console.error(error);

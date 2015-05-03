@@ -27,7 +27,6 @@ Template.mapbaker_alert.helpers({
         var started = Settings.findOne({name:'mapBakeImagesStarted'});
         var finished = Settings.findOne({name:'mapBakeImagesFinished'});
         if (started && finished) {
-            console.log(finished.value / started.value * 100)
             return finished.value / started.value * 100;
         }
     }
@@ -35,9 +34,9 @@ Template.mapbaker_alert.helpers({
 
 
 Template.mapbaker_alert.created = function() {
-    var self = this
+    var self = this;
 
-    self.subs = new ReadyManager()
+    self.subs = new ReadyManager();
 
     self.autorun(function() {
         self.subs.subscriptions([{
