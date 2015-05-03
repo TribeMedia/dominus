@@ -1,14 +1,22 @@
 Template.unverifiedemail.helpers({
     show: function() {
-        var user = Meteor.users.findOne(Meteor.userId(), {fields: {emails:1}})
+        return true;
+        var user = Meteor.users.findOne(Meteor.userId(), {fields: {emails:1}});
         if (user && user.emails) {
-            var verified = user.emails[0].verified
+            var verified = user.emails[0].verified;
             if (!verified) {
-                return true
+                return true;
             }
         }
+    },
+
+    email: function() {
+        var user = Meteor.users.findOne(Meteor.userId(), {fields: {emails:1}});
+        if (user && user.emails) {
+            return user.emails[0].address;
+        }
     }
-})
+});
 
 Template.unverifiedemail.events({
     'click #resendVerificationEmailButton': function(event, template) {

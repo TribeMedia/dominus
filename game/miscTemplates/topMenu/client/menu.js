@@ -86,7 +86,7 @@ Template.menu.helpers({
 
 	is_new_chat: function() {
 		var isNew = false;
-		var page_title = s.game_name + " : " + Meteor.settings.public.GAME_ID;
+		var page_title = s.game_name + " : " + _.capitalize(Meteor.settings.public.GAME_ID);
 
 		Roomlist.find().forEach(function(room) {
 			var selectedId = Session.get('selectedChatroomId');

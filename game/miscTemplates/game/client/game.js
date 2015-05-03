@@ -126,7 +126,7 @@ Template.game.created = function() {
 
 Template.game.rendered = function() {
 
-	document.title = "Dominus : "+Meteor.settings.public.GAME_ID;
+	document.title = "Dominus : "+_.capitalize(Meteor.settings.public.GAME_ID);
 
 	this.autorun(function() {
 		var canvasSize = Session.get('canvas_size')
