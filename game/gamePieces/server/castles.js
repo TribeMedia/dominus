@@ -109,8 +109,7 @@ create_castle = function(user_id) {
 								gAlert_mapExpanded(numHexes, numRings)
 
 								// rebake map
-								var mapbaker = new Mapbaker();
-								mapbaker.bakeHexes();
+								Mapbaker.bakeHexes();
 							});
 
 						}
