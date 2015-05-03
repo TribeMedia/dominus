@@ -1,6 +1,5 @@
 Template.unverifiedemail.helpers({
     show: function() {
-        return true;
         var user = Meteor.users.findOne(Meteor.userId(), {fields: {emails:1}});
         if (user && user.emails) {
             var verified = user.emails[0].verified;
