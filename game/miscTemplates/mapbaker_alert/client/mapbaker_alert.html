@@ -1,6 +1,6 @@
 <template name="mapbaker_alert">
-    <div id="mapbakerPositioner" class="popupPanelContainer">
-        {{#if show}}
+    {{#if show}}
+        <div id="mapbakerPositioner" class="popupPanelContainer">
             <div id="mapbaker_alert">
                 <h4>Baking Map</h4>
                 The map is baking.  This might take a bit.<br>
@@ -19,6 +19,6 @@
                     This happens when the map expands.  If there is not enough room on the map when a new player joins then the map grows.
                 </span>
             </div>
-        {{/if}}
-    </div>
+        </div>
+    {{/if}}
 </template>
