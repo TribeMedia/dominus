@@ -200,7 +200,7 @@ var resource_interval_jobs = function() {
 	if (!setting || setting.value === null) {
 		return false;
 	}
-	
+
 	Cue.addTask('record_market_history', {isAsync:true, unique:false}, {quantity:0});
 	Cue.addTask('gatherResources', {isAsync:false, unique:true}, {});
 	Cue.addTask('spendTaxes', {isAsync:false, unique:true}, {});
