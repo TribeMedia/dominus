@@ -70,7 +70,7 @@ Meteor.publish('left_panel_armies', function() {
 Meteor.publish('left_panel_villages', function() {
 	if(this.userId) {
 		var sub = this;
-		var fields = {name:1, x:1, y:1, user_id:1, level:1};
+		var fields = {name:1, x:1, y:1, user_id:1, level:1, "income.worth":1};
 
 		_.each(s.army.types, function(type) {
 			fields[type] = 1;
