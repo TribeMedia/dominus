@@ -94,7 +94,7 @@ if (Meteor.settings.public.GAME_ID == 'speed') {
             offense: 1,
             defense: 1,
             speed: 12,
-            bonus_against_buildings: 40
+            bonus_against_buildings: 50
         }
     };
     s.village.cost = {
