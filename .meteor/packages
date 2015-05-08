@@ -24,7 +24,6 @@ nemo64:bootstrap
 fortawesome:fontawesome
 danimal:readymanager
 danimal:mapmover
-danimal:mapbaker
 accounts-google
 accounts-facebook
 fastclick
@@ -40,3 +39,5 @@ wylio:mandrill
 http
 meteorhacks:kadira
 meteorhacks:sikka
+danimal:svgexport
+classcraft:knox

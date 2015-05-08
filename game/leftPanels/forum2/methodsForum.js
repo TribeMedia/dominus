@@ -148,5 +148,18 @@ Meteor.methods({
                 landingConnection.call('forumMarkAllRead', process.env.DOMINUS_KEY, user.emails[0].address);
             }
         }
+    },
+
+
+    admin_moveTopicToTag: function(topicId, tagId) {
+        check(topicId, String);
+        check(tagId, String);
+
+        if (!this.isSimulation) {
+            var user = Meteor.users.findOne(Meteor.userId(), {fields:{emails:1, admin:1}});
+            if (user) {
+                landingConnection.call('admin_moveTopicToTag', process.env.DOMINUS_KEY, user.emails[0].address, topicId, tagId);
+            }
+        }
     }
 });

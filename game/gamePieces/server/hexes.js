@@ -15,8 +15,7 @@ generate_hexes = function(num_of_rings, bakeMap) {
 
 	// rebake map
 	if (bakeMap) {
-		var mapbaker = new Mapbaker()
-		mapbaker.bakeHexes()
+		Mapbaker.bakeHexes()
 	}
 }
 
