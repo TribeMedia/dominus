@@ -32,7 +32,7 @@ Meteor.methods({
 
 			if (moment() - lastReportDate < s.canReportEvery) {
 				var dur = moment.duration(s.canReportEvery);
-				throw new Meteor.Error('Can only make a report once every '+dur.humanize()+'.');
+				throw new Meteor.Error('Can only make a report once '+dur.humanize()+'.');
 			}
 		}
 

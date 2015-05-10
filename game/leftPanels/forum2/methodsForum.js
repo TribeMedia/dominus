@@ -4,7 +4,8 @@ Meteor.methods({
         self.unblock();
 
         // can't chat if you have reports
-        var numReports = Reports.find().count();
+        var find = {user_id:Meteor.userId(), active:true};
+        var numReports = Reports.find(find).count();
         if (numReports && numReports > 0) {
             throw new Meteor.Error('Cannot post in forums after you have been reported.');
         }
@@ -93,7 +94,8 @@ Meteor.methods({
         self.unblock();
 
         // can't chat if you have reports
-        var numReports = Reports.find().count();
+        var find = {user_id:Meteor.userId(), active:true};
+        var numReports = Reports.find(find).count();
         if (numReports && numReports > 0) {
             throw new Meteor.Error('Cannot post in forums after you have been reported.');
         }
