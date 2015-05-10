@@ -3,6 +3,12 @@ Meteor.methods({
         var self = this;
         self.unblock();
 
+        // can't chat if you have reports
+        var numReports = Reports.find().count();
+        if (numReports && numReports > 0) {
+            throw new Meteor.Error('Cannot post in forums after you have been reported.');
+        }
+
         if (!tagId || tagId == 'false') {
             throw new Meteor.Error('Select a category.');
         }
@@ -85,6 +91,12 @@ Meteor.methods({
     forumNewPost: function(tagId, topicId, text) {
         var self = this;
         self.unblock();
+
+        // can't chat if you have reports
+        var numReports = Reports.find().count();
+        if (numReports && numReports > 0) {
+            throw new Meteor.Error('Cannot post in forums after you have been reported.');
+        }
 
         if (text.length < 1) {
             throw new Meteor.Error('Text too short.');

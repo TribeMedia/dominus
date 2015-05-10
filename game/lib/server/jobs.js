@@ -104,6 +104,12 @@ Meteor.startup(function() {
 		}, s.village.construction_update_interval);
 
 
+		// repots
+		Meteor.setInterval(function() {
+			Cue.addTask('checkReports', {isAsync:false, unique:true}, {});
+		}, s.reportCheckInterval);
+
+
 
 		// resource collection
 		var max = 1000 * 60 * 60;

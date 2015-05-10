@@ -235,3 +235,15 @@ s.castle.ally_defense_bonus = 1.5;
 s.income = {};
 s.income.percentToLords = 0.06;
 s.income.maxToLords = 0.3;
+
+
+
+// how often can users report someone
+// once every
+s.canReportEvery = 1000 * 60 * 60 * 24;	// a day
+s.reportCheckInterval = 1000 * 30;
+
+// how long does timeout last
+reportDuration = function(numReports) {
+	return 1000 * 60 * 10 * numReports * numReports;
+};

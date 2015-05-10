@@ -172,4 +172,5 @@ Template.game.rendered = function() {
 
 Meteor.startup(function () {
 	Meteor.subscribe('user_data');
+	Meteor.subscribe('myReports');
 })
