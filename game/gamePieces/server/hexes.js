@@ -15,7 +15,7 @@ generate_hexes = function(num_of_rings, bakeMap) {
 
 	// rebake map
 	if (bakeMap) {
-		Mapbaker.bakeHexes()
+		Cue.addTask('bakeHexes', {isAsync:false, unique:true}, {});
 	}
 }
 
