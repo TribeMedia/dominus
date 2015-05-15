@@ -331,6 +331,8 @@ Template.chatroom_open.events({
 			y: parseInt(event.currentTarget.getAttribute('data-y'))
 		}
 
+		check(hex.x, validNumber);
+		check(hex.y, validNumber);
 		Meteor.call('coords_to_id', hex.x, hex.y, 'hex', function(error, hexId) {
 			if (!error && hexId) {
 				center_on_hex(hex.x, hex.y);

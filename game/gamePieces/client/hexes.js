@@ -75,6 +75,8 @@ Template.hexes.events({
 
 			if (mouseMode == 'default') {
 
+				check(coord.x, validNumber);
+				check(coord.y, validNumber);
 				Meteor.call('coords_to_id', coord.x, coord.y, 'hex', function(error, hexId) {
 					Session.set('selected_type', 'hex')
 					Session.set('selected_id', hexId)

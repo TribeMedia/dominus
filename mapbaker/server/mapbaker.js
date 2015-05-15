@@ -228,6 +228,7 @@ Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:8}, 
     }
 });
 
+
 Mapbaker.createSvgImage = function(filepath, svgString) {
     var self = this;
     var fut = new Future();
