@@ -1,17 +1,24 @@
+Cue.addJob('bakeHexes', {retryOnError:true, maxMs:1000*60*5}, function(task, done) {
+    Mapbaker.bakeHexes();
+    done();
+});
+
+
 Mapbaker = {
     // this is how many hexes per image
     numHexes: 11,
 
-    s3 : Knox.createClient({
-        key: Meteor.settings.s3key,
-        secret: Meteor.settings.s3secretKey,
-        bucket: Meteor.settings.s3bucket,
-        region: Meteor.settings.s3region
-    }),
+    // s3 : Knox.createClient({
+    //     key: Meteor.settings.s3key,
+    //     secret: Meteor.settings.s3secretKey,
+    //     bucket: Meteor.settings.s3bucket,
+    //     region: Meteor.settings.s3region
+    // }),
 
     fs: Npm.require('fs'),
     meteorPath: 'hexes/',
-    s3prefix: 'hexes/',
+    meteorPublicPath: '../../../../../public/hexBakes/',
+    //s3prefix: 'hexes/',
     hexWidth: s.hex_size,
     hexHeight: s.hex_size * (Math.sqrt(3) * s.hex_squish),
 
@@ -47,11 +54,12 @@ Mapbaker.bakeHexes = function() {
     var maxY = Hexes.findOne({}, {sort:{y:-1}, limit:1, fields:{y:1}}).y;
 
     self.deleteLocalFiles();
+    self.deleteLocalHexFiles();
     Hexbakes.remove({});
-    if (!self.deleteS3Files()) {
-        console.error('could not delete map images from s3');
-        return false;
-    }
+    // if (!self.deleteS3Files()) {
+    //     console.error('could not delete map images from s3');
+    //     return false;
+    // }
 
     for (var x = minX; x <= maxX; x += self.numHexes) {
         for (var y = minY; y <= maxY; y += self.numHexes) {
@@ -135,76 +143,77 @@ Mapbaker.bakeHexes = function() {
 
 
 
-Cue.addJob('uploadToS3', {retryOnError:true, maxMs:1000*60*5}, function(task, done) {
-    var result = Mapbaker.uploadToS3(task.data.filename, task.data.imageObject);
 
-    if (result) {
-        Mapbaker.imageFinished();
-        done();
-    } else {
-        done(result);
-    }
-});
+// Cue.addJob('uploadToS3', {retryOnError:true, maxMs:1000*60*5}, function(task, done) {
+//     var result = Mapbaker.uploadToS3(task.data.filename, task.data.imageObject);
+//
+//     if (result) {
+//         Mapbaker.imageFinished();
+//         done();
+//     } else {
+//         done(result);
+//     }
+// });
+//
+// Mapbaker.uploadToS3 = function(filename, imageObject) {
+//     var self = this;
+//     var fut = new Future();
+//
+//     self.fs.stat(self.meteorPath+filename+'.jpg', Meteor.bindEnvironment(function(error, stat) {
+//         if (error) {
+//             console.error(error);
+//             fut['return'](error);
+//
+//         } else {
+//
+//             if (!stat.isFile()) {
+//                 console.error('stat is not a file');
+//                 fut['return']('stat is not a file');
+//
+//             } else {
+//
+//                 self.s3.putFile(self.meteorPath+filename+'.jpg', 'hexes/'+filename+'.jpg', {
+//                     'Content-Length': stat.size,
+//                     'Content-Type': 'image/jpg'
+//                 }, Meteor.bindEnvironment(function(error, res) {
+//                     if (error) {
+//                         console.error(error);
+//                         fut['return'](error);
+//
+//                     } else {
+//
+//                         var imagepath = Meteor.settings.public.s3path+'/hexes/'+filename+'.jpg';
+//                         if (res.statusCode == 200 && self.imageExists(imagepath)) {
+//                             Hexbakes.insert(imageObject);
+//                             fut['return'](true);
+//                         } else {
+//                             var err = 'Check of '+imagepath+' failed, retrying. Status code: '+res.statusCode;
+//                             console.error(err);
+//                             fut['return'](err);
+//                         }
+//                     }
+//                 }));
+//
+//             }
+//         }
+//     }));
+//
+//     return fut.wait();
+// };
 
-Mapbaker.uploadToS3 = function(filename, imageObject) {
-    var self = this;
-    var fut = new Future();
-
-    self.fs.stat(self.meteorPath+filename+'.jpg', Meteor.bindEnvironment(function(error, stat) {
-        if (error) {
-            console.error(error);
-            fut['return'](error);
-
-        } else {
-
-            if (!stat.isFile()) {
-                console.error('stat is not a file');
-                fut['return']('stat is not a file');
-
-            } else {
-
-                self.s3.putFile(self.meteorPath+filename+'.jpg', 'hexes/'+filename+'.jpg', {
-                    'Content-Length': stat.size,
-                    'Content-Type': 'image/jpg'
-                }, Meteor.bindEnvironment(function(error, res) {
-                    if (error) {
-                        console.error(error);
-                        fut['return'](error);
-
-                    } else {
-
-                        var imagepath = Meteor.settings.public.s3path+'/hexes/'+filename+'.jpg';
-                        if (res.statusCode == 200 && self.imageExists(imagepath)) {
-                            Hexbakes.insert(imageObject);
-                            fut['return'](true);
-                        } else {
-                            var err = 'Check of '+imagepath+' failed, retrying. Status code: '+res.statusCode;
-                            console.error(err);
-                            fut['return'](err);
-                        }
-                    }
-                }));
-
-            }
-        }
-    }));
-
-    return fut.wait();
-};
 
 
-
-Mapbaker.imageExists = function(image_url){
-    check(image_url, String);
-
-    try {
-        var result = HTTP.get(image_url);
-        return true;
-    } catch (error) {
-        console.error(error);
-        return false;
-    }
-};
+// Mapbaker.imageExists = function(image_url){
+//     check(image_url, String);
+//
+//     try {
+//         var result = HTTP.get(image_url);
+//         return true;
+//     } catch (error) {
+//         console.error(error);
+//         return false;
+//     }
+// };
 
 
 
@@ -215,7 +224,7 @@ Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:8}, 
     if (result) {
         Cue.addTask('createJpgImage', {isAsync:true, unique:true}, {
             inFile: Mapbaker.meteorPath+task.data.filename+'.svg',
-            outFile: Mapbaker.meteorPath+task.data.filename+'.jpg',
+            outFile: Mapbaker.meteorPublicPath+task.data.filename+'.jpg',
             outFileType: 'jpg',
             quality: '80%',
             filename: task.data.filename,
@@ -256,10 +265,12 @@ Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:5}, 
     var result = Mapbaker.createJpgImage(task.data.inFile, task.data.outFile, task.data.outFileType, task.data.quality);
 
     if (result) {
-        Cue.addTask('uploadToS3', {isAsync:true, unique:true}, {
-            filename: task.data.filename,
-            imageObject: task.data.imageObject
-        });
+        // Cue.addTask('uploadToS3', {isAsync:true, unique:true}, {
+        //     filename: task.data.filename,
+        //     imageObject: task.data.imageObject
+        // });
+        Hexbakes.insert(task.data.imageObject);
+        Mapbaker.imageFinished();
 
         done();
     } else {
@@ -346,42 +357,59 @@ Mapbaker.deleteLocalFiles = function() {
 
 
 
-
-Mapbaker.deleteS3Files = function() {
+Mapbaker.deleteLocalHexFiles = function() {
     var self = this;
 
-    // don't return until done
-    var fut = new Future();
-
-    // delete all files on s3
-    self.s3.list({ prefix: self.s3prefix }, function(error, data) {
-        if (error) {
-            console.error(error);
-            fut['return'](false);
-
-        } else {
-            var list = [];
-
-            for (var i=0; i<data.Contents.length; i++) {
-                var name = data.Contents[i].Key;
-                if (name != self.s3prefix) {
-                    list.push(name);
-                }
-            }
-
-            self.s3.deleteMultiple(list, function(error, result) {
-                if (error) {
-                    console.error(error);
-                    fut['return'](false);
-                } else {
-                    fut['return'](true);
-                }
-            });
-        }
-    });
-
-    return fut.wait();
+    if (self.fs.existsSync(self.meteorPublicPath)) {
+        // delete all files in public/hexes directory
+        self.fs.readdirSync(self.meteorPublicPath).forEach(function(file, index) {
+            var curPath = self.meteorPublicPath + '/' + file;
+            self.fs.unlinkSync(curPath);
+        });
+    } else {
+        // create directory
+        self.fs.mkdirSync(self.meteorPublicPath);
+    }
 };
+
+
+
+
+// Mapbaker.deleteS3Files = function() {
+//     var self = this;
+//
+//     // don't return until done
+//     var fut = new Future();
+//
+//     // delete all files on s3
+//     self.s3.list({ prefix: self.s3prefix }, function(error, data) {
+//         if (error) {
+//             console.error(error);
+//             fut['return'](false);
+//
+//         } else {
+//             var list = [];
+//
+//             for (var i=0; i<data.Contents.length; i++) {
+//                 var name = data.Contents[i].Key;
+//                 if (name != self.s3prefix) {
+//                     list.push(name);
+//                 }
+//             }
+//
+//             self.s3.deleteMultiple(list, function(error, result) {
+//                 if (error) {
+//                     console.error(error);
+//                     fut['return'](false);
+//                 } else {
+//                     fut['return'](true);
+//                 }
+//             });
+//         }
+//     });
+//
+//     return fut.wait();
+// };
 
 
 

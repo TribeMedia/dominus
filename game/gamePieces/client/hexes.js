@@ -23,9 +23,9 @@ mapmover.maxScale = s.hex_scale_max
 
 
 Template.hexes.helpers({
-	s3path: function() {
-		return Meteor.settings.public.s3path
-	},
+	// s3path: function() {
+	// 	return Meteor.settings.public.s3path
+	// },
 
 	// this is only used for the hex coordinates
 	// not used to draw the hexes
