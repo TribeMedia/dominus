@@ -17,7 +17,6 @@ danimal:hx
 iron:router
 underscore
 reactive-var
-spiderable
 momentjs:moment
 meteor-platform
 nemo64:bootstrap
@@ -41,3 +40,4 @@ meteorhacks:kadira
 meteorhacks:sikka
 danimal:svgexport
 classcraft:knox
+ongoworks:spiderable
