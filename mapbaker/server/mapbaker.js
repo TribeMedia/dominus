@@ -1,3 +1,5 @@
+// temp files written to /opt/#/programs/server/hexes/ on server
+
 Cue.addJob('bakeHexes', {retryOnError:true, maxMs:1000*60*5}, function(task, done) {
     Mapbaker.bakeHexes();
     done();
@@ -62,6 +64,7 @@ Mapbaker.bakeHexes = function() {
     self.deleteLocalFiles();
     self.deleteLocalHexFiles();
     Hexbakes.remove({});
+
     // if (!self.deleteS3Files()) {
     //     console.error('could not delete map images from s3');
     //     return false;
@@ -227,10 +230,18 @@ Mapbaker.bakeHexes = function() {
 Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, function(task, done) {
     var result = Mapbaker.createSvgImage(Mapbaker.meteorPath+task.data.filename+'.svg', task.data.svgString);
 
+    // if server copy to temp dir then scp to server
+    var outFile;
+    if (Meteor.isServer && process.env.NODE_ENV == 'development') {
+        outFile = Mapbaker.meteorPublicPath+task.data.filename+'.jpg';
+    } else {
+        outFile = Mapbaker.meteorPath+task.data.filename+'.jpg';
+    }
+
     if (result) {
         Cue.addTask('createJpgImage', {isAsync:true, unique:true}, {
             inFile: Mapbaker.meteorPath+task.data.filename+'.svg',
-            outFile: Mapbaker.meteorPublicPath+task.data.filename+'.jpg',
+            outFile: outFile,
             outFileType: 'jpg',
             quality: '80%',
             filename: task.data.filename,
@@ -266,6 +277,30 @@ Mapbaker.createSvgImage = function(filepath, svgString) {
 
 
 
+Cue.addJob('scpImageToServer', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, function(task, done) {
+    scpImageToServer(task.data.filename);
+    done();
+});
+
+Mapbaker.scpImageToServer = function(filename) {
+    var branchId = process.env.BRANCH_ID;
+
+    var exec = Npm.require('child_process').exec;
+
+    var cmd = '/bin/bash /scpToServer.sh '+branchId+' '+filename;
+
+    var child = exec(cmd, function(error, stdout, stderr) {
+        console.log('stdout: '+stdout);
+        console.log('stderr: '+stderr);
+
+        if (error !== null) {
+            console.log('exec error: '+error);
+        }
+
+    });
+};
+
+
 
 Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, function(task, done) {
     var result = Mapbaker.createJpgImage(task.data.inFile, task.data.outFile, task.data.outFileType, task.data.quality);
@@ -275,6 +310,13 @@ Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, 
         //     filename: task.data.filename,
         //     imageObject: task.data.imageObject
         // });
+
+        if (Meteor.isServer && process.env.NODE_ENV != 'development') {
+            // scp to server
+        }
+
+        Cue.addTask('scpImageToServer', {isAsync:true, unique:true}, {filename: task.data.filename+'.jpg'});
+
         Hexbakes.insert(task.data.imageObject);
         Mapbaker.imageFinished();
 
