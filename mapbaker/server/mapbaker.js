@@ -2,7 +2,8 @@ Cue.addJob('bakeHexes', {retryOnError:true, maxMs:1000*60*5}, function(task, don
     Mapbaker.bakeHexes();
     done();
 });
-
+console.log(process.env.PWD);
+console.log(process.cwd());
 
 Mapbaker = {
     // this is how many hexes per image
@@ -17,7 +18,6 @@ Mapbaker = {
 
     fs: Npm.require('fs'),
     meteorPath: 'hexes/',
-    meteorPublicPath: '../../../../../public/hexBakes/',
     //s3prefix: 'hexes/',
     hexWidth: s.hex_size,
     hexHeight: s.hex_size * (Math.sqrt(3) * s.hex_squish),
@@ -27,6 +27,12 @@ Mapbaker = {
     offsetX: s.hex_size,
     offsetY: s.hex_size * (Math.sqrt(3) * s.hex_squish) * 2,
 };
+
+if (Meteor.isServer && process.env.NODE_ENV == 'development') {
+    Mapbaker.meteorPublicPath = process.env.PWD + '/public/hexBakes/';
+} else {
+    Mapbaker.meteorPublicPath = process.env.PWD + '/programs/web.browser/app/hexBakes/';
+}
 
 // offset pos of image on screen
 Mapbaker.offsetPosX = Mapbaker.offsetX * -1;
