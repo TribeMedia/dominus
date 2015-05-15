@@ -29,9 +29,9 @@ Mapbaker = {
 };
 
 if (Meteor.isServer && process.env.NODE_ENV == 'development') {
-    Mapbaker.meteorPublicPath = process.env.PWD + '/public/hexBakes/';
+    Mapbaker.meteorPublicPath = process.cwd() + '/../../../../../public/hexBakes/';
 } else {
-    Mapbaker.meteorPublicPath = process.env.PWD + '/programs/web.browser/app/hexBakes/';
+    Mapbaker.meteorPublicPath = process.cwd() + '/../web.browser/app/hexBakes/';
 }
 
 // offset pos of image on screen
@@ -224,7 +224,7 @@ Mapbaker.bakeHexes = function() {
 
 
 
-Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:8}, function(task, done) {
+Cue.addJob('createSvgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, function(task, done) {
     var result = Mapbaker.createSvgImage(Mapbaker.meteorPath+task.data.filename+'.svg', task.data.svgString);
 
     if (result) {
@@ -267,7 +267,7 @@ Mapbaker.createSvgImage = function(filepath, svgString) {
 
 
 
-Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:5}, function(task, done) {
+Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, function(task, done) {
     var result = Mapbaker.createJpgImage(task.data.inFile, task.data.outFile, task.data.outFileType, task.data.quality);
 
     if (result) {
