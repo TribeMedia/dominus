@@ -278,7 +278,7 @@ Mapbaker.createSvgImage = function(filepath, svgString) {
 
 
 Cue.addJob('scpImageToServer', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, function(task, done) {
-    scpImageToServer(task.data.filename);
+    Mapbaker.scpImageToServer(task.data.filename);
     done();
 });
 
