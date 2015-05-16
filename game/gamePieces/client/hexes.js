@@ -23,9 +23,6 @@ mapmover.maxScale = s.hex_scale_max
 
 
 Template.hexes.helpers({
-	gameId: function() {
-		return Meteor.settings.public.GAME_ID;
-	}
 	// s3path: function() {
 	// 	return Meteor.settings.public.s3path
 	// },
