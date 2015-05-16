@@ -289,9 +289,10 @@ Mapbaker.scpImageToServer = function(filename) {
 
     var cmd = '/bin/bash /scpToServer.sh '+branchId+' '+filename;
 
-    var child = exec(cmd, function(error, stdout, stderr) {
-        console.log('stdout: '+stdout);
-        console.log('stderr: '+stderr);
+    var child = exec(cmd, function(error, stdout, stderr) {        
+        if (stdout != null) {
+          console.log('stdout: '+stdout);
+        }
 
         if (error !== null) {
             console.log('exec error: '+error);
