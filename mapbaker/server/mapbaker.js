@@ -46,6 +46,7 @@ Mapbaker.bakeHexes = function() {
     console.log('--- baking hexes ---');
 
     self.resetImageCounter();
+    Mapbaker.dropBakingTasks();
 
     // find hex min/max
     var minX = Hexes.findOne({}, {sort:{x:1}, limit:1, fields:{x:1}}).x;
@@ -136,6 +137,20 @@ Mapbaker.bakeHexes = function() {
         }
     }
 };
+
+
+
+
+Mapbaker.dropBakingTasks = function() {
+  var tasks = ['createSvgImage', 'scpImageToServer', 'finishImage', 'createJpgImage', 'bakeHexes'];
+
+  CueTasks.find({}, {fields:{jobName:1}}).forEach(function(task) {
+    if (_.contains(tasks, task.jobName)) {
+      CueTasks.remove(task);
+    }
+  })
+}
+
 
 
 
@@ -263,8 +278,6 @@ Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, 
           image_url: 'https://'+process.env.BRANCH_ID+'.dominusgame.net/hexBakes/'+ task.data.filename+'.jpg',
           imageObject: task.data.imageObject
         })
-
-
 
         done();
     } else {
