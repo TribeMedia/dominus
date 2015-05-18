@@ -4,8 +4,6 @@ Cue.addJob('bakeHexes', {retryOnError:true, maxMs:1000*60*5}, function(task, don
     Mapbaker.bakeHexes();
     done();
 });
-console.log(process.env.PWD);
-console.log(process.cwd());
 
 Mapbaker = {
     // this is how many hexes per image
