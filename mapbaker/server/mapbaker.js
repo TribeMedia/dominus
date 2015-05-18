@@ -274,7 +274,7 @@ Cue.addJob('createJpgImage', {retryOnError:true, maxMs:1000*60*5, maxAtOnce:3}, 
             Cue.addTask('scpImageToServer', {isAsync:true, unique:true}, {filename: task.data.filename+'.jpg'});
         }
 
-        Cue.addTask('finishImage', {isAsync:true, unique:true, delay:1000}, {
+        Cue.addTask('finishImage', {isAsync:true, unique:true, delay:1000*5}, {
           image_url: 'https://'+process.env.BRANCH_ID+'.dominusgame.net/hexBakes/'+ task.data.filename+'.jpg',
           imageObject: task.data.imageObject
         })
