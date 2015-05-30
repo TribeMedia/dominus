@@ -9,15 +9,15 @@
                 <h5>
                     Is
                     {{#if isAttacker}}
-                    an <b>attacker</b>
+                      an <b>attacker</b>
                     {{else}}
-                    a <b>defender</b>
+                      a <b>defender</b>
                     {{/if}}
                     and
                     {{#if won_this_round}}
-                    <b class="battle_won_color">won</b> this round.
+                      <b class="battle_won_color">won</b> this round.
                     {{else}}
-                    <b class="battle_lost_color">lost</b> this round.
+                      <b class="battle_lost_color">lost</b> this round.
                     {{/if}}
                 </h5>
             </td>
@@ -90,7 +90,7 @@
         {{#if greater_than_zero teamNumSoldiers.footmen}}
         <li>
             Footmen: {{round teamNumSoldiers.footmen}} &nbsp;
-            <span class="light_text">Power: {{round teamBasePower.footmen}}</span>
+            <span class="light_text">Power: {{round teamBasePower.footmen}} &nbsp; Bonus: {{round teamBonus.footmen}}</span>
         </li>
         {{/if}}
         {{#if greater_than_zero teamNumSoldiers.archers}}
@@ -139,7 +139,7 @@
         {{#if greater_than_zero enemyNumSoldiers.footmen}}
         <li>
             Footmen: {{enemyNumSoldiers.footmen}} &nbsp;
-            <span class="light_text">Power: {{round enemyBasePower.footmen}}</span>
+            <span class="light_text">Power: {{round enemyBasePower.footmen}} &nbsp; Bonus: {{round enemyBonus.footmen}}</span>
         </li>
         {{/if}}
         {{#if greater_than_zero enemyNumSoldiers.archers}}
