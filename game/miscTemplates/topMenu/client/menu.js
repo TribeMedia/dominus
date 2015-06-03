@@ -62,6 +62,10 @@ Template.menu.helpers({
 		if (Session.get('show_pro_panel')) { return 'active'; } else { return ''; }
 	},
 
+	calc_active: function() {
+		if (Session.get('calcPanel')) { return 'active'; } else { return ''; }
+	},
+
 	isNewForumPost: function() {
 		if (Session.get('forumTemplate') == 'forumList') {
 			return false;
@@ -221,6 +225,14 @@ Template.menu.events({
 			Session.set('show_pro_panel', true)
 		}
 	},
+
+	'click #calcPanelButton': function(event, template) {
+		if (Session.get('showCalcPanel')) {
+			Session.set('showCalcPanel', false);
+		} else {
+			Session.set('showCalcPanel', true);
+		}
+	}
 })
 
 
@@ -239,6 +251,7 @@ Template.menu.rendered = function() {
 	Session.setDefault('show_store_panel', false)
 	Session.setDefault('show_tree_panel', false)
 	Session.setDefault('show_pro_panel', false)
+	Session.setDefault('showCalcPanel', false);
 	Session.setDefault('show_coords', false)
 
 	this.autorun(function() {

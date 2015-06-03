@@ -28,7 +28,7 @@ accounts-facebook
 fastclick
 meteorhacks:subs-manager
 d3js:d3
-mrgalaxy:stripe
+# mrgalaxy:stripe
 mizzao:user-status
 wizonesolutions:underscore-string
 pfafman:nvd3
@@ -37,6 +37,5 @@ danimal:cue
 wylio:mandrill
 http
 meteorhacks:kadira
-meteorhacks:sikka
 danimal:svgexport
 ongoworks:spiderable

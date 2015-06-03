@@ -1,0 +1,19 @@
+<template name="calculatorPanel">
+  <div id="calculatorPanel">
+    <div class="panel_title"><i class="fa fa-comments fa-lg"></i> &nbsp;Calculator</div>
+
+    <div class="pad_group">
+      <button class="btn btn-primary" id="addButton">Add</button>
+      <button class="btn btn-primary" id="addSelectedButton">Add Selected</button>
+    </div>
+
+    {{#each armies}}
+      {{> calculatorArmy}}
+    {{/each}}
+
+    <div class="pad_group">
+      <button class="btn btn-primary" id="runButton">Run</button>
+    </div>
+
+  </div>
+</template>

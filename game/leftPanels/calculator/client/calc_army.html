@@ -1,0 +1,30 @@
+<template name="calculatorArmy">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Army {{id}}
+    </div>
+    <div class="panel-body">
+      <table>
+        {{#each s.army.types}}
+          <tr>
+            <td>
+              {{this}}
+            </td>
+            <td>
+              <input type="number" class="armyUnitInput form-control" data-type="{{this}}" value="{{unitNum}}">
+            </td>
+          </tr>
+        {{/each}}
+      </table>
+
+      Attacker <input type="checkbox" class="form-control isAttackerCheckbox" checked="{{isAttacker}}"><br>
+
+      <select class="form-control unitTypeSelect">
+        <option value="army" {{isTypeSelected "army"}}>Army</option>
+        <option value="castle" {{isTypeSelected "castle"}}>Castle</option>
+        <option value="village" {{isTypeSelected "village"}}>Village</option>
+      </select>
+
+    </div>
+  </div>
+</template>

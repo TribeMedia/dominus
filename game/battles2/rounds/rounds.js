@@ -27,30 +27,34 @@ BattleRound = function() {
 
 
 
-BattleRound.prototype.addArmy(army) {
-  this.armies.push(army);
-}
+// BattleRound.prototype.addArmy = function(army) {
+//   this.armies.push(army);
+// }
 
 
-BattleRound.prototype.run() {
+BattleRound.prototype.run = function() {
   var self = this;
 
+  var start = new Date().getTime();
+
   // find info on all armies
-  _.each(this.armies, function(army) {
+  _.each(self.armies, function(army) {
     self.cacheAllies(army);
     self.cacheEnemies(army);
     army.updateInfo();
     army.updateLocationBonus();
     self.updateUnitBonus(army);
     army.updateFinalPower();
-  }
+  })
 
   // do battle
-  _.each(this.armies, function(army) {
-    army.dif = this.getTeamFinalPower(army) - this.getEnemyFinalPower(army);
+  _.each(self.armies, function(army) {
+    army.dif = self.getTeamFinalPower(army) - self.getEnemyFinalPower(army);
     self.findPowerToLose(army);
     army.findLoses();
   })
+
+  console.log('ran battle in ' + (new Date().getTime() - start) + 'ms');
 }
 
 
@@ -63,10 +67,10 @@ BattleRound.prototype.updateUnitBonus = function(army) {
   var enemyPercentage = this.getEnemyUnitPercentage(army);
 
   var bonus = {};
-  bonus.footmen = army.basePower * army.percentage.footmen * enemyPercentage.pikemen;
-  bonus.archers = army.basePower * army.percentage.archers * enemyPercentage.footmen;
-  bonus.pikemen = army.basePower * army.percentage.pikemen * enemyPercentage.cavalry;
-  bonus.cavalry = army.basePower * army.percentage.cavalry * (enemyPercentage.footmen + enemyPercentage.archers);
+  bonus.footmen = army.basePower.total * army.percentage.footmen * enemyPercentage.pikemen;
+  bonus.archers = army.basePower.total * army.percentage.archers * enemyPercentage.footmen;
+  bonus.pikemen = army.basePower.total * army.percentage.pikemen * enemyPercentage.cavalry;
+  bonus.cavalry = army.basePower.total * army.percentage.cavalry * (enemyPercentage.footmen + enemyPercentage.archers);
 
   // catapults
   // if there is an enemy castle of village in this hex then catapults get bonus
@@ -75,28 +79,33 @@ BattleRound.prototype.updateUnitBonus = function(army) {
   // this is to stop building from sending out units and cats losing their bonus
   bonus.catapults = 0;
 
-  var isEnemyCastleOrVillageHere = false;
+  if (army.units.catapults) {
 
-  if (army.isAttacker) {
-    if (this.castle && this.castle.user_id != army.user_id) {
-      if (army.isEnemy(castle)) {
-        isEnemyCastleOrVillageHere = true;
+    var isEnemyCastleOrVillageHere = false;
+
+    if (army.isAttacker) {
+      if (this.castle && this.castle.user_id != army.user_id) {
+        if (army.isEnemy(castle)) {
+          isEnemyCastleOrVillageHere = true;
+        }
+      }
+
+      if (this.village && this.village.user_id != army.user_id) {
+        if (army.isEnemy(village)) {
+          isEnemyCastleOrVillageHere = true;
+        }
+      }
+
+      if (isEnemyCastleOrVillageHere) {
+        bonus.catapults = army.basePower.catapults * s.army.stats.catapults.bonus_against_buildings;
       }
     }
 
-    if (this.village && this.village.user_id != army.user_id) {
-      if (army.isEnemy(village)) {
-        isEnemyCastleOrVillageHere = true;
-      }
-    }
-
-    if (isEnemyCastleOrVillageHere) {
-      bonus.catapults = army.basePower.catapults * s.army.stats.catapults.bonus_against_buildings;
-    }
   }
 
   bonus.total = 0;
   _.each(s.army.types, function(type) {
+    check(bonus[type], validNumber);
     bonus.total += bonus[type];
   })
 
@@ -108,6 +117,7 @@ BattleRound.prototype.updateUnitBonus = function(army) {
 
 BattleRound.prototype.getEnemyUnitPercentage = function(army) {
   var percentage = {};
+
   _.each(s.army.types, function(type) {
     percentage[type] = 0;
   })
@@ -115,11 +125,14 @@ BattleRound.prototype.getEnemyUnitPercentage = function(army) {
   var num = this.getEnemyNumUnits(army);
 
   _.each(s.army.types, function(type) {
-    if (num[type] == 0) {
+
+    if (num[type] == 0 || num.total == 0) {
       percentage[type] = 0;
     } else {
       percentage[type] = num[type] / num.total;
+      check(percentage[type], validNumber);
     }
+
   })
 
   return percentage;
@@ -139,6 +152,7 @@ BattleRound.prototype.getEnemyNumUnits = function(army) {
     _.each(s.army.types, function(type) {
       num[type] += enemy.units[type];
       num.total += enemy.units[type];
+      check(num[type], validNumber);
     })
   })
 
@@ -170,6 +184,7 @@ BattleRound.prototype.getTeamFinalPower = function(army) {
 
   teamFinalPower += army.finalPower;
 
+  check(teamFinalPower, validNumber);
   return teamFinalPower;
 }
 
@@ -184,6 +199,7 @@ BattleRound.prototype.getEnemyFinalPower = function(army) {
     enemyFinalPower += enemy.finalPower;
   })
 
+  check(enemyFinalPower, validNumber);
   return enemyFinalPower;
 }
 
@@ -215,7 +231,7 @@ BattleRound.prototype.getAllies = function(army) {
 BattleRound.prototype.getEnemies = function(army) {
   return _.filter(this.armies, function(otherArmy) {
     return army.isEnemy(otherArmy);
-  }
+  })
 }
 
 
@@ -229,6 +245,7 @@ BattleRound.prototype.updateFinalPowerAllArmies = function() {
     power += army.finalPower;
   })
 
+  check(power, validNumber);
   self.finalPowerAllArmies = power;
 }
 
@@ -245,6 +262,7 @@ BattleRound.prototype.getNumUniqueEnemyArmies = function(army) {
     }
   })
 
+  check(numUnique, validNumber);
   return numUnique;
 }
 
@@ -261,6 +279,7 @@ BattleRound.prototype.getNumUniqueAlliedArmies = function(army) {
     }
   })
 
+  check(numUnique, validNumber);
   return numUnique;
 }
 
@@ -273,7 +292,7 @@ BattleRound.prototype.findPowerToLose = function(army) {
   self.updateFinalPowerAllArmies();
   var numEnemyArmies = self.getNumUniqueEnemyArmies(army);
   var numAllyArmies = self.getNumUniqueAlliedArmies(army);
-  var adjustForNumPeopleInBattle = Math.max(1, numEnemyArmies / numTeamArmies)
+  var adjustForNumPeopleInBattle = Math.max(1, numEnemyArmies / numAllyArmies)
 
   var powerToLose = 0;
 
@@ -282,7 +301,7 @@ BattleRound.prototype.findPowerToLose = function(army) {
 
     powerToLose = s.battle_power_lost_per_round + (self.finalPowerAllArmies/1000)
     powerToLose = powerToLose * adjustForNumPeopleInBattle;
-    powerToLose = Math.min(powerToLose, self.enemyFinalPower(army));
+    powerToLose = Math.min(powerToLose, self.getEnemyFinalPower(army));
     powerToLose = powerToLose * s.battle_power_lost_winner_ratio;
 
   } else {
@@ -293,5 +312,6 @@ BattleRound.prototype.findPowerToLose = function(army) {
 
   }
 
+  check(powerToLose, validNumber);
   army.powerToLose = powerToLose;
 }

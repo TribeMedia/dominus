@@ -1,4 +1,5 @@
 BattleArmy = function() {
+  var self = this;
 
   // set these
   this.units = {};
@@ -11,7 +12,7 @@ BattleArmy = function() {
   this.isOnAllyCastle = false;
   this.isOneAllyVillage = false;
 
-  this.user_id = null;
+  this.user_id = Math.floor(Math.random() * 100000);
   this.allies_below = [];
   this.allies_above = [];
   this.team = [];
@@ -20,14 +21,17 @@ BattleArmy = function() {
   this.vassals = [];
   this.isDominus = false;
 
+  this.id = Math.floor(Math.random() * 100000);
+  this.createdAt = new Date();
+
   // -----------------------------
   // private
 
   this.percentage = {};
   _.each(s.army.types, function(type) {
-    this.units[type] = 0;
-    this.percentage[type] = 0;
-  }
+    self.units[type] = 0;
+    self.percentage[type] = 0;
+  })
 
   this.numUnits = 0;
 
@@ -38,10 +42,11 @@ BattleArmy = function() {
   this.loses = {};
 
   _.each(s.army.types, function(type) {
-      this.basePower[type] = 0;
-      this.unitBonus[type] = 0;
-      this.loses[type] = 0;
-  }
+      self.units[type] = 0;
+      self.basePower[type] = 0;
+      self.unitBonus[type] = 0;
+      self.loses[type] = 0;
+  })
 
   this.locationBonus = 0;
   this.finalPower = 0;
@@ -125,25 +130,33 @@ BattleArmy.prototype.isAlly = function(otherArmy) {
 BattleArmy.prototype.updateInfo = function() {
   var self = this;
 
+  // num units
+  self.numUnits = 0;
   _.each(s.army.types, function(type) {
-    if (this.isAttacker) {
+    self.numUnits += self.units[type];
+  });
+  check(self.numUnits, validNumber);
+
+  // base power
+  self.basePower.total = 0;
+  _.each(s.army.types, function(type) {
+    if (self.isAttacker) {
       self.basePower[type] = s.army.stats[type].offense * self.units[type];
       self.basePower.total += s.army.stats[type].offense * self.units[type];
     } else {
       self.basePower[type] = s.army.stats[type].defense * self.units[type];
       self.basePower.total += s.army.stats[type].defense * self.units[type];
     }
-
-    self.numUnits += unit[type];
   });
 
+  // percentage
   _.each(s.army.types, function(type) {
     if (self.units[type] == 0) {
       self.percentage[type] = 0
     } else {
       self.percentage[type] = self.units[type] / self.numUnits
     }
-  })
+  });
 }
 
 
@@ -171,12 +184,15 @@ BattleArmy.prototype.updateLocationBonus = function() {
       self.onAllyVillageBonus = true;
     }
   }
+
+  check(self.locationBonus, validNumber);
 }
 
 
 
 BattleArmy.prototype.updateFinalPower = function() {
   this.finalPower = this.basePower.total + this.unitBonus.total + this.locationBonus;
+  check(this.finalPower, validNumber);
 }
 
 
@@ -208,6 +224,8 @@ BattleArmy.prototype.getFinalPowerOfEachSoldierType = function() {
     } else {
       power[type] = power[type] / self.units[type];
     }
+
+    check(power[type], validNumber);
   })
 
   return power;
@@ -217,10 +235,16 @@ BattleArmy.prototype.getFinalPowerOfEachSoldierType = function() {
 
 // after powerToLose is set call this to find loses
 BattleArmy.prototype.findLoses = function() {
+  var self = this
+
   var loses = {};
   _.each(s.army.types, function(type) {
     loses[type] = 0;
   })
+
+  if (this.numUnits == 0) {
+    return;
+  }
 
   var finalPowerOfEachSoldierType = this.getFinalPowerOfEachSoldierType();
 
@@ -235,17 +259,26 @@ BattleArmy.prototype.findLoses = function() {
   // take away until powerToLose is < smallestSoldierPower
   var fails = 0;
   var maxFails = s.army.types.length;
-  var power = this.powerToLose;
-  while (power > smallestSoldierPower || fails > maxFails) {
+  var powerLeft = this.powerToLose;
+  var numUnits = this.numUnits;
+  while (powerLeft > 0 && numUnits > 0 && fails < maxFails) {
     _.each(s.army.types, function(type) {
-      if (finalPowerOfEachSoldierType[type] >= power) {
 
-        loses[type]++;
-        power -= finalPowerOfEachSoldierType[type];
+      // if there is a unit of this type in army
+      if (self.units[type] - loses[type] > 0) {
 
-      } else {
-        fails++;
+        // if there is enough power left to take this unit away
+        if (finalPowerOfEachSoldierType[type] <= powerLeft) {
+
+          loses[type]++;
+          numUnits--;
+          powerLeft -= finalPowerOfEachSoldierType[type];
+
+        } else {
+          fails++;
+        }
       }
+
     })
   }
 
