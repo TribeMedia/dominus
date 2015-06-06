@@ -190,23 +190,23 @@ BattleArmy.prototype.updateLocationBonus = function() {
   self.locationBonus = 0;
 
   if (self.unitType == 'castle') {
-    self.locationBonus = self.basePower.total * s.castle.defense_bonus;
+    self.locationBonus = self.basePower.total * (s.castle.defense_bonus - 1);
     self.castleDefenseBonus = true;
   }
 
   if (self.unitType == 'village') {
-    self.locationBonus = self.basePower.total * s.village.defense_bonus;
+    self.locationBonus = self.basePower.total * (s.village.defense_bonus - 1);
     self.villageDefenseBonus = true
   }
 
   if (self.unitType == 'army') {
     if (self.isOnAllyCastle) {
-      self.locationBonus = self.basePower.total * s.castle.ally_defense_bonus;
+      self.locationBonus = self.basePower.total * (s.castle.ally_defense_bonus - 1);
       self.onAllyCastleBonus = true;
     }
 
     if (self.isOnAllyVillage) {
-      self.locationBonus = self.basePower.total * s.village.ally_defense_bonus;
+      self.locationBonus = self.basePower.total * (s.village.ally_defense_bonus - 1);
       self.onAllyVillageBonus = true;
     }
   }
