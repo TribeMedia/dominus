@@ -82,13 +82,13 @@
       {{#if isArmy}}
         <div class="checkbox">
           <label>
-            <input type="checkbox" class="onAllyCastleCheckbox"> On Ally Castle
+            <input type="checkbox" class="onAllyCastleCheckbox" {{isOnAllyCastle}}> On Ally Castle
           </label>
         </div>
 
         <div class="checkbox">
           <label>
-            <input type="checkbox" class="onAllyVillageCheckbox"> On Ally Village
+            <input type="checkbox" class="onAllyVillageCheckbox" {{isOnAllyVillage}}> On Ally Village
           </label>
         </div>
       {{/if}}
@@ -125,11 +125,18 @@
 
       {{#if hasSoldiers}}
         {{#if hasEnemies}}
-          {{#if won}}
-            <div class="battle_won_color">Won Battle</div>
+          {{#if army.isAttacker}}
+            Attacked and
           {{else}}
-            <div class="battle_lost_color">Lost Battle</div>
+            Defended and
           {{/if}}
+
+          {{#if won}}
+            <span class="battle_won_color">Won Battle</span>
+          {{else}}
+            <span class="battle_lost_color">Lost Battle</span>
+          {{/if}}
+          <br>
 
           Lost {{soldiersLost}} soldiers worth {{round powerLost}} power.
         {{/if}}

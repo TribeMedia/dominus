@@ -116,7 +116,21 @@ Template.calculatorArmy.helpers({
     if (army) {
       return army.finalPower > 0;
     }
-  }
+  },
+
+  isOnAllyCastle: function() {
+    var army = Template.currentData();
+    if (army) {
+      return army.isOnAllyCastle ? 'checked' : '';
+    }
+  },
+
+  isOnAllyVillage: function() {
+    var army = Template.currentData();
+    if (army) {
+      return army.isOnAllyVillage ? 'checked' : '';
+    }
+  },
 })
 
 
@@ -143,6 +157,7 @@ Template.calculatorArmy.events({
   'change .onAllyCastleCheckbox': function(event, template) {
     var value = $(event.currentTarget).is(':checked');
     var army = Template.currentData();
+    army.isOnAllyVillage = false;
     army.isOnAllyCastle = value;
     updateArmy(army);
   },
@@ -150,6 +165,7 @@ Template.calculatorArmy.events({
   'change .onAllyVillageCheckbox': function(event, template) {
     var value = $(event.currentTarget).is(':checked');
     var army = Template.currentData();
+    army.isOnAllyCastle = false;
     army.isOnAllyVillage = value;
     updateArmy(army);
   },

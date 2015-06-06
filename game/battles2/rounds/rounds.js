@@ -53,6 +53,10 @@ BattleRound.prototype.run = function() {
     army.updateFinalPowerOfEachSoldierType();
   })
 
+  self.findDefender();
+  self.checkThatThereIsOnlyOneDefender();
+  self.setAlliesOfDefenderToDefender();
+
   // do battle
   _.each(self.armies, function(army) {
     army.dif = self.getTeamFinalPower(army) - self.getEnemyFinalPower(army);
@@ -68,6 +72,92 @@ BattleRound.prototype.run = function() {
 
 // -----------------------
 // private
+
+BattleRound.prototype.checkThatThereIsOnlyOneDefender = function() {
+  var self = this;
+
+  var defender = null;
+  _.each(self.armies, function(army) {
+    if (!army.isAttacker) {
+      if (defender) {
+        console.error('should only be one defender');
+      }
+
+      defender = army;
+    }
+  })
+}
+
+
+BattleRound.prototype.setAlliesOfDefenderToDefender = function() {
+  var self = this;
+
+  // get defender
+  var defender = null;
+  _.each(self.armies, function(army) {
+    if (!army.isAttacker) {
+      defender = army;
+    }
+  })
+
+  if (defender) {
+    _.each(defender.allies, function(ally) {
+      ally.isAttacker = false;
+    })
+  }
+}
+
+
+BattleRound.prototype.findDefender = function() {
+  var self = this;
+  var defenderFound = false;
+
+  // set everyone to attacker
+  _.each(self.armies, function(army) {
+    army.isAttacker = true;
+  })
+
+  // if there is a castle or village then they are defender
+  _.each(self.armies, function(army) {
+    if (army.unitType == 'castle' || army.unitType == 'village') {
+      army.isAttacker = false;
+      defenderFound = true;
+    }
+  })
+
+  // if army is on their own castle or village then they are defender
+  if(!defenderFound) {
+    if (self.castle || self.village) {
+      _.each(self.armies, function(army) {
+        if (self.castle) {
+          if (self.castle.user_id == army.user_id) {
+            army.isAttacker = false;
+            defenderFound = true;
+          }
+        }
+
+        if (self.village) {
+          if (self.village.user_id == army.user_id) {
+            army.isAttacker = false;
+            defenderFound = true;
+          }
+        }
+      })
+    }
+  }
+
+  // if no castle or village then go by army.orderOfArrival
+  if (!defenderFound) {
+    var army = self.armies[0];
+    if (army) {
+      if (army.unitType != 'army') {
+        console.error('should be army');
+      }
+
+      army.isAttacker = false;
+    }
+  }
+}
 
 
 // make sure orderOfArrival is correct
