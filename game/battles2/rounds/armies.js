@@ -10,7 +10,7 @@ BattleArmy = function() {
 
   // only for army types
   this.isOnAllyCastle = false;
-  this.isOneAllyVillage = false;
+  this.isOnAllyVillage = false;
 
   this.user_id = Math.floor(Math.random() * 100000);
   this.allies_below = [];
@@ -21,11 +21,23 @@ BattleArmy = function() {
   this.vassals = [];
   this.isDominus = false;
 
-  this.id = Math.floor(Math.random() * 100000);
+  // assign random id
+  // set to _id of army or leave random value
+  this.id = Math.floor(Math.random() * 1000000);
+  this.name = names.armies.part1[_.random(names.armies.part1.length-1)] +' '+ names.armies.part2[_.random(names.armies.part2.length-1)];
+
+  // order that armies arrived at hex, ascending, 0 is first, 0 if castle or village
+  this.orderOfArrival = 0;
+
   this.createdAt = new Date();
 
   // -----------------------------
   // private
+
+  // filled in when battle runs
+  this.enemyFinalPower = 0;
+  this.teamFinalPower = 0;
+  this.allyFinalPower = 0;
 
   this.percentage = {};
   _.each(s.army.types, function(type) {
@@ -40,12 +52,14 @@ BattleArmy = function() {
   this.basePower.total = 0;
   this.unitBonus.total = 0;
   this.loses = {};
+  this.finalPowerPerSoldier = {};
 
   _.each(s.army.types, function(type) {
       self.units[type] = 0;
       self.basePower[type] = 0;
       self.unitBonus[type] = 0;
       self.loses[type] = 0;
+      self.finalPowerPerSoldier[type] = 0;
   })
 
   this.locationBonus = 0;
@@ -59,6 +73,12 @@ BattleArmy = function() {
   // has army won or lost
   this.dif = 0;
   this.powerToLose = 0;
+
+  // did army get a location bonus
+  self.castleDefenseBonus = false;
+  self.villageDefenseBonus = false;
+  self.onAllyCastleBonus = false;
+  self.onAllyVillageBonus = false;
 }
 
 
@@ -163,6 +183,12 @@ BattleArmy.prototype.updateInfo = function() {
 BattleArmy.prototype.updateLocationBonus = function() {
   var self = this;
 
+  self.castleDefenseBonus = false;
+  self.villageDefenseBonus = false;
+  self.onAllyCastleBonus = false;
+  self.onAllyVillageBonus = false;
+  self.locationBonus = 0;
+
   if (self.unitType == 'castle') {
     self.locationBonus = self.basePower.total * s.castle.defense_bonus;
     self.castleDefenseBonus = true;
@@ -197,38 +223,35 @@ BattleArmy.prototype.updateFinalPower = function() {
 
 
 
-BattleArmy.prototype.getFinalPowerOfEachSoldierType = function() {
+BattleArmy.prototype.updateFinalPowerOfEachSoldierType = function() {
   var self = this;
 
-  var power = {};
   _.each(s.army.types, function(type) {
-    power[type] = self.basePower[type] + self.unitBonus[type]
+    self.finalPowerPerSoldier[type] = self.basePower[type] + self.unitBonus[type]
 
     // location bonus
     if (self.castleDefenseBonus) {
-      soldierPower[type] = soldierPower[type] * s.castle.defense_bonus
+      self.finalPowerPerSoldier[type] = self.finalPowerPerSoldier[type] * s.castle.defense_bonus
     }
     if (self.villageDefenseBonus) {
-      soldierPower[type] = soldierPower[type] * s.village.defense_bonus
+      self.finalPowerPerSoldier[type] = self.finalPowerPerSoldier[type] * s.village.defense_bonus
     }
     if (self.onAllyCastleBonus) {
-      soldierPower[type] = soldierPower[type] * s.castle.ally_defense_bonus
+      self.finalPowerPerSoldier[type] = self.finalPowerPerSoldier[type] * s.castle.ally_defense_bonus
     }
     if (self.onAllyVillageBonus) {
-      soldierPower[type] = soldierPower[type] * s.village.ally_defense_bonus
+      self.finalPowerPerSoldier[type] = self.finalPowerPerSoldier[type] * s.village.ally_defense_bonus
     }
 
     // divide by number of soldiers
     if (self.units[type] == 0) {
-      power[type] = 0;
+      self.finalPowerPerSoldier[type] = 0;
     } else {
-      power[type] = power[type] / self.units[type];
+      self.finalPowerPerSoldier[type] = self.finalPowerPerSoldier[type] / self.units[type];
     }
 
-    check(power[type], validNumber);
+    check(self.finalPowerPerSoldier[type], validNumber);
   })
-
-  return power;
 }
 
 
@@ -246,13 +269,11 @@ BattleArmy.prototype.findLoses = function() {
     return;
   }
 
-  var finalPowerOfEachSoldierType = this.getFinalPowerOfEachSoldierType();
-
   // find which soldier is worth the least
   var smallestSoldierPower = 9999999;
   _.each(s.army.types, function(type) {
-    if (finalPowerOfEachSoldierType[type] > 0 && finalPowerOfEachSoldierType[type] < smallestSoldierPower) {
-      smallestSoldierPower = finalPowerOfEachSoldierType[type];
+    if (self.finalPowerPerSoldier[type] > 0 && self.finalPowerPerSoldier[type] < smallestSoldierPower) {
+      smallestSoldierPower = self.finalPowerPerSoldier[type];
     }
   })
 
@@ -268,11 +289,11 @@ BattleArmy.prototype.findLoses = function() {
       if (self.units[type] - loses[type] > 0) {
 
         // if there is enough power left to take this unit away
-        if (finalPowerOfEachSoldierType[type] <= powerLeft) {
+        if (self.finalPowerPerSoldier[type] <= powerLeft) {
 
           loses[type]++;
           numUnits--;
-          powerLeft -= finalPowerOfEachSoldierType[type];
+          powerLeft -= self.finalPowerPerSoldier[type];
 
         } else {
           fails++;

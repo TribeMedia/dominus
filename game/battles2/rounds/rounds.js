@@ -23,6 +23,9 @@ BattleRound = function() {
 
   // power of all armies combined
   this.finalPowerAllArmies = 0;
+
+  this.battleHasRun = false;
+  this.msBattleTook = 0;
 }
 
 
@@ -38,6 +41,8 @@ BattleRound.prototype.run = function() {
   var start = new Date().getTime();
 
   // find info on all armies
+  self.findOrderOfArrival();
+
   _.each(self.armies, function(army) {
     self.cacheAllies(army);
     self.cacheEnemies(army);
@@ -45,6 +50,7 @@ BattleRound.prototype.run = function() {
     army.updateLocationBonus();
     self.updateUnitBonus(army);
     army.updateFinalPower();
+    army.updateFinalPowerOfEachSoldierType();
   })
 
   // do battle
@@ -54,13 +60,44 @@ BattleRound.prototype.run = function() {
     army.findLoses();
   })
 
-  console.log('ran battle in ' + (new Date().getTime() - start) + 'ms');
+  self.battleHasRun = true;
+  self.msBattleTook = new Date().getTime() - start;
 }
 
 
 
 // -----------------------
 // private
+
+
+// make sure orderOfArrival is correct
+// castle or village first if they exist
+BattleRound.prototype.findOrderOfArrival = function() {
+  var self = this;
+
+  // is there a castle or village here
+  // if so then they're first
+  var castleOrVillageHere = false;
+
+  _.each(self.armies, function(army) {
+    if (army.unitType == 'castle' || army.unitType == 'village') {
+      castleOrVillageHere = true;
+      army.orderOfArrival = -10;
+    }
+  });
+
+  // sort
+  self.armies = _.sortBy(self.armies, function(army) {
+    return army.orderOfArrival;
+  });
+
+  // set orderOfArrival
+  var num = 0;
+  _.each(self.armies, function(army) {
+    army.orderOfArrival = num;
+    num++;
+  });
+}
 
 
 BattleRound.prototype.updateUnitBonus = function(army) {
@@ -182,7 +219,11 @@ BattleRound.prototype.getTeamFinalPower = function(army) {
     teamFinalPower += ally.finalPower;
   })
 
+  army.allyFinalPower = teamFinalPower;
+
   teamFinalPower += army.finalPower;
+
+  army.teamFinalPower = teamFinalPower;
 
   check(teamFinalPower, validNumber);
   return teamFinalPower;
@@ -198,6 +239,9 @@ BattleRound.prototype.getEnemyFinalPower = function(army) {
   _.each(enemies, function(enemy) {
     enemyFinalPower += enemy.finalPower;
   })
+
+  // store for report
+  army.enemyFinalPower = enemyFinalPower;
 
   check(enemyFinalPower, validNumber);
   return enemyFinalPower;
