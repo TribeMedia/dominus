@@ -34,3 +34,9 @@ Template.calculatorPanel.onCreated(function() {
   Session.set('runCalculator', Math.random());
   calcBattle = new BattleRound();
 })
+
+
+
+Template.calculatorPanel.onRendered(function() {
+  this.firstNode.parentNode._uihooks = leftPanelAnimation;
+})

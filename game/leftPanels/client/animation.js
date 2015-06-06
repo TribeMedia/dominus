@@ -23,3 +23,15 @@ landingLoginFormAnimation = {
 		})
 	}
 }
+
+
+battleCalculatorAnimation = {
+	insertElement: function(node, next) {
+		$(node).hide().insertBefore(next).effect('blind', {direction:'up', mode:'show'}, 150).show();
+	},
+	removeElement: function(node) {
+		$(node).effect('blind', {direction:'up', mode:'hide', complete: function() {
+			$(node).remove()
+		}}, 150)
+	}
+}

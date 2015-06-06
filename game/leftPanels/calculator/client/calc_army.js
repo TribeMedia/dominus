@@ -184,10 +184,28 @@ Template.calculatorArmy.events({
 
   'click .unitTypeButton': function(event, template) {
     var type = event.currentTarget.getAttribute('data-type');
+    var alert = template.find('.calcArmyAlert');
     var army = Template.currentData();
-    army.unitType = type;
 
-    updateArmy(army);
+    $(alert).hide();
+
+    // make sure there isn't more than one castle or village
+    var foundCastleOrVillage = false;
+    if (type == 'castle' || type == 'village') {
+      _.each(calcBattle.armies, function(army) {
+        if (army.unitType == 'castle' || army.unitType == 'village') {
+          foundCastleOrVillage = true;
+        }
+      })
+    }
+
+    if (foundCastleOrVillage) {
+      $(alert).html('Can only be one castle or village in a battle.');
+      $(alert).show();
+    } else {
+      army.unitType = type;
+      updateArmy(army);
+    }
   },
 
   'click .removeArmyButton': function(event, template) {
@@ -237,3 +255,9 @@ var updateArmy = function(army) {
   calcBattle.run();
   Session.set('runCalculator', Math.random());
 }
+
+
+
+Template.calculatorArmy.onRendered(function() {
+  this.firstNode.parentNode._uihooks = battleCalculatorAnimation;
+})
