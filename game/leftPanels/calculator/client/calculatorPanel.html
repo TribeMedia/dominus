@@ -22,15 +22,11 @@
       Armies are listed in order of arrival.  Use up/down buttons to change order.
       <br>
       <br>
-
-      If there is a castle or village in the battle then they are a defender. If an army is on the same hex as their castle or village then they are a defender. Otherwise the defender is the first army to arrive at the hex. All allies of this defender are also defenders.
-      <br>
-      <br>
     </div>
 
     {{#if calcBattle.battleHasRun}}
       <div class="pad_group">
-        <div class="light_text">Battle fought in {{round_1 calcBattle.msBattleTook}}ms.</div>
+        <div class="light_text">Battle fought in {{round calcBattle.msBattleTook}}ms.</div>
       </div>
     {{/if}}
 

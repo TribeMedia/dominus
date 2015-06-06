@@ -50,15 +50,21 @@
             </td>
 
             <td style="text-align:right;">
-              {{round basePower}}
+              {{#if basePower}}
+                {{round basePower}}
+              {{/if}}
             </td>
 
             <td style="text-align:right;">
-              {{round unitBonus}}
+              {{#if unitBonus}}
+                {{round unitBonus}}
+              {{/if}}
             </td>
 
             <td style="text-align:right;">
-              {{round loses}}
+              {{#if loses}}
+                {{round loses}}
+              {{/if}}
             </td>
 
           </tr>
@@ -67,13 +73,11 @@
         <tr>
           <td>Total</td>
           <td><input type="number" class="form-control armyUnitInput" value="{{numSoldiers}}" readonly></td>
-          <td style="text-align:right;">{{round army.basePower.total}}</td>
-          <td style="text-align:right;">{{round army.unitBonus.total}}</td>
-          <td style="text-align:right;">{{soldiersLost}}</td>
+          <td style="text-align:right;">{{#if army.basePower.total}}{{round army.basePower.total}}{{/if}}</td>
+          <td style="text-align:right;">{{#if army.unitBonus.total}}{{round army.unitBonus.total}}{{/if}}</td>
+          <td style="text-align:right;">{{#if soldiersLost}}{{soldiersLost}}{{/if}}</td>
         </tr>
       </table>
-
-      <br>
 
       {{#if isArmy}}
         <div class="checkbox">
@@ -88,6 +92,8 @@
           </label>
         </div>
       {{/if}}
+
+      <br>
 
       <div class="light_text">Base Power + Unit Bonus + Location Bonus = Final Power</div>
       {{round army.basePower.total}} + {{round army.unitBonus.total}} + {{round army.locationBonus}} = {{round army.finalPower}}<br>

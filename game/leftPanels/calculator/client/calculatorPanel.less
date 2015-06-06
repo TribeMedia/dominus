@@ -14,11 +14,15 @@
     width:100%;
 
     td {
-      padding-right:8px;
+      padding:0 4px 0 4px;
 
       .armyUnitInput {
         width:80px;
       }
+    }
+
+    tr:nth-child(even) {
+      background-color:fadeIn(lighten(@panel_bg, 13%), 10%);
     }
   }
 }
