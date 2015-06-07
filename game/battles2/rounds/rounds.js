@@ -73,6 +73,21 @@ BattleRound.prototype.run = function() {
 // -----------------------
 // private
 
+
+
+BattleRound.prototype.isThereACastleOrVillageInBattle = function() {
+  var self = this;
+  var found = false;
+  _.each(self.armies, function(army) {
+    if (army.unitType == 'castle' || army.unitType == 'village') {
+      found = true;
+    }
+  })
+  return found;
+}
+
+
+
 BattleRound.prototype.checkThatThereIsOnlyOneDefender = function() {
   var self = this;
 
@@ -191,6 +206,8 @@ BattleRound.prototype.findOrderOfArrival = function() {
 
 
 BattleRound.prototype.updateUnitBonus = function(army) {
+  var self = this;
+
   var enemyPercentage = this.getEnemyUnitPercentage(army);
 
   var bonus = {};
@@ -212,13 +229,13 @@ BattleRound.prototype.updateUnitBonus = function(army) {
 
     if (army.isAttacker) {
       if (this.castle && this.castle.user_id != army.user_id) {
-        if (army.isEnemy(castle)) {
+        if (army.isEnemy(this.castle)) {
           isEnemyCastleOrVillageHere = true;
         }
       }
 
       if (this.village && this.village.user_id != army.user_id) {
-        if (army.isEnemy(village)) {
+        if (army.isEnemy(this.village)) {
           isEnemyCastleOrVillageHere = true;
         }
       }
@@ -348,9 +365,15 @@ BattleRound.prototype.getAllies = function(army) {
 
   _.each(enemies, function(enemy) {
     _.each(self.getEnemies(enemy), function(enemyOfEnemy) {
-      if (_.indexOf(enemyOfEnemies, enemyOfEnemy) == -1) {
-        if (enemyOfEnemy._id != army._id) {
-          enemyOfEnemies.push(enemyOfEnemy)
+
+      if (enemyOfEnemy.id != army.id) {
+
+        var alreadyInArray = _.find(enemyOfEnemies, function(e) {
+          return e.id == enemyOfEnemy.id;
+        })
+
+        if (!alreadyInArray) {
+            enemyOfEnemies.push(enemyOfEnemy)
         }
       }
     })

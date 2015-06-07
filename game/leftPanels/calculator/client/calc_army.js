@@ -188,13 +188,17 @@ Template.calculatorArmy.events({
     var army = Template.currentData();
 
     $(alert).hide();
+    calcBattle.castle = null;
+    calcBattle.village = null;
 
     // make sure there isn't more than one castle or village
     var foundCastleOrVillage = false;
     if (type == 'castle' || type == 'village') {
-      _.each(calcBattle.armies, function(army) {
-        if (army.unitType == 'castle' || army.unitType == 'village') {
-          foundCastleOrVillage = true;
+      _.each(calcBattle.armies, function(a) {
+        if (a.id != army.id) {
+          if (a.unitType == 'castle' || a.unitType == 'village') {
+            foundCastleOrVillage = true;
+          }
         }
       })
     }
@@ -204,6 +208,16 @@ Template.calculatorArmy.events({
       $(alert).show();
     } else {
       army.unitType = type;
+
+      // fill in castle or village
+      if (type == 'castle') {
+        var data = {name:'asdf', user_id:army.user_id, x:1, y:1, username:'asdf'};
+        calcBattle.castle = data;
+      } else if (type == 'village') {
+        var data = {name:'asdf', user_id:army.user_id, x:1, y:1, username:'asdf', castle_x:1, castle_y:1, castle_id:12345};
+        calcBattle.village = data;
+      }
+
       updateArmy(army);
     }
   },

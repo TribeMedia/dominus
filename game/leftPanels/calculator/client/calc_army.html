@@ -77,7 +77,7 @@
           <td><input type="number" class="form-control armyUnitInput" value="{{numSoldiers}}" readonly></td>
           <td style="text-align:right;">{{#if army.basePower.total}}{{round army.basePower.total}}{{/if}}</td>
           <td style="text-align:right;">{{#if army.unitBonus.total}}{{round army.unitBonus.total}}{{/if}}</td>
-          <td style="text-align:right;">{{#if soldiersLost}}{{soldiersLost}}{{/if}}</td>
+          <td style="text-align:right;">{{#if soldiersLost}}{{round soldiersLost}}{{/if}}</td>
         </tr>
       </table>
 
@@ -117,7 +117,7 @@
 
       {{#if hasEnemies}}
         <div>
-          Enemies:
+          <span class="light_text">Enemies:</span>
           {{#each army.enemies}}
             {{name}},
           {{/each}}
@@ -127,18 +127,19 @@
 
       {{#if hasSoldiers}}
         {{#if hasEnemies}}
-          {{#if army.isAttacker}}
-            Attacked and
-          {{else}}
-            Defended and
-          {{/if}}
+          <div style="font-size:140%;">
+            {{#if army.isAttacker}}
+              Attacked and
+            {{else}}
+              Defended and
+            {{/if}}
 
-          {{#if won}}
-            <span class="battle_won_color">Won Battle</span>
-          {{else}}
-            <span class="battle_lost_color">Lost Battle</span>
-          {{/if}}
-          <br>
+            {{#if won}}
+              <span class="battle_won_color">Won Battle</span>
+            {{else}}
+              <span class="battle_lost_color">Lost Battle</span>
+            {{/if}}
+          </div>
 
           Lost {{soldiersLost}} soldiers worth {{round powerLost}} power.
         {{/if}}
