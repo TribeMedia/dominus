@@ -26,6 +26,49 @@ getNiceRelationType = function(relationType) {
 	}
 }
 
+
+// new relation type function
+// user = {_id:1, team:1, lord:1, allies_above:1, allies_below:1, king:1, vassals:1}
+// otherUserId = 1234
+// TODO: update others to use this
+
+getRelationType = function(user, otherUserId) {
+
+	if (user._id == otherUserId) {
+		return 'mine';
+	}
+
+	if (_.indexOf(user.team, otherUserId) != -1) {
+
+		if (_.indexOf(user.allies_above, otherUserId) != -1) {
+
+			if (user.king == otherUserId) {
+				return 'king';
+			} else if (user.lord == otherUserId) {
+				return 'direct_lord';
+			} else {
+				return 'lord';
+			}
+
+		} else if (_.indexOf(user.allies_below, otherUserId) != -1) {
+
+			if (_.indexOf(user.vassals, otherUserId) != -1) {
+				return 'direct_vassal';
+			} else {
+				return 'vassal';
+			}
+
+		} else {
+			return 'enemy_ally';
+		}
+
+	} else {
+		return 'enemy';
+	}
+}
+
+
+
 // TODO: there are a few places that need to be updated to use this function
 getUnitRelationType = function(user_id) {
 	if (user_id) {

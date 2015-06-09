@@ -1,6 +1,6 @@
 // both client and server
 s = {};
-s.version = '0.0.21';
+s.version = '0.0.22';
 s.market = {};
 s.resource = {};
 s.army = {};
@@ -19,7 +19,7 @@ s.gameOverPhaseTime = 1000 * 60 * 60 * 24; 	// 24 hours
 s.gameClosedPhaseTime = 1000 * 60 * 60 * 48; 	// 48 hours
 
 // close registration after this number of players create accounts
-s.serverMaxPlayers = 200;
+s.serverMaxPlayers = 300;
 
 // number of rankings per page in the rankings panel
 s.rankings.perPage = 10;
@@ -58,7 +58,7 @@ s.battle_power_lost_per_round = 500;
 s.battle_power_lost_winner_ratio = 0.5;
 
 // length of time added to game end clock when there is a new dominus
-s.time_til_game_end_when_new_dominus = 1000 * 60 * 60 * 24 * 2; 	// 7 days
+s.time_til_game_end_when_new_dominus = 1000 * 60 * 60 * 24 * 2;
 
 // removal of inactives
 s.inactives = {

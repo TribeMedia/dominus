@@ -1,0 +1,151 @@
+<template name="calculatorArmy">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{name}}
+      &nbsp;
+      {{#if isArmy}}
+        <button class="btn btn-primary btn-xs armyUpButton"><i class="fa fa-sort-up"></i></button>
+        <button class="btn btn-primary btn-xs armyDownButton"><i class="fa fa-sort-down"></i></button>
+      {{/if}}
+      <button class="btn btn-primary btn-xs removeArmyButton"><i class="fa fa-close"></i></button>
+    </div>
+    <div class="panel-body">
+
+
+      <div class="form-group">
+        <div class="alert alert-danger calcArmyAlert" style="display:none;"></div>
+
+        <div class="btn-group btn-group-justified" role="group">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary {{isTypeSelected "army"}} unitTypeButton" data-type="army">Army</button>
+          </div>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary {{isTypeSelected "castle"}} unitTypeButton" data-type="castle">Castle</button>
+          </div>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-primary {{isTypeSelected "village"}} unitTypeButton" data-type="village">Village</button>
+          </div>
+        </div>
+      </div>
+
+
+      <table class="calcArmyTable">
+        <thead>
+          <tr>
+            <td></td>
+            <td></td>
+            <td style="text-align:right;">Base Power</td>
+            <td style="text-align:right;">Unit Bonus</td>
+            <td style="text-align:right;">Dead</td>
+          </tr>
+        </thead>
+
+        {{#each s.army.types}}
+          <tr>
+
+            <td>
+              {{capitalize this}}
+            </td>
+
+            <td>
+              <input type="number" class="armyUnitInput form-control" data-type="{{this}}" value="{{unitNum}}" min="0" step="1">
+            </td>
+
+            <td style="text-align:right;">
+              {{#if basePower}}
+                {{round basePower}}
+              {{/if}}
+            </td>
+
+            <td style="text-align:right;">
+              {{#if unitBonus}}
+                {{round unitBonus}}
+              {{/if}}
+            </td>
+
+            <td style="text-align:right;">
+              {{#if loses}}
+                {{round loses}}
+              {{/if}}
+            </td>
+
+          </tr>
+        {{/each}}
+
+        <tr>
+          <td>Total</td>
+          <td><input type="number" class="form-control armyUnitInput" value="{{numSoldiers}}" readonly></td>
+          <td style="text-align:right;">{{#if army.basePower.total}}{{round army.basePower.total}}{{/if}}</td>
+          <td style="text-align:right;">{{#if army.unitBonus.total}}{{round army.unitBonus.total}}{{/if}}</td>
+          <td style="text-align:right;">{{#if soldiersLost}}{{round soldiersLost}}{{/if}}</td>
+        </tr>
+      </table>
+
+      {{#if isArmy}}
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" class="onAllyCastleCheckbox" {{isOnAllyCastle}}> On Ally Castle
+          </label>
+        </div>
+
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" class="onAllyVillageCheckbox" {{isOnAllyVillage}}> On Ally Village
+          </label>
+        </div>
+      {{/if}}
+
+      <br>
+
+      <div class="light_text">Base Power + Unit Bonus + Location Bonus = Final Power</div>
+      {{round army.basePower.total}} + {{round army.unitBonus.total}} + {{round army.locationBonus}} = {{round army.finalPower}}<br>
+      <br>
+
+      <div class="light_text">Final Power + Ally Final Power vs Enemy Final Power</div>
+      {{round army.finalPower}} + {{round army.allyFinalPower}} vs {{round army.enemyFinalPower}}<br>
+      <br>
+
+      {{#if hasAllies}}
+        <div>
+          <span class="light_text">Allies:</span>
+          {{#each army.allies}}
+            {{name}},
+          {{/each}}
+        </div>
+        <br>
+      {{/if}}
+
+      {{#if hasEnemies}}
+        <div>
+          <span class="light_text">Enemies:</span>
+          {{#each army.enemies}}
+            {{name}},
+          {{/each}}
+        </div>
+        <br>
+      {{/if}}
+
+      {{#if hasSoldiers}}
+        {{#if hasEnemies}}
+          <div style="font-size:140%;">
+            {{#if army.isAttacker}}
+              Attacked and
+            {{else}}
+              Defended and
+            {{/if}}
+
+            {{#if won}}
+              <span class="battle_won_color">Won Battle</span>
+            {{else}}
+              <span class="battle_lost_color">Lost Battle</span>
+            {{/if}}
+          </div>
+
+          Lost {{soldiersLost}} soldiers worth {{round powerLost}} power.
+        {{/if}}
+      {{/if}}
+
+
+    </div>
+  </div>
+</template>

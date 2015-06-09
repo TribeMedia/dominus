@@ -138,39 +138,29 @@ deleteAccount = function(user_id) {
 
 	// fix tree
 	if (user.lord) {
-		var lord = Meteor.users.findOne(user.lord);
+		var lord = Meteor.users.findOne(user.lord, {fields:{_id:1}});
 		if (lord) {
 			// give vassals to lord
 			_.each(user.vassals, function(vassal_id) {
 				var vassal = Meteor.users.findOne(vassal_id);
 				if (vassal) {
+					remove_lord_and_vassal(user._id, vassal._id);
 					set_lord_and_vassal(lord._id, vassal._id);
 				}
 			});
 
 			// remove from lord
 			remove_lord_and_vassal(lord._id, user._id);
-
-			// update lord's tree
-			// var rf = new relation_finder(lord._id)
-			// rf.start()
 		}
 	} else {
 		// make vassals kings
 		_.each(user.vassals, function(vassal_id) {
-			var vassal = Meteor.users.findOne(vassal_id);
+			var vassal = Meteor.users.findOne(vassal_id, {fields:{_id:1}});
 			if (vassal) {
 				remove_lord_and_vassal(user._id, vassal._id);
-				// var rf = new relation_finder(vassal._id)
-				// rf.start()
 			}
 		});
 	}
-
-	// remove from everyone's allies
-	// Meteor.users.find().forEach(function(u) {
-	// 	if (_.indexOf(u.allies))
-	// })
 
 
 	Castles.remove({user_id: user._id});

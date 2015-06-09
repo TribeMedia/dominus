@@ -16,11 +16,13 @@ set_lord_and_vassal = function(winner_id, loser_id) {
 	var loser = Meteor.users.findOne(loser_id, {fields:fields});
 
 	if (!winner || !loser) {
-		throw new Meteor.Error('winner or loser not found');
+		console.error('winner or loser not found');
+		return false;
 	}
 
 	if (winner._id == loser._id) {
-		throw new Meteor.Error('winner and loser are the same in set_lord_and_vassal');
+		console.error('winner and loser are the same in set_lord_and_vassal');
+		return false;
 	}
 
 	// lost/gained vassal notifications
@@ -53,6 +55,7 @@ set_lord_and_vassal = function(winner_id, loser_id) {
 
 	// vassal is no longer a king, he had no lord, now he does
 	// destroy king chatroom
+	// TODO: isn't this handled in cleanupAllKingChatrooms?
 	if (loser.is_king) {
 		Cue.addTask('destroyKingChatroom', {isAsync:false, unique:true}, {king_id:loser._id});
 	}
@@ -104,7 +107,7 @@ remove_lord_and_vassal = function(lord_id, vassal_id) {
 	check(vassal_id, String);
 
 	if (lord_id == vassal_id) {
-		throw new Meteor.Error('winner and loser are the same in remove_lord_and_vassal');
+		console.error('winner and loser are the same in remove_lord_and_vassal');
 	}
 
 	var fields = {allies_above:1, allies_below:1};
@@ -112,7 +115,8 @@ remove_lord_and_vassal = function(lord_id, vassal_id) {
 	var vassal = Meteor.users.findOne(vassal_id, {fields:fields});
 
 	if (!lord || !vassal) {
-		throw new Meteor.Error('lord or vassal not found');
+		console.error('lord or vassal not found');
+		return false;
 	}
 
 	// vassal
@@ -174,6 +178,7 @@ create_lord_and_vassal = function(lord_id, vassal_id) {
 		console.log('lord '+lord_id);
 		console.log('vassal '+vassal_id);
 		console.error('winner and loser are the same in create_lord_and_vassal');
+		return false;
 	}
 
 	var fields = {allies_above:1, allies_below:1, king:1, team:1, is_king:1};
@@ -184,6 +189,7 @@ create_lord_and_vassal = function(lord_id, vassal_id) {
 		console.log('lord '+lord_id);
 		console.log('vassal '+vassal_id);
 		console.error('lord or vassal not found');
+		return false;
 	}
 
 	check(lord.allies_above, Array);
@@ -199,6 +205,7 @@ create_lord_and_vassal = function(lord_id, vassal_id) {
 		console.log('lord '+lord_id);
 		console.log('vassal '+vassal_id);
 		console.error('vassal must not have a lord');
+		return false;
 	}
 
 	// set lord and remove king
@@ -215,6 +222,7 @@ create_lord_and_vassal = function(lord_id, vassal_id) {
 	// set vassal and vassal's allies below's king to king of lord
 	// must happen after setting lord
 	var newKing = null;
+
 	if (lord.is_king) {
 		newKing = lord._id;
 	} else if (lord.king){
@@ -222,6 +230,11 @@ create_lord_and_vassal = function(lord_id, vassal_id) {
 	} else {
 		newKing = getKingOf(vassal_id);
 	}
+
+	if (!newKing) {
+		console.error('king not found');
+	}
+
 	var setKingIds = _.union(vassal.allies_below, vassal._id, lord._id);
 	Meteor.users.update({_id:{$in:setKingIds}}, {$set:{king:newKing}}, {multi:true});
 
@@ -240,7 +253,7 @@ create_lord_and_vassal = function(lord_id, vassal_id) {
 	// team
 	// add vassal and vassal's allies_below to lord's team
 	// this does not work for some reason
-	//var team = _.union(lord.team, [lord._id, vassal._id], vassal.allies_below);
+	// var team = _.union(lord.team, [lord._id, vassal._id], vassal.allies_below);
 	// use this slower way instead
 	var team = getTeamOf(newKing);
 	Meteor.users.update({_id:{$in:team}}, {$set:{team:team}}, {multi:true});
@@ -293,7 +306,7 @@ update_vassal_ally_count = function(user_id) {
 };
 
 
-
+// walk up tree to find king
 getKingOf = function(userId) {
 	var user = Meteor.users.findOne(userId, {fields: {lord:1}});
 	if (user) {
@@ -304,19 +317,25 @@ getKingOf = function(userId) {
 		}
 	} else {
 		console.error('error finding lord in getKingOf()');
+		return false;
 	}
 };
 
+// find king
+// return king's allies_below + king
 getTeamOf = function(userId) {
 	var kingId = getKingOf(userId);
+
 	if (kingId) {
 		var king = Meteor.users.findOne(kingId, {fields: {allies_below:1}});
 		if (king) {
 			return _.union(king.allies_below, king._id);
 		} else {
 			console.error('error finding user in getTeamOf()');
+			return false;
 		}
 	} else {
 		console.error('error finding king in getTeamOf()');
+		return false;
 	}
 };

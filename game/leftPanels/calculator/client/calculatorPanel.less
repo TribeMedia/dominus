@@ -1,0 +1,28 @@
+@import (reference) url("/lib/client/custom.bootstrap.import.less");
+
+#calculatorPanel {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: @panel_bg;
+  padding: @panel_padding;
+  height: 100%;
+  pointer-events: auto;
+  margin-left: 10px;
+  width: 400px;
+
+  table.calcArmyTable {
+    width:100%;
+
+    td {
+      padding:0 4px 0 4px;
+
+      .armyUnitInput {
+        width:80px;
+      }
+    }
+
+    tr:nth-child(even) {
+      background-color:fadeIn(lighten(@panel_bg, 13%), 10%);
+    }
+  }
+}

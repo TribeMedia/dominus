@@ -39,6 +39,7 @@ Template.game.helpers({
 	show_store_panel: function() { return Session.get('show_store_panel'); },
 	show_tree_panel: function() { return Session.get('show_tree_panel'); },
 	show_pro_panel: function() { return Session.get('show_pro_panel'); },
+	showCalcPanel: function() { return Session.get('showCalcPanel'); }
 });
 
 

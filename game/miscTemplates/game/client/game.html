@@ -77,6 +77,12 @@
 			{{/if}}
 		</div>
 
+		{{#if showCalcPanel}}
+			<div class="left_panel_content">
+				{{> calculatorPanel}}
+			</div>
+		{{/if}}
+
 		<div class="left_panel_content">
 			{{#if show_admin_panel}}
 				{{> admin_panel}}

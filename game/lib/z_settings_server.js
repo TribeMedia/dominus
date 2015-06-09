@@ -23,8 +23,4 @@ if (Meteor.isServer) {
         s.battle_check_interval = 1000 * 10;
         s.army_update_interval = 1000 * 10;	// how often does army movement job run
     }
-
-    if (process.env.GAME_ID == 'dev') {
-
-    }
 }
