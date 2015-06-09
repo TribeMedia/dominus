@@ -11,7 +11,7 @@
 // so that another job doesn't change someone's allies while it's running
 Cue.addJob('updateAllKingsAllies', {retryOnError:false, maxMs:1000*60*10}, function(task, done) {
 	// stop job queue
-	Cue.stop();
+	Cue.pause();
 	var fut = new Future();
 
 	// wait a bit for jobs to finish
@@ -27,7 +27,7 @@ Cue.addJob('updateAllKingsAllies', {retryOnError:false, maxMs:1000*60*10}, funct
 	}, 1000*60);
 
 	fut.wait();
-	Cue.start();
+	Cue.unpause();
 	done();
 });
 
