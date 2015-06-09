@@ -130,7 +130,7 @@ Mapbaker.bakeHexes = function() {
             Cue.addTask('createSvgImage', {isAsync:true, unique:true}, {
                 filename: filenameWithCoords,
                 svgString: svgWithCoords,
-                imageObject: imageObject
+                imageObject: imageObjectWithCoords
             });
         }
     }
