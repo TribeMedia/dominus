@@ -207,6 +207,7 @@ Mapbaker.createSvgImage = function(filepath, svgString) {
 
     self.fs.writeFile(filepath, svgString, Meteor.bindEnvironment(function(error) {
         if (error) {
+            console.error('error creating svg image');
             console.error(error);
             fut['return'](error);
         } else {
@@ -291,6 +292,7 @@ Mapbaker.createJpgImage = function(inFile, outFile, outFileType, quality) {
         'output': outFile+' '+outFileType+' '+quality
     }], Meteor.bindEnvironment(function(error, result) {
         if (error) {
+            console.error('error creating jpg image');
             console.error(error);
             fut['return'](error);
         } else {
