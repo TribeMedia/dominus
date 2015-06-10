@@ -89,6 +89,31 @@ BattleArmy = function() {
 // private
 
 
+BattleArmy.prototype.updateUser = function() {
+  if (this.isRealArmy) {
+    var fields = {allies_below:1, allies_above:1, team:1, king:1, lord:1, vassals:1, isDominus:1};
+
+    if (Meteor.isServer) {
+      var user = Meteor.users.findOne(this.user_id, {fields:fields});
+    } else {
+      var user = Calcusers.findOne(this.user_id, {fields:fields});
+    }
+
+    if (user) {
+      this.allies_below = user.allies_below;
+      this.allies_above = user.allies_above;
+      this.team = user.team;
+      this.king = user.king;
+      this.lord = user.lord;
+      this.vassals = user.vassals;
+      this.isDominus = user.isDominus;
+    } else {
+      console.error('could not find user');
+    }
+  }
+}
+
+
 BattleArmy.prototype.isEnemy = function(otherArmy) {
 
   // if army is dominus then they can attack any other army
@@ -109,7 +134,11 @@ BattleArmy.prototype.isEnemy = function(otherArmy) {
   }
 
   if (this.unitType == 'army') {
-    var enemyTypes = ['enemy', 'enemy_ally'];
+    if (otherArmy.unitType == 'castle') {
+      var enemyTypes = ['enemy', 'enemy_ally', 'lord', 'direct_lord', 'king'];
+    } else {
+      var enemyTypes = ['enemy', 'enemy_ally'];
+    }
   }
 
   if (_.indexOf(enemyTypes, relation) != -1) {

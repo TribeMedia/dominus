@@ -131,6 +131,17 @@ Template.calculatorArmy.helpers({
       return army.isOnAllyVillage ? 'checked' : '';
     }
   },
+
+  user: function() {
+    var army = Template.currentData();
+    if (army) {
+      var fields = {username:1};
+      var user = Calcusers.findOne(army.user_id, {fields:fields});
+      if (user) {
+        return user;
+      }
+    }
+  }
 })
 
 

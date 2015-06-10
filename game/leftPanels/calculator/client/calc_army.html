@@ -1,6 +1,9 @@
 <template name="calculatorArmy">
   <div class="panel panel-default">
     <div class="panel-heading">
+      {{#if army.isRealArmy}}
+        {{user.username}} :
+      {{/if}}
       {{name}}
       &nbsp;
       {{#if isArmy}}

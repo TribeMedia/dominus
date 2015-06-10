@@ -40,11 +40,14 @@ BattleRound.prototype.run = function() {
 
   var start = new Date().getTime();
 
+  _.each(self.armies, function(army) {
+    army.updateUser();
+  });
+
   // find info on all armies
   self.findOrderOfArrival();
 
   _.each(self.armies, function(army) {
-    self.updateUser(army);
     self.cacheAllies(army);
     self.cacheEnemies(army);
     army.updateInfo();
@@ -73,32 +76,6 @@ BattleRound.prototype.run = function() {
 
 // -----------------------
 // private
-
-
-
-
-BattleRound.prototype.updateUser = function(army) {
-  if (army.isRealArmy) {
-    var fields = {allies_below:1, allies_above:1, team:1, king:1, lord:1, vassals:1, isDominus:1};
-
-    if (Meteor.isServer) {
-      var user = Meteor.users.findOne(army.user_id, {fields:fields});
-    } else {
-      var user = Calcusers.findOne(army.user_id, {fields:fields});
-    }
-
-    if (user) {
-      army.allies_below = user.allies_below;
-      army.allies_above = user.allies_above;
-      army.team = user.team;
-      army.king = user.king;
-      army.lord = user.lord;
-      army.vassals = user.vassals;
-      army.isDominus = user.isDominus;
-    }
-  }
-}
-
 
 
 BattleRound.prototype.isThereACastleOrVillageInBattle = function() {
