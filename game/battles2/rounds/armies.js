@@ -26,7 +26,7 @@ BattleArmy = function() {
 
   // assign random id
   // set to _id of army or leave random value
-  this.id = Math.floor(Math.random() * 1000000);
+  this._id = Math.floor(Math.random() * 1000000);
   this.name = names.armies.part1[_.random(names.armies.part1.length-1)] +' '+ names.armies.part2[_.random(names.armies.part2.length-1)];
 
   // order that armies arrived at hex, ascending, 0 is first, 0 if castle or village

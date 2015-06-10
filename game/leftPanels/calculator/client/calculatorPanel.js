@@ -71,7 +71,7 @@ Template.calculatorPanel.events({
       // make sure unit isn't already in battle
       var dupe = false;
       _.each(calcBattle.armies, function(a) {
-        if (a.id == data._id) {
+        if (a._id == data._id) {
           dupe = true;
         }
       })
@@ -90,7 +90,7 @@ Template.calculatorPanel.events({
       army.lord = null;
       army.vassals = [];
       army.isDominus = false;
-      army.id = data._id;
+      army._id = data._id;
       army.name = data.name;
       army.isRealArmy = true;
 

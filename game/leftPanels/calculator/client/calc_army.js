@@ -206,7 +206,7 @@ Template.calculatorArmy.events({
     var foundCastleOrVillage = false;
     if (type == 'castle' || type == 'village') {
       _.each(calcBattle.armies, function(a) {
-        if (a.id != army.id) {
+        if (a._id != army._id) {
           if (a.unitType == 'castle' || a.unitType == 'village') {
             foundCastleOrVillage = true;
           }
@@ -264,7 +264,7 @@ var moveArmyDown = function(army) {
 
 var removeArmy = function(army) {
   var armies = _.reject(calcBattle.armies, function(a) {
-    return a.id == army.id;
+    return a._id == army._id;
   })
   calcBattle.armies = armies;
   Session.set('runCalcBattle', Math.random());
@@ -272,7 +272,7 @@ var removeArmy = function(army) {
 
 var updateArmy = function(army) {
   var armies = _.reject(calcBattle.armies, function(a) {
-    return a.id == army.id;
+    return a._id == army._id;
   })
   armies.push(army);
   calcBattle.armies = armies;
@@ -288,16 +288,17 @@ Template.calculatorArmy.onRendered(function() {
 
 Template.calculatorArmy.onCreated(function() {
 
-  // subscribe to user if this is a real army
-  var army = Template.currentData();
-  if (army && army.isRealArmy) {
-    this.subscribe('calcUser', army.user_id);
-  }
+  var self = this;
+  self.army = Template.currentData();
 
-  // if this is a real army wait for subscription
-  this.autorun(function() {
+  self.autorun(function() {
+    self.subscribe('calcUser', self.army.user_id);
+  })
+
+  self.autorun(function() {
     Session.get('runCalcBattle');
-    if (army.isRealArmy) {
+
+    if (self.army.isRealArmy) {
       if (Template.instance().subscriptionsReady()) {
         calcBattle.run();
         Session.set('updateCalculatorTemplates', Math.random());
@@ -306,5 +307,7 @@ Template.calculatorArmy.onCreated(function() {
       calcBattle.run();
       Session.set('updateCalculatorTemplates', Math.random());
     }
-  })
+  });
+
+
 })

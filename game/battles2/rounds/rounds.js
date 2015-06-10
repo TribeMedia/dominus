@@ -369,10 +369,10 @@ BattleRound.prototype.getAllies = function(army) {
   _.each(enemies, function(enemy) {
     _.each(self.getEnemies(enemy), function(enemyOfEnemy) {
 
-      if (enemyOfEnemy.id != army.id) {
+      if (enemyOfEnemy._id != army._id) {
 
         var alreadyInArray = _.find(enemyOfEnemies, function(e) {
-          return e.id == enemyOfEnemy.id;
+          return e._id == enemyOfEnemy._id;
         })
 
         if (!alreadyInArray) {

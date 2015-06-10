@@ -63,7 +63,7 @@ Template.menu.helpers({
 	},
 
 	calc_active: function() {
-		if (Session.get('calcPanel')) { return 'active'; } else { return ''; }
+		if (Session.get('showCalcPanel')) { return 'active'; } else { return ''; }
 	},
 
 	isNewForumPost: function() {
