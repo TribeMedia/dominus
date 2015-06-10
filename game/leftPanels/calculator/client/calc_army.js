@@ -256,8 +256,7 @@ var removeArmy = function(army) {
     return a.id == army.id;
   })
   calcBattle.armies = armies;
-  calcBattle.run();
-  Session.set('runCalculator', Math.random());
+  Session.set('runCalcBattle', Math.random());
 }
 
 var updateArmy = function(army) {
@@ -266,12 +265,35 @@ var updateArmy = function(army) {
   })
   armies.push(army);
   calcBattle.armies = armies;
-  calcBattle.run();
-  Session.set('runCalculator', Math.random());
+  Session.set('runCalcBattle', Math.random());
 }
 
 
 
 Template.calculatorArmy.onRendered(function() {
   this.firstNode.parentNode._uihooks = battleCalculatorAnimation;
+})
+
+
+Template.calculatorArmy.onCreated(function() {
+
+  // subscribe to user if this is a real army
+  var army = Template.currentData();
+  if (army && army.isRealArmy) {
+    this.subscribe('calcUser', army.user_id);
+  }
+
+  // if this is a real army wait for subscription
+  this.autorun(function() {
+    Session.get('runCalcBattle');
+    if (army.isRealArmy) {
+      if (Template.instance().subscriptionsReady()) {
+        calcBattle.run();
+        Session.set('updateCalculatorTemplates', Math.random());
+      }
+    } else {
+      calcBattle.run();
+      Session.set('updateCalculatorTemplates', Math.random());
+    }
+  })
 })

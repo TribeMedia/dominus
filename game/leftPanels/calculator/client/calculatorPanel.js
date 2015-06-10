@@ -1,13 +1,13 @@
 Template.calculatorPanel.helpers({
   armies: function() {
-    Session.get('runCalculator');
+    Session.get('updateCalculatorTemplates');
     return _.sortBy(calcBattle.armies, function(army) {
       return army.orderOfArrival;
     });
   },
 
   calcBattle: function() {
-    Session.get('runCalculator');
+    Session.get('updateCalculatorTemplates');
     return calcBattle;
   }
 })
@@ -21,7 +21,7 @@ Template.calculatorPanel.events({
 
     calcBattle.armies.push(army);
     calcBattle.run();
-    Session.set('runCalculator', Math.random());
+    Session.set('updateCalculatorTemplates', Math.random());
   },
 
   'click #addSelectedButton': function(event, template) {
@@ -92,6 +92,7 @@ Template.calculatorPanel.events({
       army.isDominus = false;
       army.id = data._id;
       army.name = data.name;
+      army.isRealArmy = true;
 
       _.each(s.army.types, function(type) {
         army.units[type] = data[type];
@@ -99,7 +100,7 @@ Template.calculatorPanel.events({
 
       calcBattle.armies.push(army);
       calcBattle.run();
-      Session.set('runCalculator', Math.random());
+      Session.set('updateCalculatorTemplates', Math.random());
 
     } else {
       $(alert).html('Select a castle, village or army then click add selected button.');
@@ -111,7 +112,7 @@ Template.calculatorPanel.events({
 
 Template.calculatorPanel.onCreated(function() {
   var self = this;
-  Session.set('runCalculator', Math.random());
+  Session.set('updateCalculatorTemplates', Math.random());
   calcBattle = new BattleRound();
 })
 

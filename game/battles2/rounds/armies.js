@@ -21,6 +21,9 @@ BattleArmy = function() {
   this.vassals = [];
   this.isDominus = false;
 
+  // if set to true it will look in db for user to update allies_below etc.
+  this.isRealArmy = false;
+
   // assign random id
   // set to _id of army or leave random value
   this.id = Math.floor(Math.random() * 1000000);
