@@ -13,6 +13,20 @@ Template.calculatorArmy.helpers({
     }
   },
 
+  isCastle: function() {
+    var army = Template.currentData();
+    if (army && army.unitType) {
+      return army.unitType == 'castle';
+    }
+  },
+
+  isVillage: function() {
+    var army = Template.currentData();
+    if (army && army.unitType) {
+      return army.unitType == 'village';
+    }
+  },
+
   isArmy: function() {
     var army = Template.currentData();
     if (army && army.unitType) {

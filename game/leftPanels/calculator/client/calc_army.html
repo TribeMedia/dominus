@@ -128,23 +128,35 @@
         <br>
       {{/if}}
 
-      {{#if hasSoldiers}}
-        {{#if hasEnemies}}
-          <div style="font-size:140%;">
-            {{#if army.isAttacker}}
-              Attacked and
-            {{else}}
-              Defended and
-            {{/if}}
+      {{#if hasEnemies}}
+        <div style="font-size:140%;">
+          {{#if army.isAttacker}}
+            Attacked and
+          {{else}}
+            Defended and
+          {{/if}}
 
-            {{#if won}}
-              <span class="battle_won_color">Won Battle</span>
-            {{else}}
-              <span class="battle_lost_color">Lost Battle</span>
-            {{/if}}
-          </div>
+          {{#if won}}
+            <span class="battle_won_color">Won Battle</span>
+          {{else}}
+            <span class="battle_lost_color">Lost Battle</span>
+          {{/if}}
+        </div>
 
-          Lost {{soldiersLost}} soldiers worth {{round powerLost}} power.
+        Lost {{soldiersLost}} soldiers worth {{round powerLost}} power.
+
+        {{#if destroyed}}
+          {{#if isCastle}}
+            <br>Castle was taken.
+          {{/if}}
+
+          {{#if isVillage}}
+            <br>Village was destroyed
+          {{/if}}
+
+          {{#if isArmy}}
+            <br>Army was destroyed
+          {{/if}}
         {{/if}}
       {{/if}}
 

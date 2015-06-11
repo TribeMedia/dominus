@@ -82,6 +82,9 @@ BattleArmy = function() {
   self.villageDefenseBonus = false;
   self.onAllyCastleBonus = false;
   self.onAllyVillageBonus = false;
+
+  // does unit have no soldiers after battle is over
+  this.destroyed = false;
 }
 
 
@@ -298,6 +301,7 @@ BattleArmy.prototype.findLoses = function() {
   })
 
   if (this.numUnits == 0) {
+    this.destroyed = true;
     return;
   }
 
@@ -333,6 +337,10 @@ BattleArmy.prototype.findLoses = function() {
       }
 
     })
+  }
+
+  if (numUnits == 0) {
+    this.destroyed = true;
   }
 
   this.loses = loses;
