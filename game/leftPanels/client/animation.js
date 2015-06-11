@@ -33,5 +33,11 @@ battleCalculatorAnimation = {
 		$(node).effect('blind', {direction:'up', mode:'hide', complete: function() {
 			$(node).remove()
 		}}, 150)
+	},
+	moveElement: function(node, next) {
+		$(node).effect('blind', {direction:'up', mode:'hide', complete: function() {
+			$(node).remove()
+			$(node).hide().insertBefore(next).effect('blind', {direction:'up', mode:'show'}, 150).show();
+		}}, 150)
 	}
 }
