@@ -301,6 +301,7 @@ BattleArmy.prototype.findLoses = function() {
   })
 
   if (this.numUnits == 0) {
+    this.loses = loses;
     this.destroyed = true;
     return;
   }
