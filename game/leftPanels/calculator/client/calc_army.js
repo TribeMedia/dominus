@@ -304,10 +304,7 @@ Template.calculatorArmy.onCreated(function() {
 
   var self = this;
   self.army = Template.currentData();
-
-  self.autorun(function() {
-    self.subscribe('calcUser', self.army.user_id);
-  })
+  self.subscribe('calcUser', self.army.user_id);
 
   self.autorun(function() {
     Session.get('runCalcBattle');
