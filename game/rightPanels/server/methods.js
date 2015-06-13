@@ -26,5 +26,25 @@ Meteor.methods({
         }
 
         return null;
+    },
+
+    // 'none', or a resource type.  'wool', 'grain'
+    changeSpecialization: function(type) {
+      var validTypes = ['none'];
+      _.each(s.resource.types, function(res) {
+        validTypes.push(res);
+      })
+
+      if (_.indexOf(validTypes, type) == -1) {
+        return false;
+      }
+
+      if (type == 'none') {
+        var set = {specialization:null, specializationChanging:false};
+      } else {
+        var set = {specialization:type, specializationChanging:true, specializationChangeStarted:new Date()};
+      }
+
+      Meteor.users.update(Meteor.userId(), {$set:set});
     }
 });

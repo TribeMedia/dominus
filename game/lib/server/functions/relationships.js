@@ -96,6 +96,7 @@ set_lord_and_vassal = function(winner_id, loser_id) {
 	Cue.addTask('enemy_on_building_check', {isAsync:false, unique:true, delay:500}, {});
 	Cue.addTask('check_for_dominus', {isAsync:false, unique:true, delay:500}, {});
 	Cue.addTask('cleanupAllKingChatrooms', {isAsync:false, unique:true, delay:500}, {});
+	Cue.addTask('generateTree', {isAsync:false, unique:true}, {});
 };
 
 

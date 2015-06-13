@@ -5,7 +5,7 @@ Meteor.methods({
 		check(y, validNumber)
 
 		var fields = {
-			x:1, y:1, username:1, castle_id:1
+			x:1, y:1, username:1, castle_id:1, specialization:1, specializationChanging:1
 		}
 
 		_.each(s.resource_types, function(type) {
@@ -52,14 +52,24 @@ Meteor.methods({
 
 						income.gold = s.resource.gold_gained_at_village
 
+						// specialization bonus
+						var specializationBonus = {}
+						_.each(s.resource.types, function(type) {
+							specializationBonus[type] = 1;
+
+							if (!user.specializationChanging && user.specialization == type) {
+								specializationBonus[type] = s.specialization.bonus;
+							}
+						})
+
 						var hexes = Hx.getSurroundingHexes(x,y,s.resource.num_rings_village)
 						_.each(hexes, function(hx) {
 							var h = Hexes.findOne({x:hx.x, y:hx.y}, {fields:{type:1, large:1}})
 							if (h) {
 								if (h.large) {
-									income[h.type] += s.resource.gained_at_hex * s.resource.large_resource_multiplier
+									income[h.type] += s.resource.gained_at_hex * s.resource.large_resource_multiplier * specializationBonus[h.type]
 								} else {
-									income[h.type] += s.resource.gained_at_hex
+									income[h.type] += s.resource.gained_at_hex * specializationBonus[h.type]
 								}
 							}
 						})

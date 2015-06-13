@@ -52,18 +52,28 @@ gatherResources = function() {
 	clear_cached_user_update();
 
 	// only receive income if email is verified
-	Meteor.users.find({}, {fields:{emails:1}}).forEach(function(user) {
+	Meteor.users.find({}, {fields:{emails:1, specialization:1, specializationChanging:1}}).forEach(function(user) {
 		if (user && user.emails[0].verified) {
+
+			// specialization bonus
+			var bonus = {}
+			_.each(s.resource.types, function(type) {
+				bonus[type] = 1;
+
+				if (!user.specializationChanging && user.specialization == type) {
+					bonus[type] = s.specialization.bonus;
+				}
+			})
 
 			receive_income_id(
 				user._id,
 				30,
-				s.castle.income.grain,
-				s.castle.income.lumber,
-				s.castle.income.ore,
-				s.castle.income.wool,
-				s.castle.income.clay,
-				s.castle.income.glass
+				s.castle.income.grain * bonus.grain,
+				s.castle.income.lumber * bonus.lumber,
+				s.castle.income.ore * bonus.ore,
+				s.castle.income.wool * bonus.wool,
+				s.castle.income.clay * bonus.clay,
+				s.castle.income.glass * bonus.glass
 			);
 		}
 	});
@@ -72,19 +82,30 @@ gatherResources = function() {
 	Villages.find({under_construction:false}, {fields: {user_id:1, x:1, y:1, level:1, income:1}}).forEach(function(res) {
 
 		// only receive income if email is verified
-		var user = Meteor.users.findOne(res.user_id, {fields:{emails:1, allies_above:1}});
+		var user = Meteor.users.findOne(res.user_id, {fields:{emails:1, allies_above:1, specialization:1, specializationChanging:1}});
 		if (user && user.emails[0].verified) {
 
-			// TODO: this could be remove and cache village's income
+			// TODO: this could be removed and cache village's income
+			// includes large hex multipler
+			// does not include specialization bonus or village level bonus
 			var income = resourcesFromSurroundingHexes(res.x, res.y, s.resource.num_rings_village);
-
 			income.gold = s.resource.gold_gained_at_village;
 
 			// add production bonus for level 2 and 3 villages
-			var multiplier = s.village.productionBonus['level'+res.level];
+			var villageMultiplier = s.village.productionBonus['level'+res.level];
+
+			// specialization bonus
+			var specializationBonus = {}
+			_.each(s.resource.types, function(type) {
+				specializationBonus[type] = 1;
+
+				if (!user.specializationChanging && user.specialization == type) {
+					specializationBonus[type] = s.specialization.bonus;
+				}
+			})
 
 			_.each(s.resource.types, function(type) {
-				income[type] = income[type] * multiplier;
+				income[type] = income[type] * villageMultiplier * specializationBonus[type];
 			});
 
 			receive_income(user, income.gold, income.grain, income.lumber, income.ore, income.wool, income.clay, income.glass);

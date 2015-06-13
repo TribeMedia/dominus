@@ -158,7 +158,6 @@ Meteor.startup(function() {
 			Cue.addTask('updateIncomeRank', {isAsync:false, unique:true}, {});
 			Cue.addTask('updateVassalRank', {isAsync:false, unique:true}, {});
 			Cue.addTask('updateIncomeStats', {isAsync:false, unique:true}, {});
-			Cue.addTask('generateTree', {isAsync:false, unique:true}, {});
 		}, 1000 * 60 * 10);
 
 

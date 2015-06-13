@@ -172,6 +172,31 @@
 
 			{{/if}}		<!-- is owner -->
 
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					Specialization
+				</div>
+				<div class="panel-body">
+
+					{{#if user.specialization}}
+						{{#if user.specializationChanging}}
+							Researching
+						{{else}}
+							Skilled in
+						{{/if}}
+
+						{{user.specialization}}.
+					{{else}}
+						No specialization.
+					{{/if}}
+
+					{{#if is_owner}}
+						<br><br>
+						<button type="button" class="btn btn-sm btn-primary btn-block" id="changeSpecializationButton">Change Specialization</button>
+					{{/if}}
+				</div>
+			</div>
+
 
 			{{#unless is_owner}}
 				<div class="panel panel-default panel-body">

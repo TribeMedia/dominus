@@ -43,7 +43,12 @@ Meteor.publish('user_data', function () {
 			emails:1,
 			lastActive:1,
 			status:1,
-			net:1
+			net:1,
+
+			// specialization
+			specialization:1,
+			specializationChanging:1,
+			specializationChangeStarted:1
 		}})
 	} else {
 		this.ready()

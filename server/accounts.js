@@ -196,6 +196,11 @@ setupNewUser = function(user) {
 		castle:0,
 		user:0
 	};
+	
+	// specialization
+	user.specialization = null;
+	user.specializationChanging = false;
+	user.specializationChangeStarted = null;
 
 	// flag for has notification that your account will soon been deleted been sent to this user
 	user.accountDelNotificationSent = false;

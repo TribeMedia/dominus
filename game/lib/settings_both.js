@@ -247,3 +247,8 @@ s.reportCheckInterval = 1000 * 30;
 reportDuration = function(numReports) {
 	return 1000 * 60 * 10 * numReports * numReports;
 };
+
+
+s.specialization = {}
+s.specialization.changeTime = 1000 * 60 * 60 * 24;	// a day
+s.specialization.bonus = 2;

@@ -299,6 +299,7 @@ Template.rp_info_army.created = function() {
 		}
 	})
 
+	// worth of hex
 	self.worthOfHex = new ReactiveVar(0)
 	self.autorun(function() {
 		if (Template.currentData()) {

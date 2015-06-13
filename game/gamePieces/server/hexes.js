@@ -90,7 +90,8 @@ function assign_properties_to_hex() {
 	return hex;
 }
 
-
+// does not include specialization bonus
+// does include large hex multiplier
 resourcesFromSurroundingHexes = function(x,y,numRings) {
 	var hex_array = Hx.getSurroundingHexes(x, y, numRings);
 

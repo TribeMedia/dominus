@@ -161,6 +161,10 @@ Template.rp_info_castle.events({
 
 	'click #reportPlayerButton': function(event, template) {
 		Session.set('rp_template', 'rp_reportPlayer');
+	},
+
+	'click #changeSpecializationButton': function(event, template) {
+		Session.set('rp_template', 'rp_changeSpecialization');
 	}
 });
 
