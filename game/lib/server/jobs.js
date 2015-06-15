@@ -98,9 +98,10 @@ Meteor.startup(function() {
 
 
 
-		// village construction
+		// upgrades
 		Meteor.setInterval(function() {
 			Cue.addTask('villageConstructionJob', {isAsync:false, unique:true}, {});
+			Cue.addTask('specializationUpgrade', {isAsync:false, unique:true}, {});
 		}, s.village.construction_update_interval);
 
 

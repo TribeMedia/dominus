@@ -24,17 +24,29 @@ s.serverMaxPlayers = 300;
 // number of rankings per page in the rankings panel
 s.rankings.perPage = 10;
 
+// specialization
+s.specialization = {}
+s.specialization.bonus = 2;
 
 if (Meteor.isServer && process.env.NODE_ENV == 'development') {
 	// cheats
 	s.resource.interval = 1000 * 30;
 	s.battle_interval = 1000 * 30;
 	s.village.max_can_have = 6;
+
+	// specialization
+	s.specialization.changeTime = 1000 * 10;
+
 } else {
 	s.resource.interval = 1000 * 60 * 10;
 	s.battle_interval = 1000 * 60 * 4;
 	s.village.max_can_have = 6;
+
+	// specialization
+	s.specialization.changeTime = 1000 * 60 * 60 * 24;	// a day
 }
+
+
 
 s.hex_size = 60;
 s.hex_squish = 0.7;
@@ -247,8 +259,3 @@ s.reportCheckInterval = 1000 * 30;
 reportDuration = function(numReports) {
 	return 1000 * 60 * 10 * numReports * numReports;
 };
-
-
-s.specialization = {}
-s.specialization.changeTime = 1000 * 60 * 60 * 24;	// a day
-s.specialization.bonus = 2;
