@@ -121,6 +121,7 @@ onCreateUser = function(userId) {
 		Cue.addTask('create_castle', {isAsync:false, unique:true}, {user_id:userId});
 		Cue.addTask('initDailystatsForNewUser', {isAsync:false, unique:true}, {user_id:userId});
 		Cue.addTask('setupEveryoneChatroom', {isAsync:false, unique:true}, {});
+		Cue.addTask('generateTree', {isAsync:false, unique:true}, {});
 
 		// create profile
 		var options = {username: user.username, admin:user.admin};
@@ -196,7 +197,7 @@ setupNewUser = function(user) {
 		castle:0,
 		user:0
 	};
-	
+
 	// specialization
 	user.specialization = null;
 	user.specializationChanging = false;
