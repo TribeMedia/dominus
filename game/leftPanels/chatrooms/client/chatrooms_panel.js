@@ -104,3 +104,8 @@ Template.chatrooms_panel.rendered = function() {
 		}
 	})
 }
+
+
+Template.chatrooms_panel.onDestroyed(function() {
+	Session.set('selectedChatroomId', null);
+})

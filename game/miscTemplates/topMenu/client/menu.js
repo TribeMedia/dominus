@@ -155,6 +155,13 @@ Template.menu.events({
 	'click #show_chatrooms_panel_button': function(event, template) {
 		if (Session.get('show_chatrooms_panel')) {
 			Session.set('show_chatrooms_panel', false)
+
+			var selectedChatroomId = Session.get('selectedChatroomId');
+			if (selectedChatroomId) {
+				var date = new Date(TimeSync.serverTime(null, 5000))
+				Cookie.set('room_'+selectedChatroomId+'_open', moment(date).add(1, 's').toDate(), {years: 10});
+			}
+
 		} else {
 			Session.set('show_chatrooms_panel', true)
 		}

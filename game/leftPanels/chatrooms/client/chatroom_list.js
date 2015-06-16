@@ -36,7 +36,7 @@ Template.chatroom_list.events({
 		} else {
 			Session.set('selectedChatroomId', template.data._id)
 			var date = new Date(TimeSync.serverTime(null, 5000))
-			Cookie.set('room_'+template.data._id+'_open', moment(date).add(1, 's').toDate(), {years: 10})
+			Cookie.set('room_'+template.data._id+'_open', moment(date).add(1, 's').toDate(), {years: 10});
 		}
 	},
 })
