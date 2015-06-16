@@ -67,7 +67,7 @@ if (Meteor.settings.public.GAME_ID == 'andor') {
 if (Meteor.settings.public.GAME_ID == 'speed') {
     s.battle_interval = 1000 * 60 * 1;
     s.village.max_can_have = 8;
-    s.serverMaxPlayers = 300;
+    s.serverMaxPlayers = 400;
     s.resource.gained_at_hex = 4;
     s.army.stats = {
         footmen: {
