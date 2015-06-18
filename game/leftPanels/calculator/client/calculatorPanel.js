@@ -55,11 +55,13 @@ Template.calculatorPanel.events({
 
         data = RightPanelCastle.findOne(Session.get('selected_id'));
         army.unitType = 'castle';
+        calcBattle.castle = data;
 
       } else if (type == 'village') {
 
         data = RightPanelVillages.findOne(Session.get('selected_id'));
         army.unitType = 'village';
+        calcBattle.village = data;
 
       } else if (type == 'army') {
 

@@ -67,6 +67,8 @@ Meteor.methods({
 
 			gAlert_nameChange(Meteor.userId(), previousUsername, username);
 
+			Cue.addTask('generateTree', {isAsync:false, unique:true}, {});
+
 			// update profile
 			var options = {
 				newName: username,
@@ -177,6 +179,7 @@ deleteAccount = function(user_id) {
 	checkForDominus();
 
 	Cue.addTask('setupEveryoneChatroom', {isAsync:false, unique:true}, {});
+	Cue.addTask('generateTree', {isAsync:false, unique:true}, {});
 
 	// let home base know that a player was deleted
 	var numPlayers = Meteor.users.find().count();

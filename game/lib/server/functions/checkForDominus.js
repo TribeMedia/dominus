@@ -21,17 +21,28 @@ checkForDominus = function() {
 	})
 
 	// find dominus
-	Meteor.users.find({num_allies_below: num_users-1}).forEach(function(d) {
-		Meteor.users.update(d._id, {$set: {is_dominus: true}})
+	var fields = {emails:1};
+	Meteor.users.find({is_king:true}, {fields:fields}).forEach(function(king) {
 
-		if (dominus) {
-			if (d._id == dominus._id) {
-				is_still_dominus = true
+		// get number of players who are not under king
+		var find = {_id:{$ne:king._id}, king:{$ne:king._id}, castle_id: {$exists: true}}
+		var nonVassals = Meteor.users.find(find).count();
+
+		// in none then dominus
+		if (nonVassals == 0) {
+
+			Meteor.users.update(king._id, {$set: {is_dominus: true}});
+
+			if (dominus) {
+				if (king._id == dominus._id) {
+					is_still_dominus = true;
+				} else {
+					new_dominus_event(king);
+				}
 			} else {
-				new_dominus_event(d)
+				new_dominus_event(king);
 			}
-		} else {
-			new_dominus_event(d)
+
 		}
 	})
 
@@ -91,4 +102,7 @@ new_dominus_event = function(dominus_user) {
 	// update profile
 	var options = {};
 	callLandingMethod('profile_becameDominus', dominus_user.emails[0].address, options);
+	
+	// let landing site know to close registration
+	landingConnection.call('dominusTriggered', process.env.GAME_ID, process.env.DOMINUS_KEY);
 }

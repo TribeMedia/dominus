@@ -18,6 +18,12 @@ Accounts.validateNewUser(function(user) {
 		throw new Meteor.Error(403, 'Game full.');
 	}
 
+	// if someone has become dominus close registration
+	var lastDominus = Settings.findOne({name: 'lastDominusUserId'})
+	if (lastDominus) {
+		throw new Meteor.Error(403, 'Registration closed after someone has become Dominus.');
+	}
+
 	// only let admin create account if before start date
 	var setting = Settings.findOne({name:'gameStartDate'});
 	if (setting && setting.value !== null) {
