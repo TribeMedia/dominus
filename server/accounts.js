@@ -19,8 +19,8 @@ Accounts.validateNewUser(function(user) {
 	}
 
 	// if someone has become dominus close registration
-	var lastDominus = Settings.findOne({name: 'lastDominusUserId'})
-	if (lastDominus) {
+	var lastDominus = Settings.findOne({name: 'lastDominusUserId'});
+	if (lastDominus && lastDominus.value) {
 		throw new Meteor.Error(403, 'Registration closed after someone has become Dominus.');
 	}
 

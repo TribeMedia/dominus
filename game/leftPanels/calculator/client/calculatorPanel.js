@@ -55,13 +55,11 @@ Template.calculatorPanel.events({
 
         data = RightPanelCastle.findOne(Session.get('selected_id'));
         army.unitType = 'castle';
-        calcBattle.castle = data;
 
       } else if (type == 'village') {
 
         data = RightPanelVillages.findOne(Session.get('selected_id'));
         army.unitType = 'village';
-        calcBattle.village = data;
 
       } else if (type == 'army') {
 
@@ -99,6 +97,14 @@ Template.calculatorPanel.events({
       _.each(s.army.types, function(type) {
         army.units[type] = data[type];
       })
+
+      if (army.unitType == 'castle') {
+        calcBattle.castle = army;
+      }
+
+      if (army.unitType == 'village') {
+        calcBattle.village = army;
+      }
 
       calcBattle.armies.push(army);
       calcBattle.run();
