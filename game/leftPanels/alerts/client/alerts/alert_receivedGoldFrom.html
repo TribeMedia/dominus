@@ -2,7 +2,7 @@
     {{> alert_titleTemplate title=title iconName='fa-dollar' date=created_at read=read}}
     <div class="alertAnimationWrapper">
         {{#if isOpen}}
-            <div class="alertBody">
+            <div class="alertBody alertPad">
                 <a href="" data-x="{{fromUser.x}}" data-y="{{fromUser.y}}" data-castle_id="{{fromUser.castle_id}}" class="userLink">{{fromUser.username}}</a>
                 sent you {{round vars.amount}} gold.
 

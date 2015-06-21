@@ -32,7 +32,6 @@ Meteor.methods({
 		if (user) {
 			var previousUsername = user.username;
 
-			username = _.clean(username);
 			username = username.replace(/[^0-9a-zA-Z_\s]/g, '');
 
 			if (username.length < 3) {

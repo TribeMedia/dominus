@@ -2,7 +2,7 @@
     {{> alert_titleTemplate title=title iconName='fa-arrows' date=created_at read=read}}
     <div class="alertAnimationWrapper">
         {{#if isOpen}}
-            <div class="alertBody">
+            <div class="alertBody alertPad">
                 Your army <a href="" class="armyLink" data-x="{{army.x}}" data-y="{{army.y}}" data-army_id="{{army._id}}">{{army.name}}</a> just finished their march to <a href=""  class="coordinateLink" data-x="{{vars.x}}" data-y="{{vars.y}}">{{vars.x}},{{vars.y}}</a>.
 
                 {{#if joinedCastle}}
