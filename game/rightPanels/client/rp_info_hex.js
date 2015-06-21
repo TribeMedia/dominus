@@ -12,7 +12,7 @@ Template.rp_info_hex.helpers({
 
 	battle: function() {
 		if (this) {
-			return Battles.findOne({x:this.x, y:this.y})
+			return Battles2.findOne({x:this.x, y:this.y})
 		}
 	},
 

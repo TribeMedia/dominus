@@ -10,7 +10,7 @@
                             </a>
                         </td>
                         <td style="text-align:right;">
-                            {{date_calendar created_at}}
+                            {{date_calendar createdAt}}
                         </td>
                     </tr>
                 </tbody>
@@ -27,7 +27,7 @@
     <div class="alertAnimationWrapper">
         {{#if isOpen}}
             <div class="alertBody">
-                {{> Template.dynamic template='battle_report' data=battle}}
+                {{> Template.dynamic template='battleReport' data=battle}}
             </div>
         {{/if}}
     </div>

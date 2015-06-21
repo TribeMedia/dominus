@@ -1,13 +1,13 @@
-Cue.addJob('startBattle', {retryOnError:false, maxMs:1000*60*8}, function(task, done) {
-	Battle.start_battle(task.data.x, task.data.y)
-	done()
-})
-
-
-Cue.addJob('runBattle', {retryOnError:false, maxMs:1000*60*8}, function(task, done) {
-	Battle.run_battle(task.data.x, task.data.y)
-	done()
-})
+// Cue.addJob('startBattle', {retryOnError:false, maxMs:1000*60*8}, function(task, done) {
+// 	Battle.start_battle(task.data.x, task.data.y)
+// 	done()
+// })
+//
+//
+// Cue.addJob('runBattle', {retryOnError:false, maxMs:1000*60*8}, function(task, done) {
+// 	Battle.run_battle(task.data.x, task.data.y)
+// 	done()
+// })
 
 
 Battle = {

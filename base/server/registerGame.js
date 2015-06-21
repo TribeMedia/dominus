@@ -7,7 +7,12 @@ Meteor.startup(function() {
     // pass DOMINUS_BASE to client
     // insert into settings
     // this is used for links
-    Settings.upsert({name:'dominusBase'}, {$set: {name:'dominusBase', value:process.env.DOMINUS_BASE}});
+    var dominusBase = process.env.DOMINUS_BASE;
+    if (dominusBase) {
+      Settings.upsert({name:'dominusBase'}, {$set: {name:'dominusBase', value:process.env.DOMINUS_BASE}});
+    } else {
+      console.error('DOMINUS_BASE env var not set');
+    }
 });
 
 registerGame = function() {

@@ -2,24 +2,11 @@ BattleArmy = function() {
   var self = this;
 
   // set these
+
   this.units = {};
-  this.isAttacker = true;
 
   // 'army', 'village', 'castle'
   this.unitType = 'army';
-
-  // only for army types
-  this.isOnAllyCastle = false;
-  this.isOnAllyVillage = false;
-
-  this.user_id = Math.floor(Math.random() * 100000);
-  this.allies_below = [];
-  this.allies_above = [];
-  this.team = [];
-  this.king = null;
-  this.lord = null;
-  this.vassals = [];
-  this.isDominus = false;
 
   // if set to true it will look in db for user to update allies_below etc.
   this.isRealArmy = false;
@@ -29,13 +16,30 @@ BattleArmy = function() {
   this._id = Math.floor(Math.random() * 1000000);
   this.name = names.armies.part1[_.random(names.armies.part1.length-1)] +' '+ names.armies.part2[_.random(names.armies.part2.length-1)];
 
+  // -----------------------------
+  // private
+  // these are filled in when run
+
+  // only for army types
+  this.isOnAllyCastle = false;
+  this.isOnAllyVillage = false;
+
+  this.isAttacker = true;
+
+  // these get filled in if isRealArmy is true
+  this.user_id = Math.floor(Math.random() * 100000);
+  this.allies_below = [];
+  this.allies_above = [];
+  this.team = [];
+  this.king = null;
+  this.lord = null;
+  this.vassals = [];
+  this.isDominus = false;
+
   // order that armies arrived at hex, ascending, 0 is first, 0 if castle or village
   this.orderOfArrival = 0;
 
   this.createdAt = new Date();
-
-  // -----------------------------
-  // private
 
   // filled in when battle runs
   this.enemyFinalPower = 0;
@@ -85,6 +89,13 @@ BattleArmy = function() {
 
   // does unit have no soldiers after battle is over
   this.destroyed = false;
+
+  // true if castle was destoyed and this army became it's lord
+  this.tookCastle = false;
+
+  // if this is a castle and castle was destoyed, this is set to the id of the army who became it's lord
+  this.becameVassalOf_armyId = null;
+  this.becameVassalOf_userId = null;
 }
 
 
@@ -111,7 +122,8 @@ BattleArmy.prototype.updateUser = function() {
       this.vassals = user.vassals;
       this.isDominus = user.isDominus;
     } else {
-      console.error('could not find user');
+      console.error('could not find user '+this.user_id);
+      console.error(user);
     }
   }
 }

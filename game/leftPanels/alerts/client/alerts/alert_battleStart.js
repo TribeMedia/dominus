@@ -1,7 +1,7 @@
 var helpers = {
     battle: function() {
         if (this) {
-            return Battles.findOne(this.vars.battle_id)
+            return Battles2.findOne(this.vars.battle_id)
         }
     },
 

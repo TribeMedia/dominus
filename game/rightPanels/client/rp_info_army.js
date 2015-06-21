@@ -36,7 +36,7 @@ Template.rp_info_army.helpers({
 
 	battle: function() {
 		if (this) {
-			return Battles.findOne({x:this.x, y:this.y, isOver:false})
+			return Battles2.findOne({x:this.x, y:this.y, isOver:false})
 		}
 	},
 

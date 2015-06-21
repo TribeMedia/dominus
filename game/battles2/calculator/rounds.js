@@ -2,6 +2,7 @@
 // add armies to BattleRound
 // set all army info
 // call BattleRound.run()
+
 // update army info
 // call BattleRound.run()
 
@@ -11,11 +12,11 @@ BattleRound = function() {
   this.armies = [];
 
   // if there is a castle here fill this in with it's info
-  // {name:1, user_id:1, x:1, y:1, username:1, image:1}
+  // {name:1, user_id:1, x:1, y:1, username:1, image:1} + soldiers
   this.castle = null;
 
   // if there is a village here fill this in with it's info
-  // {name:1, user_id:1, x:1, y:1, username:1, castle_x:1, castle_y:1, castle_id:1}
+  // {name:1, user_id:1, x:1, y:1, username:1, castle_x:1, castle_y:1, castle_id:1} + soldiers
   this.village = null;
 
   // ----------------------
@@ -26,6 +27,8 @@ BattleRound = function() {
 
   this.battleHasRun = false;
   this.msBattleTook = 0;
+
+  this.battleIsOver = null;
 }
 
 
@@ -51,6 +54,7 @@ BattleRound.prototype.run = function() {
     self.cacheAllies(army);
     self.cacheEnemies(army);
     army.updateInfo();
+    self.isOnAllyBuilding(army);
     army.updateLocationBonus();
     self.updateUnitBonus(army);
     army.updateFinalPower();
@@ -68,6 +72,11 @@ BattleRound.prototype.run = function() {
     army.findLoses();
   })
 
+  self.isBattleIsOver();
+  if (self.battleIsOver) {
+    self.handleCastle();
+  }
+
   self.battleHasRun = true;
   self.msBattleTook = new Date().getTime() - start;
 }
@@ -76,6 +85,97 @@ BattleRound.prototype.run = function() {
 
 // -----------------------
 // private
+
+
+BattleRound.prototype.isOnAllyBuilding = function(army) {
+  var self = this;
+
+  if (army.unitType != 'army') {
+    return;
+  }
+
+  if (self.castle) {
+    if (army.isAlly(self.castle)) {
+      army.isOnAllyCastle = true;
+    }
+  }
+
+  if (self.village) {
+    if (army.isAlly(self.village)) {
+      army.isOnAllyVillage = true;
+    }
+  }
+}
+
+
+BattleRound.prototype.handleCastle = function() {
+  var self = this;
+
+  if (self.castle) {
+    // find which army is castle
+    var castle = _.find(self.armies, function(a) {
+      return a.unitType == 'castle';
+    })
+
+    // if castle destroyed
+    if (castle && castle.destroyed) {
+      // find who gets castle
+      var smallestOrderOfArrival = 999999;
+      var firstEnemyArmy = null;
+      _.each(self.armies, function(army) {
+        if (army.unitType == 'army') {
+          if (!army.destroyed) {
+            if (castle.isEnemy(army)) {
+              if (army.orderOfArrival < smallestOrderOfArrival) {
+                smallestOrderOfArrival = army.orderOfArrival;
+                firstEnemyArmy = army;
+              }
+            }
+          }
+        }
+      })
+
+      if (firstEnemyArmy) {
+        castle.becameVassalOf_armyId = firstEnemyArmy._id;
+        castle.becameVassalOf_userId = firstEnemyArmy.user_id;
+        firstEnemyArmy.tookCastle = true;
+      }
+    }
+  }
+}
+
+
+
+BattleRound.prototype.isBattleIsOver = function() {
+  var self = this;
+
+  var numAliveArmies = 0;
+  _.each(self.armies, function(army) {
+    if (!army.destroyed) {
+      numAliveArmies++;
+    }
+  })
+
+  if (numAliveArmies < 2) {
+    self.battleIsOver = true;
+    return;
+  }
+
+  var someoneHasAnEnemy = false;
+  _.each(self.armies, function(army) {
+    if (!army.destroyed) {
+      _.each(army.enemies, function(enemy) {
+        if (!enemy.destroyed) {
+          someoneHasAnEnemy = true;
+        }
+      })
+    }
+  })
+
+  self.battleIsOver = !someoneHasAnEnemy;
+}
+
+
 
 
 BattleRound.prototype.isThereACastleOrVillageInBattle = function() {

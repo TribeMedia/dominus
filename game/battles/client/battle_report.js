@@ -22,7 +22,7 @@ Template.battle_report.helpers({
 	},
 
 	fightTitles: function() {
-		return Fighttitles.find({battle_id:this._id}, {sort:{roundNumber:-1}})
+		return Roundtitles.find({battle_id:this._id}, {sort:{roundNumber:-1}})
 	},
 
 	winnersLastRound: function() {
@@ -72,8 +72,8 @@ Template.battle_report.created = function() {
 	self.autorun(function() {
 		if (Template.currentData()) {
 			self.subs.subscriptions([{
-				groupName: 'fighttitles',
-				subscriptions: [ Meteor.subscribe('fighttitles', Template.currentData()._id).ready() ]
+				groupName: 'roundtitles',
+				subscriptions: [ Meteor.subscribe('roundtitles', Template.currentData()._id).ready() ]
 			}, {
 				groupName: 'lastFight',
 				subscriptions: [ Meteor.subscribe('lastFightInBattle', Template.currentData()._id).ready() ]

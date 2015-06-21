@@ -1,10 +1,10 @@
 Template.alerts_battles.helpers({
     battles: function() {
-        return AlertBattleTitles.find({isOver:false}, {sort:{updated_at:-1}})
+        return AlertBattleTitles.find({isOver:false}, {sort:{updatedAt:-1}})
     },
 
     finishedBattles: function() {
-        return AlertBattleTitles.find({isOver:true}, {sort:{updated_at:-1}})
+        return AlertBattleTitles.find({isOver:true}, {sort:{updatedAt:-1}})
     }
 })
 

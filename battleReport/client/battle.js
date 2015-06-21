@@ -1,6 +1,6 @@
 Template.battle.helpers({
     battle: function() {
-        return Battles.findOne(this._id)
+        return Battles2.findOne(this._id)
     }
 })
 

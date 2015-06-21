@@ -1,7 +1,7 @@
 Template.alerts_battle.helpers({
 	battle: function() {
 		if (this) {
-			return Battles.findOne(this._id)
+			return Battles2.findOne(this._id)
 		}
 	},
 
