@@ -53,6 +53,13 @@ BattleRound.prototype.run = function() {
   _.each(self.armies, function(army) {
     self.cacheAllies(army);
     self.cacheEnemies(army);
+  });
+
+  self.findDefender();
+  self.checkThatThereIsOnlyOneDefender();
+  self.setAlliesOfDefenderToDefender();
+
+  _.each(self.armies, function(army) {
     army.updateInfo();
     self.isOnAllyBuilding(army);
     army.updateLocationBonus();
@@ -60,10 +67,6 @@ BattleRound.prototype.run = function() {
     army.updateFinalPower();
     army.updateFinalPowerOfEachSoldierType();
   })
-
-  self.findDefender();
-  self.checkThatThereIsOnlyOneDefender();
-  self.setAlliesOfDefenderToDefender();
 
   // do battle
   _.each(self.armies, function(army) {
