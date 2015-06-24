@@ -131,7 +131,28 @@ BattleJob.prototype.processBattleResults = function() {
 
         break;
     }
+
+    self.trackLosesInPlayer(army);
   })
+}
+
+
+
+
+// for rankings
+BattleJob.prototype.trackLosesInPlayer = function(army) {
+  var self = this;
+
+  var inc = {};
+
+  _.each(army.loses, function(value, key) {
+    inc["losses."+key] = value;
+  })
+
+  var num = Meteor.users.update(army.user_id, {$inc:inc});
+  if (num) {
+    Cue.addTask('update_losses_worth',{isAsync:true, unique:true}, {user_id: army.user_id});
+  }
 }
 
 
